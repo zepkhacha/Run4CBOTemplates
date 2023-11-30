@@ -258,10 +258,10 @@ int main(int argc, char* argv[]){
       TH1D* gFullFitComparedWithWithoutCBODiv = new TH1D("dataDivFnc_wo_CBO", "dataDivFnc_wo_CBO", nBins, 0, 650.0644);
       TH1D* gFullFitComparedWithWithoutYDiv = new TH1D("dataDivFnc_wo_Y", "dataDivFnc_wo_Y", nBins, 0, 650.0644);
 
-      gFullFitComparedWithWithoutCBODiv->SetMaximum(1.1);
-      gFullFitComparedWithWithoutCBODiv->SetMinimum(0.9);
-      gFullFitComparedWithWithoutYDiv->SetMaximum(1.02);
-      gFullFitComparedWithWithoutYDiv->SetMinimum(0.98);
+      gFullFitComparedWithWithoutCBODiv->SetMaximum(1.64);
+      gFullFitComparedWithWithoutCBODiv->SetMinimum(1.56);
+      gFullFitComparedWithWithoutYDiv->SetMaximum(1.7);
+      gFullFitComparedWithWithoutYDiv->SetMinimum(1.5);
 
       // get fullFitResults
       fullFitResults->GetEntry(0);
@@ -311,9 +311,6 @@ int main(int argc, char* argv[]){
 	  double fullFitVal_noY_fromFunction = calcnu(dim, noYpar);
           gFullFitComparedWithWithoutCBODiv->SetBinContent(point, wiggleData / fullFitVal_noCBO_fromFunction);
 	  gFullFitComparedWithWithoutYDiv->SetBinContent(point, wiggleData / fullFitVal_noY_fromFunction);
-	  //printf("point %i wiggleData %f fullFitVal %f withoutCBO %f bestfit %f\n",
-	  //point, wiggleData, fullFitVal_withCBO_fromFunction, fullFitVal_noCBO_fromFunction, bestfitData);
-	  //printf("%i : %f\n", point, wiggleData / fullFitVal_noCBO_fromFunction);
       }
 
       // only add option 'a' for first plot
