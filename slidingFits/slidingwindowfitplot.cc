@@ -118,10 +118,8 @@ int main(int argc, char* argv[]){
     }
   } 
   format.close();
-  sleep(1);
 
   printf("Parameters after format file: pBinTau %d pBinPhi %d constraintau %d includeMopTerm %d constrainMop %d c_e_scale %f \n", pBinTau, pBinPhi, constraintau, includeMopTerm, constrainMop, c_e_scale);
-  sleep(1);
   // printf("Opening file %s.\n", boostFilename);
   // TFile* boostdata  = new TFile(boostFilename, "READ");
   // TH1D*  boostgamma = (TH1D*) boostdata->Get("transform_gamma");
@@ -531,9 +529,10 @@ int main(int argc, char* argv[]){
      minimizer.DefineParameter(11, "pNy1", 0, 0, 0, 0);
      minimizer.DefineParameter(12, "w_y" , 0, 0, 0, 0);
 
-     minimizer.DefineParameter(13, "ANy2", 0.0001, 0.0000001, 0, 0.001);
+     minimizer.DefineParameter(13, "ANy2", 0.004, 0.0001, 0, 0);
      minimizer.DefineParameter(14, "pNy2", pNy2, 0.0000001, 0, 0);
-     minimizer.DefineParameter(15, "w_vw", (2275977.048975)*((2*M_PI)/(1000000)), 0, 0, 2.0);
+     double w_vw_guess = (2.3)*(2*M_PI);
+     minimizer.DefineParameter(15, "w_vw", w_vw_guess, 0.01, 0.5*w_vw_guess, 1.5*w_vw_guess);
 
      minimizer.DefineParameter(16, "LM", LM, 0.0, -0.1, 0.1); // FIX
      
