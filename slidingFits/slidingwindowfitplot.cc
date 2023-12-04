@@ -375,7 +375,7 @@ int main(int argc, char* argv[]){
   fitrangelow  = startBin + (windowNo);
 
   if (windowNo == 0){
-     windowBins = 120;
+     windowBins = 60;
   }else{
      double c = 0.55;
      double insideLog = 1.0 - c*c*exp(-((startBin-fitrangelow)*0.1492)/tau) 
@@ -395,8 +395,8 @@ int main(int argc, char* argv[]){
      // now round to nearest 10.0
      windowBins = int (windowBins/10.0) * 10;
      // if deltaT < 17us, set it back to 17us
-     if (windowBins < 120){
-       windowBins = 120;
+     if (windowBins < 60){
+       windowBins = 60;
      }
 
   }
@@ -522,8 +522,8 @@ int main(int argc, char* argv[]){
      minimizer.DefineParameter(6, "w_CBO", w_CBO, 0.001, 0, 0);
      minimizer.DefineParameter(7, "phi_CBO", phi_CBO, 0.0001, 0, 0);
 
-     minimizer.DefineParameter(8, "ANx2", 0, 0, 0, 0);
-     minimizer.DefineParameter(9, "pNx2", 0, 0, 0, 0);
+     minimizer.DefineParameter(8, "ANx2", ANx2, 0.000001, 0, 0);
+     minimizer.DefineParameter(9, "pNx2", pNx2, 0.001, 0, 0);
 
      minimizer.DefineParameter(10, "ANy1", 0, 0, 0, 0);
      minimizer.DefineParameter(11, "pNy1", 0, 0, 0, 0);
