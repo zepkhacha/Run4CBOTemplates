@@ -377,7 +377,7 @@ int main(int argc, char* argv[]){
   fitrangelow  = startBin + (windowNo);
 
   if (windowNo == 0){
-     windowBins = 60;
+     windowBins = 120;
   }else{
      double c = 0.55;
      double insideLog = 1.0 - c*c*exp(-((startBin-fitrangelow)*0.1492)/tau) 
@@ -397,8 +397,8 @@ int main(int argc, char* argv[]){
      // now round to nearest 10.0
      windowBins = int (windowBins/10.0) * 10;
      // if deltaT < 17us, set it back to 17us
-     if (windowBins < 60){
-       windowBins = 60;
+     if (windowBins < 120){
+       windowBins = 120;
      }
 
   }
