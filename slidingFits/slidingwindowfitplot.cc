@@ -250,6 +250,8 @@ int main(int argc, char* argv[]){
   double ANy2, pNy2;
   double ANy1err, pNy1err, Kyerr, A_cterr;
   double ANy2err, pNy2err;
+  double w_y, w_yerr;
+  double w_vw, w_vwerr;
   
   double fitStart = fitrangelow  * 0.1492;
   double fitStop  = fitrangehigh * 0.1492;
@@ -306,56 +308,66 @@ int main(int argc, char* argv[]){
   fitresults->Branch("fitStart", &fitStart);
   fitresults->Branch("fitStop",  &fitStop );
   fitresults->Branch("windowBins", &windowBins);
+
   fitresults->Branch("pBinTau", &pBinTau);
   fitresults->Branch("pBinPhi", &pBinPhi);
   fitresults->Branch("includeMopTerm", &includeMopTerm);
   fitresults->Branch("constrainMop", &constrainMop);
   fitresults->Branch("constrainTau", &constraintau);
+
   fitresults->Branch("seed", &sidx);
   fitresults->Branch("windowNo", &windowNo);
+
   fitresults->Branch("chisq", &chisq);
   fitresults->Branch("rchisq", &rchisq);
+
   fitresults->Branch("N0", &N0);
+  fitresults->Branch("A0", &A0);
   fitresults->Branch("tau", &tau);
-
-  fitresults->Branch("ANx2", &ANx2);
-  fitresults->Branch("pNx2", &pNx2);
-  fitresults->Branch("ANy1", &ANy1);
-  fitresults->Branch("pNy1", &pNy1);
-  fitresults->Branch("ANy2", &ANy2);
-  fitresults->Branch("pNy2", &pNy2);
-
   fitresults->Branch("R", &R);
+  fitresults->Branch("phi", &phi);
+
   fitresults->Branch("w_CBO", &w_CBO);
   fitresults->Branch("A_CBO", &A_CBO);
   fitresults->Branch("phi_CBO", &phi_CBO);
-  fitresults->Branch("LM", &LM);
 
-  fitresults->Branch("N0err", &N0err);
-  fitresults->Branch("tauerr", &tauerr);
-  fitresults->Branch("A0err", &A0err);
-  fitresults->Branch("phierr", &phierr);
-  fitresults->Branch("Rerr", &Rerr);
-  fitresults->Branch("w_CBOerr", &w_CBOerr);
-  fitresults->Branch("A_CBOerr", &A_CBOerr);
-  fitresults->Branch("phi_CBOerr", &phi_CBOerr);
-  fitresults->Branch("LMerr", &LMerr);
-  fitresults->Branch("wCBO_phiCBO_cov", &wCBO_phiCBO_cov);
+  fitresults->Branch("ANx2", &ANx2);
+  fitresults->Branch("pNx2", &pNx2);
 
   fitresults->Branch("ANy1", &ANy1);
   fitresults->Branch("pNy1", &pNy1);
+  fitresults->Branch("w_y" , &w_y );
+
   fitresults->Branch("ANy2", &ANy2);
   fitresults->Branch("pNy2", &pNy2);
-  fitresults->Branch("Ky", &Ky);
-  fitresults->Branch("A_ct", &A_ct);
+  fitresults->Branch("w_vw", &w_vw);
+
+  fitresults->Branch("LM", &LM);
+
+  fitresults->Branch("N0err", &N0err);
+  fitresults->Branch("A0err", &A0err);
+  fitresults->Branch("tauerr", &tauerr);
+  fitresults->Branch("Rerr", &Rerr);
+  fitresults->Branch("phierr", &phierr);
+
+  fitresults->Branch("w_CBOerr", &w_CBOerr);
+  fitresults->Branch("A_CBOerr", &A_CBOerr);
+  fitresults->Branch("phi_CBOerr", &phi_CBOerr);
+
+  fitresults->Branch("LMerr", &LMerr);
+
+  fitresults->Branch("wCBO_phiCBO_cov", &wCBO_phiCBO_cov);
+
   fitresults->Branch("ANx2err", &ANx2err);
   fitresults->Branch("pNx2err", &pNx2err);
+
   fitresults->Branch("ANy1err", &ANy1err);
   fitresults->Branch("pNy1err", &pNy1err);
+  fitresults->Branch("w_yerr" , &w_yerr );
+
   fitresults->Branch("ANy2err", &ANy2err);
   fitresults->Branch("pNy2err", &pNy2err);
-  fitresults->Branch("Kyerr", &Kyerr);
-  fitresults->Branch("A_cterr", &A_cterr);
+  fitresults->Branch("w_vwerr", &w_vwerr);
 
   // assign number of bins to this window
   // use longer windows at later times
@@ -500,8 +512,6 @@ int main(int argc, char* argv[]){
      minimizer.Command("SET NOWARNINGS");
      minimizer.SetFCN(minuitFunction);
      minimizer.fGraphicsMode = false;
-    
-     ANy2 = 0;
 
      // allow basic 5-param fit to float except R and tau
      minimizer.DefineParameter(0, "N0", N0, 100, 0, 0);
@@ -519,11 +529,11 @@ int main(int argc, char* argv[]){
 
      minimizer.DefineParameter(10, "ANy1", 0, 0, 0, 0);
      minimizer.DefineParameter(11, "pNy1", 0, 0, 0, 0);
-     minimizer.DefineParameter(12, "Ky"  , Ky, 0, 0, 0);
-     minimizer.DefineParameter(13, "A_ct", A_ct, 0, 0, 0);
+     minimizer.DefineParameter(12, "w_y" , 0, 0, 0, 0);
 
-     minimizer.DefineParameter(14, "ANy2", 0, 0, 0, 0);
-     minimizer.DefineParameter(15, "pNy2", 0, 0, 0, 0);
+     minimizer.DefineParameter(13, "ANy2", 0.0001, 0.0000001, 0, 0.001);
+     minimizer.DefineParameter(14, "pNy2", pNy2, 0.0000001, 0, 0);
+     minimizer.DefineParameter(15, "w_vw", (2275977.048975)*((2*M_PI)/(1000000)), 0, 0, 2.0);
 
      minimizer.DefineParameter(16, "LM", LM, 0.0, -0.1, 0.1); // FIX
      
@@ -552,10 +562,8 @@ int main(int argc, char* argv[]){
      minimizer.Command("FIX 3");
      minimizer.Command("FIX 4");
      minimizer.Command("FIX 9");
-     minimizer.Command("FIX 10");
      minimizer.Command("FIX 11");
      minimizer.Command("FIX 12");
-     minimizer.Command("FIX 13");
      minimizer.Command("FIX 14");
      minimizer.Command("FIX 15");
      minimizer.Command("FIX 16");
@@ -609,9 +617,8 @@ int main(int argc, char* argv[]){
      minimizer.Command("FIX 5");
      minimizer.Command("FIX 6");
      minimizer.Command("FIX 7");
-     minimizer.Command("FIX 10");
-     minimizer.Command("FIX 11");
-     minimizer.Command("FIX 12");
+     minimizer.Command("FIX 8");
+     minimizer.Command("FIX 9");
      minimizer.Command("FIX 13");
      minimizer.Command("FIX 14");
      minimizer.Command("FIX 15");
@@ -634,7 +641,6 @@ int main(int argc, char* argv[]){
      minimizer.Command("FIX 10");
      minimizer.Command("FIX 11");
      minimizer.Command("FIX 12");
-     minimizer.Command("FIX 13");
      minimizer.Command("FIX 16");
      minimizer.Migrad();
      
@@ -670,8 +676,6 @@ int main(int argc, char* argv[]){
      minimizer.Command("FIX 5");
      minimizer.Command("FIX 6");
      minimizer.Command("FIX 7");
-     minimizer.Command("FIX 14");
-     minimizer.Command("FIX 15");
      minimizer.Command("FIX 16");
      minimizer.Migrad();
        
@@ -716,17 +720,22 @@ int main(int argc, char* argv[]){
      A0 = par[2];
      phi = par[3];
      R = par[4];
+
      A_CBO = par[5];
      w_CBO = par[6];
      phi_CBO = par[7];
+
      ANx2 = par[8];
      pNx2 = par[9];
+
      ANy1 = par[10];
      pNy1 = par[11];
-     Ky = par[12];
-     A_ct = par[13];
-     ANy2 = par[14];
-     pNy2 = par[15];
+     w_y  = par[12];
+
+     ANy2 = par[13];
+     pNy2 = par[14];
+     w_vw = par[15];
+
      LM = par[16];
 
      N0err = sqrt(-errorplus[0]*errorminus[0]);
@@ -734,17 +743,22 @@ int main(int argc, char* argv[]){
      A0err = sqrt(-errorplus[2]*errorminus[2]);
      phierr = sqrt(-errorplus[3]*errorminus[3]);
      Rerr = sqrt(-errorplus[4]*errorminus[4]);
+
      A_CBOerr = sqrt(-errorplus[5]*errorminus[5]);
      w_CBOerr = sqrt(-errorplus[6]*errorminus[6]);
      phi_CBOerr = sqrt(-errorplus[7]*errorminus[7]);
+
      ANx2err = sqrt(-errorplus[8]*errorminus[8]);
      pNx2err = sqrt(-errorplus[9]*errorminus[9]);
+
      ANy1err = sqrt(-errorplus[10]*errorminus[10]);
      pNy1err = sqrt(-errorplus[11]*errorminus[11]);
-     Kyerr = sqrt(-errorplus[12]*errorminus[12]);
-     A_cterr = sqrt(-errorplus[13]*errorminus[13]);
-     ANy2err = sqrt(-errorplus[14]*errorminus[14]);
-     pNy2err = sqrt(-errorplus[15]*errorminus[15]);
+     w_yerr  = sqrt(-errorplus[12]*errorminus[12]);
+
+     ANy2err = sqrt(-errorplus[13]*errorminus[13]);
+     pNy2err = sqrt(-errorplus[14]*errorminus[14]);
+     w_vwerr = sqrt(-errorplus[15]*errorminus[15]);
+
      LMerr = sqrt(-errorplus[16]*errorminus[16]);
      
      wCBO_phiCBO_cov = covariance[3][4]; // covariance matrix is only floating parameters, so indices different

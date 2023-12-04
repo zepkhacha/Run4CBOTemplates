@@ -124,8 +124,8 @@ for (int entry=0; entry<t->GetEntries(); entry++){
      continue;
    }else{
       printf("non overlapping entry %i (%f, %f)\n", entry, fitStart, fitStop);
-//      printf("fCBO %f fVW %f fy %f \n",
-//       fCBO, fVW, fy) ;
+      printf("fCBO %f fVW %f fy %f \n",
+       fCBO, fVW, fy) ;
    
       prevStart=fitStart;
       prevStop=fitStop;

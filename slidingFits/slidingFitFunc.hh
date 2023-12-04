@@ -82,15 +82,6 @@ double cbo(double time, double amp){
 return 1.0 + amp*exp(-time/24.4)/time;
 }
 
-double wy(double kappa, double wcbo, double time, double amp){
-  double x = (4*3.141592)/(0.1492*kappa*wcbo*cbo(time, amp)) - 1.0;
-  return kappa*wcbo*cbo(time, amp)*sqrt(x);
-}
-
-double wvw(double kappa, double wcbo, double time, double amp){
-  return (2*3.141592)/0.1492 - 2.*wy(kappa, wcbo, time, amp);
-}
-
 double calcnuCboIsolate(double par[], double i){
   double time = (i-0.5) * 0.1492 + startTime;
   double nu = (1.0 + par[0]*cos((par[1])*time - par[2]));
@@ -124,8 +115,8 @@ double calcnu(double par[], double i){
   // now add x-terms
   nu *= 1.0 + par[5]*cos(par[6]*(time) - par[7]) + par[8]*cos(2*par[7]*(time)- par[9]);
   // now add y-terms
-  nu *= (1.0 + par[10] * cos( wy(par[12], par[7], time, par[13])*(time) - par[11])
-             + par[14] * cos(wvw(par[12], par[7], time, par[13])*(time) - par[15]));
+  nu *= (1.0 + par[10] * cos(par[12] - par[11])
+             + par[13] * cos(par[15] - par[14]));
   // now add LM 
   nu *= (1.0 - par[16]*lambda->GetBinContent(i));
   return nu; 

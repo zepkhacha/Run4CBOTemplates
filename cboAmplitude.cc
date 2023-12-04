@@ -129,12 +129,19 @@ int main(int argc, char* argv[]){
       double fitStart, fitStop;
       int windowNo;
 
+      double fullchisq, slidingchisq;
+      double slidingFit_w_y, slidingFit_w_vw;
+      double slidingFit_w_yerr, slidingFit_w_vwerr;
+
       fullFit_pNx1 = invert(fullFit_A_CNx1, fullFit_A_SNx1);
 
       // full fit result should only have one entry in TTree
       if (fullFitResults->GetEntries()!=1){
         std::cerr<<"Full-fit file should have only 1 entry in 'fitresults' TTree.";
       }
+
+      slidingResults->SetBranchAddress("chisq", &slidingchisq);
+      fullFitResults->SetBranchAddress("chisq", &fullchisq);
 
       slidingResults->SetBranchAddress("windowNo", &windowNo);
       fullFitResults->SetBranchAddress("A_ct", &fullFit_A_ct);
@@ -154,22 +161,32 @@ int main(int argc, char* argv[]){
 
       slidingResults->SetBranchAddress("ANx2", &slidingFit_Ax2);
       slidingResults->SetBranchAddress("pNx2", &slidingFit_px2);
+
       slidingResults->SetBranchAddress("ANy1", &slidingFit_Ay1);
       slidingResults->SetBranchAddress("pNy1", &slidingFit_py1);
+      slidingResults->SetBranchAddress("w_y", &slidingFit_w_y);
+
       slidingResults->SetBranchAddress("ANy2", &slidingFit_Ay2);
       slidingResults->SetBranchAddress("pNy2", &slidingFit_py2);
+      slidingResults->SetBranchAddress("w_vw", &slidingFit_w_vw);
+
       slidingResults->SetBranchAddress("ANx2err", &slidingFit_Ax2err);
       slidingResults->SetBranchAddress("pNx2err", &slidingFit_px2err);
+
       slidingResults->SetBranchAddress("ANy1err", &slidingFit_Ay1err);
       slidingResults->SetBranchAddress("pNy1err", &slidingFit_py1err);
+      slidingResults->SetBranchAddress("w_yerr", &slidingFit_w_yerr);
+
       slidingResults->SetBranchAddress("ANy2err", &slidingFit_Ay2err);
       slidingResults->SetBranchAddress("pNy2err", &slidingFit_py2err);
+      slidingResults->SetBranchAddress("w_vwerr", &slidingFit_w_vwerr);
       
       fullFitResults->SetBranchAddress("pNx1err" , &fullFit_phierr);
       fullFitResults->SetBranchAddress("A_CNx1", &fullFit_A_CNx1);
       fullFitResults->SetBranchAddress("A_SNx1", &fullFit_A_SNx1);
       fullFitResults->SetBranchAddress("A_CNx1err", &fullFit_A_CNx1err);
       fullFitResults->SetBranchAddress("A_SNx1err", &fullFit_A_SNx1err);
+
       slidingResults->SetBranchAddress("wCBO_phiCBO_cov", &slidingFit_wCBO_phiCBO_cov);
       
       slidingResults->SetBranchAddress("fitStart", &fitStart);
@@ -185,8 +202,10 @@ int main(int argc, char* argv[]){
       TGraphErrors gpx2;
       TGraphErrors gay1;
       TGraphErrors gpy1;
+      TGraphErrors gpw1;
       TGraphErrors gay2;
       TGraphErrors gpy2;
+      TGraphErrors gpw2;
 
       TGraph gAmpvFres;
 
@@ -201,21 +220,23 @@ int main(int argc, char* argv[]){
       gpx2.SetMarkerStyle(7);
       gay1.SetMarkerStyle(7);
       gpy1.SetMarkerStyle(7);
+      gpw1.SetMarkerStyle(7);
       gay2.SetMarkerStyle(7);
       gpy2.SetMarkerStyle(7);
+      gpw2.SetMarkerStyle(7);
 
-      gax2.SetMaximum(0.005);
-      gay1.SetMaximum(0.005);
-      gay2.SetMaximum(0.005);
-      gax2.SetMinimum(-0.005);
-      gay1.SetMinimum(-0.005);
-      gay2.SetMinimum(-0.005);
-      gpy1.SetMaximum(M_PI);
-      gpy1.SetMinimum(-M_PI);
-      gpy2.SetMaximum(M_PI);
-      gpy2.SetMinimum(-M_PI);
-      gpx2.SetMaximum(M_PI);
-      gpx2.SetMinimum(-M_PI);
+      //gax2.SetMaximum(0.005);
+      //gay1.SetMaximum(0.005);
+      //gay2.SetMaximum(0.005);
+      //gax2.SetMinimum(-0.005);
+      //gay1.SetMinimum(-0.005);
+      //gay2.SetMinimum(-0.005);
+      //gpy1.SetMaximum(M_PI);
+      //gpy1.SetMinimum(-M_PI);
+      //gpy2.SetMaximum(M_PI);
+      //gpy2.SetMinimum(-M_PI);
+      //gpx2.SetMaximum(M_PI);
+      //gpx2.SetMinimum(-M_PI);
       
       gSlidingAmplitude.SetMaximum(20);
       gSlidingAmplitude.SetMinimum(-1);
@@ -235,16 +256,20 @@ int main(int argc, char* argv[]){
       gpy1.SetTitle("py1; Window Start [#mus]; py1 [rad]");
       gay2.SetTitle("Ay2; Window Start [#mus]; Ay2 ");
       gpy2.SetTitle("py2; Window Start [#mus]; py2 [rad]");
+      gpw1.SetTitle("w_y;  Window Start [#mus]; w_y [rad/s]");
+      gpw2.SetTitle("w_vw; Window Start [#mus]; w_vw [rad/s]");
 
       // get fullFitResults
       fullFitResults->GetEntry(0);
       printf("Full fit results: \nR: %f Rerr: %f wCBO: %f phi: %f \n", fullFit_R, fullFit_Rerr, fullFit_wCBO, (fullFit_phi));
 
       double previousResidual = 0.0;
+      printf("getting window results...\n");
 
       // get sliding window results
       int graphEntry = 0;
       for (int entry=0; entry<slidingResults->GetEntries(); entry++){
+        printf("entry %i...\n", entry);
         slidingResults->GetEntry(entry);
 
         // skip entries with a ridiculous R -- fit didn't converge
@@ -253,7 +278,7 @@ int main(int argc, char* argv[]){
         }
 
         // take every x-th window for now
-        if (windowNo % 10 != 0){
+        if (windowNo % 20 != 0){
           continue;
         }
 
@@ -322,9 +347,15 @@ int main(int argc, char* argv[]){
         gay2.SetPointError(graphEntry, 0, slidingFit_Ay2err);
         gpy2.SetPoint(graphEntry, time, slidingFit_py2);
         gpy2.SetPointError(graphEntry, 0, slidingFit_py2err);
+        gpw1.SetPoint(graphEntry, time, slidingFit_w_y);
+        gpw1.SetPointError(graphEntry, 0, slidingFit_w_yerr);
+        gpw2.SetPoint(graphEntry, time, slidingFit_w_vw);
+        gpw2.SetPointError(graphEntry, 0, slidingFit_w_vwerr);
 
         graphEntry++;
       }// end for loop over window fits
+
+      printf("doing linear fit...\n");
 
       // fit first time to get w_0 and phi_0
       TF1 fit ("fit", "[0]*x - [1]", gSlidingVal.GetPointX(0), gSlidingVal.GetPointX(gSlidingVal.GetN()-1));
@@ -395,19 +426,32 @@ int main(int argc, char* argv[]){
       gax2.Draw(drawOption.c_str());
       c.Draw("Y+");
       c.Print(outputFilename.c_str());
+
       gpx2.Draw(drawOption.c_str());
       c.Draw("Y+");
       c.Print(outputFilename.c_str());
+
       gay1.Draw(drawOption.c_str());
       c.Draw("Y+");
       c.Print(outputFilename.c_str());
+
       gpy1.Draw(drawOption.c_str());
       c.Draw("Y+");
       c.Print(outputFilename.c_str());
+
       gay2.Draw(drawOption.c_str());
       c.Draw("Y+");
       c.Print(outputFilename.c_str());
+
       gpy2.Draw(drawOption.c_str());
+      c.Draw("Y+");
+      c.Print(outputFilename.c_str());
+
+      gpw1.Draw(drawOption.c_str());
+      c.Draw("Y+");
+      c.Print(outputFilename.c_str());
+
+      gpw2.Draw(drawOption.c_str());
       c.Draw("Y+");
       c.Print(outputFilename.c_str());
 
