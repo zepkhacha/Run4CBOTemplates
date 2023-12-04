@@ -374,8 +374,8 @@ int main(int argc, char* argv[]){
         gLinearResidual.SetPointError(i, 0, gSlidingVal.GetErrorY(i));
       }
 
-       gLinearResidual.SetMinimum(-0.5);
-       gLinearResidual.SetMaximum(0.5);
+       //gLinearResidual.SetMinimum(-0.5);
+       //gLinearResidual.SetMaximum(0.5);
 
       // only add option 'a' for first plot, and only use palette for individual calos
       //std::string drawOption = Form("%sPE%s", axesInitialized ? "" : "A", (calo != 0 || runs.size() > 1) ? " PMC PLC" : "");
