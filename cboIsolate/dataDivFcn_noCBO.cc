@@ -258,10 +258,10 @@ int main(int argc, char* argv[]){
       TH1D* gFullFitComparedWithWithoutCBODiv = new TH1D("dataDivFnc_wo_CBO", "dataDivFnc_wo_CBO", nBins, 0, 650.0644);
       TH1D* gFullFitComparedWithWithoutYDiv = new TH1D("dataDivFnc_wo_Y", "dataDivFnc_wo_Y", nBins, 0, 650.0644);
 
-      gFullFitComparedWithWithoutCBODiv->SetMaximum(1.64);
-      gFullFitComparedWithWithoutCBODiv->SetMinimum(1.56);
-      gFullFitComparedWithWithoutYDiv->SetMaximum(1.7);
-      gFullFitComparedWithWithoutYDiv->SetMinimum(1.5);
+      gFullFitComparedWithWithoutCBODiv->SetMaximum(1.1);
+      gFullFitComparedWithWithoutCBODiv->SetMinimum(0.9);
+      gFullFitComparedWithWithoutYDiv->SetMaximum(1.1);
+      gFullFitComparedWithWithoutYDiv->SetMinimum(0.9);
 
       // get fullFitResults
       fullFitResults->GetEntry(0);

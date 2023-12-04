@@ -7,11 +7,11 @@ runlist="
 for run in ${runlist};
 do
 
-  for calo in {1..24}
+  for calo in {0..24}
   do
       echo "run $run calo $calo" 
       ./dataDivFcn_noCBO \
-      -i /gm2data/zkhechad/cboTemplates/aMethod/fullFits/run${run}/sBin_constraintOn_cE0.0_seed0_run${run}_calo${calo}.root \
+      -i /gm2data/zkhechad/cboTemplates/aMethod_dec2023/fullFits/run${run}/sBin_constraintOn_cE0.0_seed0_run${run}_calo${calo}.root \
       -o run${run}_calo${calo} \
       -b $transform 
       
