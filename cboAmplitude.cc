@@ -207,6 +207,8 @@ int main(int argc, char* argv[]){
       TGraphErrors gpy2;
       TGraphErrors gpw2;
 
+      TGraphErrors gvw_pa;
+
       TGraph gAmpvFres;
 
       gFullFitResidual.SetMarkerStyle(7);
@@ -224,6 +226,7 @@ int main(int argc, char* argv[]){
       gay2.SetMarkerStyle(7);
       gpy2.SetMarkerStyle(7);
       gpw2.SetMarkerStyle(7);
+      gvw_pa.SetMarkerStyle(7);
 
       //gax2.SetMaximum(0.005);
       //gay1.SetMaximum(0.005);
@@ -258,6 +261,7 @@ int main(int argc, char* argv[]){
       gpy2.SetTitle("py2; Window Start [#mus]; py2 [rad]");
       gpw1.SetTitle("w_y;  Window Start [#mus]; w_y [rad/s]");
       gpw2.SetTitle("w_vw; Window Start [#mus]; w_vw [rad/s]");
+      gvw_pa.SetTitle("vw phase advance;  Window Start [#mus]; vs phase advance [rad])");
 
       // get fullFitResults
       fullFitResults->GetEntry(0);
@@ -351,6 +355,7 @@ int main(int argc, char* argv[]){
         gpw1.SetPointError(graphEntry, 0, slidingFit_w_yerr);
         gpw2.SetPoint(graphEntry, time, slidingFit_w_vw);
         gpw2.SetPointError(graphEntry, 0, slidingFit_w_vwerr);
+        gvw_pa.SetPoint(graphEntry, time, slidingFit_w_vw*t - sliidngFit_py2);
 
         graphEntry++;
       }// end for loop over window fits
@@ -452,6 +457,10 @@ int main(int argc, char* argv[]){
       c.Print(outputFilename.c_str());
 
       gpw2.Draw(drawOption.c_str());
+      c.Draw("Y+");
+      c.Print(outputFilename.c_str());
+
+      gvw_pa.Draw(drawOption.c_str());
       c.Draw("Y+");
       c.Print(outputFilename.c_str());
 
