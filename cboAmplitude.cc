@@ -414,7 +414,8 @@ int main(int argc, char* argv[]){
 
     // now draw residual for VW
     for (int i=0; i<gphaseAdvance_vw.GetN(); i++) {
-        gphaseAdvanceR_vw.SetPoint(i, gphaseAdvance_vw.GetPointX(i), gphaseAdvance_vw.GetPointY(i) - fitVW.Eval(gphaseAdvance_vw.GetPointX(i)));
+        gphaseAdvanceR_vw.SetPoint(i, gphaseAdvance_vw.GetPointX(i), 
+        within2Pi(gphaseAdvance_vw.GetPointY(i) - fitVW.Eval(gphaseAdvance_vw.GetPointX(i))) );
         gphaseAdvanceR_vw.SetPointError(i, 0, gphaseAdvance_vw.GetErrorY(i));
     }
     
