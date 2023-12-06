@@ -524,9 +524,9 @@ int main(int argc, char* argv[]){
      minimizer.DefineParameter(8, "ANx2", ANx2, 0.000001, 0, 0);
      minimizer.DefineParameter(9, "pNx2", pNx2, 0.001, 0, 0);
 
-     minimizer.DefineParameter(10, "ANy1", 0, 0, 0, 0);
-     minimizer.DefineParameter(11, "pNy1", 0, 0, 0, 0);
-     minimizer.DefineParameter(12, "w_y" , 0, 0, 0, 0);
+     minimizer.DefineParameter(10, "ANy1", 0, 0.0000001, 0, 0);
+     minimizer.DefineParameter(11, "pNy1", 0, 0.001, 0, 0);
+     minimizer.DefineParameter(12, "w_y" , 0, 0.01, 0, 0);
 
      minimizer.DefineParameter(13, "ANy2", 0.004, 0.0001, 0, 0);
      minimizer.DefineParameter(14, "pNy2", pNy2, 0.0000001, 0, 0);

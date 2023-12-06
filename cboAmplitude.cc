@@ -209,9 +209,11 @@ int main(int argc, char* argv[]){
     
     TGraphErrors gphaseAdvance_2cbo;
     TGraphErrors gphaseAdvance_vw;
+    TGraphErrors gphaseAdvance_y;
 
     TGraphErrors gphaseAdvanceR_2cbo;
     TGraphErrors gphaseAdvanceR_vw;
+    TGraphErrors gphaseAdvanceR_y;
     
     TGraph gAmpvFres;
     
@@ -232,6 +234,7 @@ int main(int argc, char* argv[]){
     gpw2.SetMarkerStyle(7);
     gphaseAdvance_2cbo.SetMarkerStyle(7);
     gphaseAdvance_vw.SetMarkerStyle(7);
+    gphaseAdvance_y.SetMarkerStyle(7);
 
     gphaseAdvanceR_2cbo.SetMarkerStyle(7);
     gphaseAdvanceR_vw.SetMarkerStyle(7);
@@ -279,6 +282,7 @@ int main(int argc, char* argv[]){
     gphaseAdvance_vw.SetTitle("vw Phase Advance; Window Start [#mus]; vw Phase Advance [rad]");
     gphaseAdvanceR_2cbo.SetTitle("2CBO Phase Advance Residual; Window Start [#mus]; 2CBO Residual [rad]");
     gphaseAdvanceR_vw.SetTitle("vw Phase Advance Residual; Window Start [#mus]; vw Residual [rad]");
+    gphaseAdvance_y.SetTitle("1-y Phase Advance; Window Start [#mus]; 1-y Phase Advance [rad]");
     
     // get fullFitResults
     fullFitResults->GetEntry(0);
@@ -375,6 +379,7 @@ int main(int argc, char* argv[]){
         
         gphaseAdvance_2cbo.SetPoint(graphEntry, time, (2*slidingFit_wCBO*time - slidingFit_phiCBO));
         gphaseAdvance_vw.SetPoint(graphEntry, time, (slidingFit_w_vw*time - slidingFit_py2));
+        gphaseAdvance_y.SetPoint(graphEntry, time, (slidingFit_w_y*time - slidingFit_py1));
         
         graphEntry++;
     }// end for loop over window fits
@@ -390,7 +395,6 @@ int main(int argc, char* argv[]){
     double w_0_err = fit.GetParError(0);
     double phi_0 = fit.GetParameter(1);
     double phi_0_err = fit.GetParError(1);
-    printf("FIT RESULTS: w_0 %f phi_0 %f\n", w_0, phi_0);
 
     // fit for vw 
     TF1 fitVW ("fitVW", "[0]*x - [1]", gphaseAdvance_vw.GetPointX(0), gphaseAdvance_vw.GetPointX(gphaseAdvance_vw.GetN()-1));
@@ -401,7 +405,16 @@ int main(int argc, char* argv[]){
     double linwVW_err = fitVW.GetParError(0);
     double linphi_VW = fitVW.GetParameter(1);
     double linphi_VW_err = fitVW.GetParError(1);
-    printf("FIT RESULTS: w_0 %f phi_0 %f\n", lin_wVW, linphi_VW);
+
+    // fit for 1-y
+    TF1 fity ("fity", "[0]*x - [1]", gphaseAdvance_y.GetPointX(0), gphaseAdvance_y.GetPointX(gphaseAdvance_y.GetN()-1));
+    gphaseAdvance_y.Fit("fitVW", "", "", 50, 100);
+    fity.SetRange(50,100);
+
+    double lin_wy = fity.GetParameter(0);
+    double linwy_err = fity.GetParError(0);
+    double linphi_y = fity.GetParameter(1);
+    double linphi_y_err = fity.GetParError(1);
 
     // fit for 2CBO
     TF1 fit2CBO ("fit2CBO", "[0]*x - [1]", gphaseAdvance_2cbo.GetPointX(0), gphaseAdvance_2cbo.GetPointX(gphaseAdvance_2cbo.GetN()-1));
@@ -412,7 +425,6 @@ int main(int argc, char* argv[]){
     double linw2CBO_err = fit2CBO.GetParError(0);
     double linphi_2CBO = fit2CBO.GetParameter(1);
     double linphi_2CBO_err = fit2CBO.GetParError(1);
-    printf("FIT RESULTS: w_0 %f phi_0 %f\n", lin_w2CBO, linphi_2CBO);
 
     // now draw residual for CBO
     for (int i=0; i<gSlidingVal.GetN(); i++) {
@@ -428,6 +440,13 @@ int main(int argc, char* argv[]){
         gphaseAdvanceR_vw.SetPoint(i, gphaseAdvance_vw.GetPointX(i), 
         within2Pi(gphaseAdvance_vw.GetPointY(i) - fitVW.Eval(gphaseAdvance_vw.GetPointX(i))) );
         gphaseAdvanceR_vw.SetPointError(i, 0, gphaseAdvance_vw.GetErrorY(i));
+    }
+
+    // now draw residual for 1-y
+    for (int i=0; i<gphaseAdvance_y.GetN(); i++) {
+        gphaseAdvanceR_y.SetPoint(i, gphaseAdvance_y.GetPointX(i), 
+        within2Pi(gphaseAdvance_y.GetPointY(i) - fity.Eval(gphaseAdvance_y.GetPointX(i))) );
+        gphaseAdvanceR_y.SetPointError(i, 0, gphaseAdvance_y.GetErrorY(i));
     }
 
     // now draw residual for 2CBO
@@ -527,6 +546,10 @@ int main(int argc, char* argv[]){
     c.Print(outputFilename.c_str());
 
     gphaseAdvanceR_vw.Draw(drawOption.c_str());
+    c.Draw("Y+");
+    c.Print(outputFilename.c_str());
+
+    gphaseAdvanceR_y.Draw(drawOption.c_str());
     c.Draw("Y+");
     c.Print(outputFilename.c_str());
 

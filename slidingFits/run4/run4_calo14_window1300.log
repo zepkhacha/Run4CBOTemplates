@@ -83,9 +83,9 @@ done fitting cbo isolate
      8 phi_CBO      5.99287e+00  1.00000e-04     no limits
      9 ANx2         3.16430e-04  1.00000e-06     no limits
     10 pNx2         2.82055e+00  1.00000e-03     no limits
-    11 ANy1         0.00000e+00  constant
-    12 pNy1         0.00000e+00  constant
-    13 w_y          0.00000e+00  constant
+    11 ANy1         0.00000e+00  1.00000e-07     no limits
+    12 pNy1         0.00000e+00  1.00000e-03     no limits
+    13 w_y          0.00000e+00  1.00000e-02     no limits
     14 ANy2         4.00000e-03  1.00000e-04     no limits
     15 pNy2         2.23607e+00  1.00000e-07     no limits
     16 w_vw         1.44513e+01  1.00000e-02    1.15611e+01  1.73416e+01
@@ -113,15 +113,12 @@ MINUIT - FIT ONLY WIGGLE
  **********
  **    9 **FIX           11
  **********
- PARAMETER   11  IS CONSTANT.   IGNORED.
  **********
  **   10 **FIX           12
  **********
- PARAMETER   12  IS CONSTANT.   IGNORED.
  **********
  **   11 **FIX           13
  **********
- PARAMETER   13  IS CONSTANT.   IGNORED.
  **********
  **   12 **FIX           14
  **********
@@ -150,9 +147,9 @@ MINUIT - FIT ONLY WIGGLE
    8  phi_CBO      5.99287e+00     fixed    
    9  ANx2         3.16430e-04     fixed    
   10  pNx2         2.82055e+00     fixed    
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
+  11  ANy1         0.00000e+00     fixed    
+  12  pNy1         0.00000e+00     fixed    
+  13  w_y          0.00000e+00     fixed    
   14  ANy2         4.00000e-03     fixed    
   15  pNy2         2.23607e+00     fixed    
   16  w_vw         1.44513e+01     fixed    
@@ -174,9 +171,9 @@ MINUIT - FIT ONLY WIGGLE
    8  phi_CBO      5.99287e+00     fixed    
    9  ANx2         3.16430e-04     fixed    
   10  pNx2         2.82055e+00     fixed    
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
+  11  ANy1         0.00000e+00     fixed    
+  12  pNy1         0.00000e+00     fixed    
+  13  w_y          0.00000e+00     fixed    
   14  ANy2         4.00000e-03     fixed    
   15  pNy2         2.23607e+00     fixed    
   16  w_vw         1.44513e+01     fixed    
@@ -197,6 +194,9 @@ MINUIT - FIT ONLY 1-CBO + other amplitudes
                    PARAMETER   16  w_vw RESTORED TO VARIABLE.
                    PARAMETER   15  pNy2 RESTORED TO VARIABLE.
                    PARAMETER   14  ANy2 RESTORED TO VARIABLE.
+                   PARAMETER   13  w_y RESTORED TO VARIABLE.
+                   PARAMETER   12  pNy1 RESTORED TO VARIABLE.
+                   PARAMETER   11  ANy1 RESTORED TO VARIABLE.
                    PARAMETER   10  pNx2 RESTORED TO VARIABLE.
                    PARAMETER    9  ANx2 RESTORED TO VARIABLE.
                    PARAMETER    8  phi_CBO RESTORED TO VARIABLE.
@@ -225,11 +225,9 @@ MINUIT - FIT ONLY 1-CBO + other amplitudes
  **********
  **   23 **FIX           11
  **********
- PARAMETER   11  IS CONSTANT.   IGNORED.
  **********
  **   24 **FIX           12
  **********
- PARAMETER   12  IS CONSTANT.   IGNORED.
  **********
  **   25 **FIX           14
  **********
@@ -243,7 +241,7 @@ MINUIT - FIT ONLY 1-CBO + other amplitudes
  **   28 **MIGRAD
  **********
  START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-04
- FCN=538.874 FROM MIGRAD    STATUS=INITIATE       49 CALLS          92 TOTAL
+ FCN=538.874 FROM MIGRAD    STATUS=INITIATE      204 CALLS         247 TOTAL
                      EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
   EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
@@ -256,49 +254,53 @@ MINUIT - FIT ONLY 1-CBO + other amplitudes
    7  w_CBO        2.32714e+00   1.00000e-03   0.00000e+00   4.39214e+02
    8  phi_CBO      5.99287e+00   1.00000e-04   0.00000e+00   7.20942e-01
    9  ANx2         3.16430e-04     fixed    
-  10  pNx2         4.19931e-01   1.00000e-03  -2.28680e+00   8.19423e-03
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
+  10  pNx2         4.19931e-01   1.00000e-03   0.00000e+00   8.19443e-03
+  11  ANy1         0.00000e+00     fixed    
+  12  pNy1         0.00000e+00     fixed    
+  13  w_y          0.00000e+00   1.00000e-02   0.00000e+00   0.00000e+00
   14  ANy2         4.00000e-03     fixed    
   15  pNy2         2.23607e+00     fixed    
   16  w_vw         1.44513e+01     fixed    
   17  LM          -1.34420e-04   constant   
  MIGRAD MINIMIZATION HAS CONVERGED.
  MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
- COVARIANCE MATRIX CALCULATED SUCCESSFULLY
- FCN=537.411 FROM MIGRAD    STATUS=CONVERGED     124 CALLS         167 TOTAL
-                     EDM=5.55004e-06    STRATEGY= 1      ERROR MATRIX ACCURATE 
-  EXT PARAMETER                                   STEP         FIRST   
+  MNHESS FAILS AND WILL RETURN DIAGONAL MATRIX. 
+ FCN=537.411 FROM MIGRAD    STATUS=CONVERGED     285 CALLS         328 TOTAL
+                     EDM=3.91003e-06    STRATEGY= 1  ERROR MATRIX UNCERTAINTY 100.0 per cent
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
    1  N0           3.30536e+06     fixed    
    2  tau          6.44004e+01   constant   
    3  A0           3.61892e-01     fixed    
    4  phi          4.12136e+00     fixed    
    5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48876e-03   2.62241e-04   2.97099e-06  -1.10953e+00
-   7  w_CBO        2.32496e+00   2.50677e-03   4.25161e-06   5.15261e+00
-   8  phi_CBO      5.39799e+00   6.84810e-01   1.18956e-03  -1.37132e-02
+   6  A_CBO        2.48876e-03   2.62226e-04   2.97099e-06  -1.10951e+00
+   7  w_CBO        2.32496e+00   3.75605e-04   4.25161e-06   5.15225e+00
+   8  phi_CBO      5.39799e+00   1.05085e-01   1.18956e-03  -1.37129e-02
    9  ANx2         3.16430e-04     fixed    
-  10  pNx2        -7.53765e-01   1.64438e+00   1.06644e-02  -5.07147e-04
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
+  10  pNx2        -7.53765e-01   9.40773e-01   1.06644e-02  -5.07410e-04
+  11  ANy1         0.00000e+00     fixed    
+  12  pNy1         0.00000e+00     fixed    
+  13  w_y          0.00000e+00   1.41421e-02  -0.00000e+00   0.00000e+00
   14  ANy2         4.00000e-03     fixed    
   15  pNy2         2.23607e+00     fixed    
   16  w_vw         1.44513e+01     fixed    
   17  LM          -1.34420e-04   constant   
- EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  4    ERR DEF=1
-  6.877e-08  4.097e-10  4.022e-08 -2.381e-06 
-  4.097e-10  6.284e-06  1.696e-03  3.381e-03 
-  4.022e-08  1.696e-03  4.690e-01  9.125e-01 
- -2.381e-06  3.381e-03  9.125e-01  2.704e+00 
+ EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  5    ERR DEF=1
+  6.876e-08  0.000e+00  0.000e+00  0.000e+00  0.000e+00 
+  0.000e+00  1.411e-07  0.000e+00  0.000e+00  0.000e+00 
+  0.000e+00  0.000e+00  1.104e-02  0.000e+00  0.000e+00 
+  0.000e+00  0.000e+00  0.000e+00  8.851e-01  0.000e+00 
+  0.000e+00  0.000e+00  0.000e+00  0.000e+00  2.000e-04 
+ERR MATRIX APPROXIMATE
  PARAMETER  CORRELATION COEFFICIENTS  
-       NO.  GLOBAL      6      7      8     10
-        6  0.01087   1.000  0.001  0.000 -0.006
-        7  0.98871   0.001  1.000  0.988  0.820
-        8  0.98816   0.000  0.988  1.000  0.810
-       10  0.82017  -0.006  0.820  0.810  1.000
+       NO.  GLOBAL      6      7      8     10     13
+        6  0.00000   1.000  0.000  0.000  0.000  0.000
+        7  0.00000   0.000  1.000  0.000  0.000  0.000
+        8  0.00000   0.000  0.000  1.000  0.000  0.000
+       10  0.00000   0.000  0.000  0.000  1.000  0.000
+       13  0.00000   0.000  0.000  0.000  0.000  1.000
+ ERR MATRIX APPROXIMATE
 MINUIT - FIT ONLY 1-CBO
  **********
  **   29 **RES 
@@ -306,6 +308,8 @@ MINUIT - FIT ONLY 1-CBO
                    PARAMETER   16  w_vw RESTORED TO VARIABLE.
                    PARAMETER   15  pNy2 RESTORED TO VARIABLE.
                    PARAMETER   14  ANy2 RESTORED TO VARIABLE.
+                   PARAMETER   12  pNy1 RESTORED TO VARIABLE.
+                   PARAMETER   11  ANy1 RESTORED TO VARIABLE.
                    PARAMETER    9  ANx2 RESTORED TO VARIABLE.
                    PARAMETER    4  phi RESTORED TO VARIABLE.
                    PARAMETER    3  A0 RESTORED TO VARIABLE.
@@ -336,15 +340,12 @@ MINUIT - FIT ONLY 1-CBO
  **********
  **   37 **FIX           11
  **********
- PARAMETER   11  IS CONSTANT.   IGNORED.
  **********
  **   38 **FIX           12
  **********
- PARAMETER   12  IS CONSTANT.   IGNORED.
  **********
  **   39 **FIX           13
  **********
- PARAMETER   13  IS CONSTANT.   IGNORED.
  **********
  **   40 **FIX           15
  **********
@@ -355,7 +356,7 @@ MINUIT - FIT ONLY 1-CBO
  **   42 **MIGRAD
  **********
  START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-04
- FCN=537.411 FROM MIGRAD    STATUS=INITIATE       10 CALLS         177 TOTAL
+ FCN=537.411 FROM MIGRAD    STATUS=INITIATE       10 CALLS         338 TOTAL
                      EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
   EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
@@ -364,14 +365,14 @@ MINUIT - FIT ONLY 1-CBO
    3  A0           3.61892e-01     fixed    
    4  phi          4.12136e+00     fixed    
    5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48876e-03   2.62241e-04   2.97099e-06  -1.10953e+00
-   7  w_CBO        2.32496e+00   2.50677e-03   4.25161e-06   5.15246e+00
+   6  A_CBO        2.48876e-03   2.62226e-04   2.97099e-06  -1.10951e+00
+   7  w_CBO        2.32496e+00   3.75605e-04   4.25161e-06   5.15225e+00
    8  phi_CBO      5.39799e+00     fixed    
    9  ANx2         3.16430e-04     fixed    
-  10  pNx2        -7.53765e-01   1.64438e+00   1.06644e-02  -5.07386e-04
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
+  10  pNx2        -7.53765e-01   9.40773e-01   1.06644e-02  -5.07410e-04
+  11  ANy1         0.00000e+00     fixed    
+  12  pNy1         0.00000e+00     fixed    
+  13  w_y          0.00000e+00     fixed    
   14  ANy2         4.00000e-03   1.00000e-04   1.00000e-04   1.13941e+05
   15  pNy2         2.23607e+00     fixed    
   16  w_vw         1.44513e+01     fixed    
@@ -379,7 +380,7 @@ MINUIT - FIT ONLY 1-CBO
  MIGRAD MINIMIZATION HAS CONVERGED.
  MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
  COVARIANCE MATRIX CALCULATED SUCCESSFULLY
- FCN=314.611 FROM MIGRAD    STATUS=CONVERGED      52 CALLS         219 TOTAL
+ FCN=314.611 FROM MIGRAD    STATUS=CONVERGED      52 CALLS         380 TOTAL
                      EDM=1.39042e-06    STRATEGY= 1      ERROR MATRIX ACCURATE 
   EXT PARAMETER                                   STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
@@ -388,15 +389,15 @@ MINUIT - FIT ONLY 1-CBO
    3  A0           3.61892e-01     fixed    
    4  phi          4.12136e+00     fixed    
    5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48653e-03   2.62242e-04   2.27469e-06   3.22086e+00
-   7  w_CBO        2.32496e+00   3.84951e-04   3.25997e-06   2.98498e+00
+   6  A_CBO        2.48653e-03   2.62242e-04   2.27469e-06   3.22085e+00
+   7  w_CBO        2.32496e+00   3.84951e-04   3.25997e-06   2.98497e+00
    8  phi_CBO      5.39799e+00     fixed    
    9  ANx2         3.16430e-04     fixed    
-  10  pNx2        -7.56634e-01   9.72810e-01   8.24145e-03  -1.16344e-03
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         8.92150e-05   2.62003e-04   2.27275e-06  -1.30575e-03
+  10  pNx2        -7.56635e-01   9.72810e-01   8.24145e-03  -1.16344e-03
+  11  ANy1         0.00000e+00     fixed    
+  12  pNy1         0.00000e+00     fixed    
+  13  w_y          0.00000e+00     fixed    
+  14  ANy2         8.92150e-05   2.62003e-04   2.27275e-06  -1.24072e-03
   15  pNy2         2.23607e+00     fixed    
   16  w_vw         1.44513e+01     fixed    
   17  LM          -1.34420e-04   constant   
@@ -417,6 +418,9 @@ MINUIT - FIT ONLY 2-CBO
  **********
                    PARAMETER   16  w_vw RESTORED TO VARIABLE.
                    PARAMETER   15  pNy2 RESTORED TO VARIABLE.
+                   PARAMETER   13  w_y RESTORED TO VARIABLE.
+                   PARAMETER   12  pNy1 RESTORED TO VARIABLE.
+                   PARAMETER   11  ANy1 RESTORED TO VARIABLE.
                    PARAMETER    9  ANx2 RESTORED TO VARIABLE.
                    PARAMETER    8  phi_CBO RESTORED TO VARIABLE.
                    PARAMETER    4  phi RESTORED TO VARIABLE.
@@ -455,15 +459,12 @@ MINUIT - FIT ONLY 2-CBO
  **********
  **   53 **FIX           11
  **********
- PARAMETER   11  IS CONSTANT.   IGNORED.
  **********
  **   54 **FIX           12
  **********
- PARAMETER   12  IS CONSTANT.   IGNORED.
  **********
  **   55 **FIX           13
  **********
- PARAMETER   13  IS CONSTANT.   IGNORED.
  **********
  **   56 **FIX           14
  **********
@@ -477,7 +478,7 @@ MINUIT - FIT ONLY 2-CBO
  **   59 **MIGRAD
  **********
  START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-04
- FCN=314.611 FROM MIGRAD    STATUS=INITIATE        6 CALLS         225 TOTAL
+ FCN=314.611 FROM MIGRAD    STATUS=INITIATE        6 CALLS         386 TOTAL
                      EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
   EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
@@ -488,12 +489,12 @@ MINUIT - FIT ONLY 2-CBO
    5  R           -6.05915e+01   constant   
    6  A_CBO        2.48653e-03     fixed    
    7  w_CBO        2.32496e+00     fixed    
-   8  phi_CBO      5.39799e+00   6.84810e-01   6.84810e-01   2.10901e-02
+   8  phi_CBO      5.39799e+00   1.05085e-01   1.05085e-01   2.10899e-02
    9  ANx2         3.16430e-04   1.00000e-06   1.00000e-06   2.22246e+03
-  10  pNx2        -7.56634e-01     fixed    
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
+  10  pNx2        -7.56635e-01     fixed    
+  11  ANy1         0.00000e+00     fixed    
+  12  pNy1         0.00000e+00     fixed    
+  13  w_y          0.00000e+00     fixed    
   14  ANy2         8.92150e-05     fixed    
   15  pNy2         2.23607e+00     fixed    
   16  w_vw         1.44513e+01     fixed    
@@ -501,8 +502,8 @@ MINUIT - FIT ONLY 2-CBO
  MIGRAD MINIMIZATION HAS CONVERGED.
  MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
  COVARIANCE MATRIX CALCULATED SUCCESSFULLY
- FCN=314.526 FROM MIGRAD    STATUS=CONVERGED      30 CALLS         249 TOTAL
-                     EDM=3.83363e-16    STRATEGY= 1      ERROR MATRIX ACCURATE 
+ FCN=314.526 FROM MIGRAD    STATUS=CONVERGED      32 CALLS         412 TOTAL
+                     EDM=4.19194e-16    STRATEGY= 1      ERROR MATRIX ACCURATE 
   EXT PARAMETER                                   STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
    1  N0           3.30536e+06     fixed    
@@ -512,12 +513,12 @@ MINUIT - FIT ONLY 2-CBO
    5  R           -6.05915e+01   constant   
    6  A_CBO        2.48653e-03     fixed    
    7  w_CBO        2.32496e+00     fixed    
-   8  phi_CBO      5.39771e+00   1.05184e-01   9.12284e-04  -2.63255e-07
-   9  ANx2         2.40247e-04   2.61832e-04   2.27093e-06   3.12886e-07
-  10  pNx2        -7.56634e-01     fixed    
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
+   8  phi_CBO      5.39771e+00   1.05184e-01   9.12284e-04  -2.74159e-07
+   9  ANx2         2.40247e-04   2.61832e-04   2.27093e-06  -9.38658e-06
+  10  pNx2        -7.56635e-01     fixed    
+  11  ANy1         0.00000e+00     fixed    
+  12  pNy1         0.00000e+00     fixed    
+  13  w_y          0.00000e+00     fixed    
   14  ANy2         8.92150e-05     fixed    
   15  pNy2         2.23607e+00     fixed    
   16  w_vw         1.44513e+01     fixed    
@@ -536,6 +537,9 @@ MINUIT - FIT ONLY 1-y
                    PARAMETER   16  w_vw RESTORED TO VARIABLE.
                    PARAMETER   15  pNy2 RESTORED TO VARIABLE.
                    PARAMETER   14  ANy2 RESTORED TO VARIABLE.
+                   PARAMETER   13  w_y RESTORED TO VARIABLE.
+                   PARAMETER   12  pNy1 RESTORED TO VARIABLE.
+                   PARAMETER   11  ANy1 RESTORED TO VARIABLE.
                    PARAMETER   10  pNx2 RESTORED TO VARIABLE.
                    PARAMETER    7  w_CBO RESTORED TO VARIABLE.
                    PARAMETER    6  A_CBO RESTORED TO VARIABLE.
@@ -578,7 +582,6 @@ MINUIT - FIT ONLY 1-y
  **********
  **   71 **FIX           13
  **********
- PARAMETER   13  IS CONSTANT.   IGNORED.
  **********
  **   72 **FIX           14
  **********
@@ -592,7 +595,7 @@ MINUIT - FIT ONLY 1-y
  **   75 **MIGRAD
  **********
  START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-04
- FCN=314.526 FROM MIGRAD    STATUS=INITIATE        2 CALLS         251 TOTAL
+ FCN=314.526 FROM MIGRAD    STATUS=INITIATE       95 CALLS         507 TOTAL
                      EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
   EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
@@ -605,10 +608,10 @@ MINUIT - FIT ONLY 1-y
    7  w_CBO        2.32496e+00     fixed    
    8  phi_CBO      5.39771e+00     fixed    
    9  ANx2         2.40247e-04     fixed    
-  10  pNx2        -7.56634e-01   9.72810e-01   9.72810e-01  -1.72248e-03
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
+  10  pNx2        -7.56635e-01   9.72810e-01   0.00000e+00  -1.72251e-03
+  11  ANy1         0.00000e+00   1.00000e-07   0.00000e+00  -4.77132e+02
+  12  pNy1         0.00000e+00   1.00000e-03   0.00000e+00   0.00000e+00
+  13  w_y          0.00000e+00     fixed    
   14  ANy2         8.92150e-05     fixed    
   15  pNy2         2.23607e+00     fixed    
   16  w_vw         1.44513e+01     fixed    
@@ -616,8 +619,8 @@ MINUIT - FIT ONLY 1-y
  MIGRAD MINIMIZATION HAS CONVERGED.
  MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
  COVARIANCE MATRIX CALCULATED SUCCESSFULLY
- FCN=314.526 FROM MIGRAD    STATUS=CONVERGED      12 CALLS         261 TOTAL
-                     EDM=3.43668e-15    STRATEGY= 1      ERROR MATRIX ACCURATE 
+ FCN=314.524 FROM MIGRAD    STATUS=CONVERGED     118 CALLS         530 TOTAL
+                     EDM=8.71129e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
   EXT PARAMETER                                   STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
    1  N0           3.30536e+06     fixed    
@@ -629,16 +632,23 @@ MINUIT - FIT ONLY 1-y
    7  w_CBO        2.32496e+00     fixed    
    8  phi_CBO      5.39771e+00     fixed    
    9  ANx2         2.40247e-04     fixed    
-  10  pNx2        -7.55611e-01   1.09026e+00   9.45616e-03   7.60424e-08
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
+  10  pNx2        -7.55611e-01   1.09028e+00   9.45614e-03   3.82699e-04
+  11  ANy1         8.18068e-06   2.56434e-04   1.60612e-06   4.78860e-02
+  12  pNy1         0.00000e+00   6.82039e+01   1.00000e+00   0.00000e+00
+  13  w_y          0.00000e+00     fixed    
   14  ANy2         8.92150e-05     fixed    
   15  pNy2         2.23607e+00     fixed    
   16  w_vw         1.44513e+01     fixed    
   17  LM          -1.34420e-04   constant   
- EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  1    ERR DEF=1
-  1.189e+00 
+ EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  3    ERR DEF=1
+  1.189e+00 -5.630e-07  1.499e-01 
+ -5.630e-07  6.576e-08  1.210e-02 
+  1.499e-01  1.210e-02  4.652e+03 
+ PARAMETER  CORRELATION COEFFICIENTS  
+       NO.  GLOBAL     10     11     12
+       10  0.00513   1.000 -0.002  0.002
+       11  0.69176  -0.002  1.000  0.692
+       12  0.69176   0.002  0.692  1.000
 MINUIT - FIT ONLY 2-y
  **********
  **   76 **RES 
@@ -646,6 +656,7 @@ MINUIT - FIT ONLY 2-y
                    PARAMETER   16  w_vw RESTORED TO VARIABLE.
                    PARAMETER   15  pNy2 RESTORED TO VARIABLE.
                    PARAMETER   14  ANy2 RESTORED TO VARIABLE.
+                   PARAMETER   13  w_y RESTORED TO VARIABLE.
                    PARAMETER    9  ANx2 RESTORED TO VARIABLE.
                    PARAMETER    8  phi_CBO RESTORED TO VARIABLE.
                    PARAMETER    7  w_CBO RESTORED TO VARIABLE.
@@ -692,11 +703,9 @@ MINUIT - FIT ONLY 2-y
  **********
  **   88 **FIX           11
  **********
- PARAMETER   11  IS CONSTANT.   IGNORED.
  **********
  **   89 **FIX           12
  **********
- PARAMETER   12  IS CONSTANT.   IGNORED.
  **********
  **   90 **FIX           16
  **********
@@ -704,7 +713,7 @@ MINUIT - FIT ONLY 2-y
  **   91 **MIGRAD
  **********
  START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-04
- FCN=314.526 FROM MIGRAD    STATUS=INITIATE        6 CALLS         267 TOTAL
+ FCN=314.472 FROM MIGRAD    STATUS=INITIATE       28 CALLS         558 TOTAL
                      EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
   EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
@@ -718,18 +727,18 @@ MINUIT - FIT ONLY 2-y
    8  phi_CBO      5.39771e+00     fixed    
    9  ANx2         2.40247e-04     fixed    
   10  pNx2        -7.55611e-01     fixed    
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         8.92150e-05   2.62003e-04   2.62003e-04   2.70835e+00
-  15  pNy2         2.23607e+00   1.00000e-07   1.00000e-07   1.83382e-01
+  11  ANy1         8.18068e-06     fixed    
+  12  pNy1         0.00000e+00     fixed    
+  13  w_y          3.28150e-01   1.41421e-02   3.28150e-01   7.74487e+00
+  14  ANy2         8.92150e-05   2.62003e-04   0.00000e+00   2.77532e+00
+  15  pNy2         2.23607e+00   1.00000e-07   0.00000e+00   1.83371e-01
   16  w_vw         1.44513e+01     fixed    
   17  LM          -1.34420e-04   constant   
  MIGRAD MINIMIZATION HAS CONVERGED.
  MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
  COVARIANCE MATRIX CALCULATED SUCCESSFULLY
- FCN=314.454 FROM MIGRAD    STATUS=CONVERGED      36 CALLS         297 TOTAL
-                     EDM=1.3191e-06    STRATEGY= 1      ERROR MATRIX ACCURATE 
+ FCN=314.369 FROM MIGRAD    STATUS=CONVERGED      81 CALLS         611 TOTAL
+                     EDM=9.5857e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
   EXT PARAMETER                                   STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
    1  N0           3.30536e+06     fixed    
@@ -742,25 +751,29 @@ MINUIT - FIT ONLY 2-y
    8  phi_CBO      5.39771e+00     fixed    
    9  ANx2         2.40247e-04     fixed    
   10  pNx2        -7.55611e-01     fixed    
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         1.13437e-04   2.62021e-04   2.27208e-06  -5.55806e+00
-  15  pNy2         1.56846e+00   2.30573e+00   2.03107e-02   3.05519e-04
+  11  ANy1         8.18068e-06     fixed    
+  12  pNy1         0.00000e+00     fixed    
+  13  w_y          3.24971e-01   1.70858e-02   1.48442e-04   6.13679e-02
+  14  ANy2         1.13712e-04   2.62020e-04   2.27187e-06   2.81436e+00
+  15  pNy2         1.56831e+00   2.30306e+00   1.99373e-02   2.30393e-04
   16  w_vw         1.44513e+01     fixed    
   17  LM          -1.34420e-04   constant   
- EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  2    ERR DEF=1
-  6.865e-08 -6.206e-06 
- -6.206e-06  5.316e+00 
+ EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  3    ERR DEF=1
+  2.919e-04  5.942e-10 -2.484e-06 
+  5.942e-10  6.865e-08 -5.956e-06 
+ -2.484e-06 -5.956e-06  5.304e+00 
  PARAMETER  CORRELATION COEFFICIENTS  
-       NO.  GLOBAL     14     15
-       14  0.01027   1.000 -0.010
-       15  0.01027  -0.010  1.000
+       NO.  GLOBAL     13     14     15
+       13  0.00015   1.000  0.000 -0.000
+       14  0.00987   0.000  1.000 -0.010
+       15  0.00987  -0.000 -0.010  1.000
 MINUIT - FIT ALTOGETHER
  **********
  **   92 **RES 
  **********
                    PARAMETER   16  w_vw RESTORED TO VARIABLE.
+                   PARAMETER   12  pNy1 RESTORED TO VARIABLE.
+                   PARAMETER   11  ANy1 RESTORED TO VARIABLE.
                    PARAMETER   10  pNx2 RESTORED TO VARIABLE.
                    PARAMETER    9  ANx2 RESTORED TO VARIABLE.
                    PARAMETER    8  phi_CBO RESTORED TO VARIABLE.
@@ -773,452 +786,199 @@ MINUIT - FIT ALTOGETHER
  **   93 **MIGRAD
  **********
  START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-04
- FCN=314.454 FROM MIGRAD    STATUS=INITIATE       22 CALLS         319 TOTAL
+ FCN=314.369 FROM MIGRAD    STATUS=INITIATE       32 CALLS         643 TOTAL
                      EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
   EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-   1  N0           3.30536e+06   6.12096e+02   6.12096e+02  -1.45862e-04
+   1  N0           3.30536e+06   6.12096e+02   6.12096e+02  -1.42343e-04
    2  tau          6.44004e+01   constant   
-   3  A0           3.61892e-01   2.48428e-04   2.48428e-04   3.78505e+00
-   4  phi          4.12136e+00   7.10282e-04   7.10282e-04   2.32504e+01
+   3  A0           3.61892e-01   2.48428e-04   2.48428e-04  -1.71030e-01
+   4  phi          4.12136e+00   7.10282e-04   7.10282e-04   2.42250e+01
    5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48653e-03   2.62242e-04   2.62242e-04  -1.06579e+00
-   7  w_CBO        2.32496e+00   3.84951e-04   3.84951e-04  -1.34644e+01
-   8  phi_CBO      5.39771e+00   1.05184e-01   1.05184e-01  -4.54565e-04
-   9  ANx2         2.40247e-04   2.61832e-04   2.61832e-04  -4.04990e+00
-  10  pNx2        -7.55611e-01   1.09026e+00   1.09026e+00   3.54883e-04
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         1.13437e-04   2.62021e-04   2.27208e-06  -5.55806e+00
-  15  pNy2         1.56846e+00   2.30573e+00   2.03107e-02   3.05551e-04
-  16  w_vw         1.44513e+01   1.00000e-02   1.00000e-02  -3.26122e+01
+   6  A_CBO        2.48653e-03   2.62242e-04   2.62242e-04   6.12651e-01
+   7  w_CBO        2.32496e+00   3.84951e-04   3.84951e-04  -1.23258e+01
+   8  phi_CBO      5.39771e+00   1.05184e-01   1.05184e-01  -5.17621e-03
+   9  ANx2         2.40247e-04   2.61832e-04   2.61832e-04  -4.21398e+00
+  10  pNx2        -7.55611e-01   1.09028e+00   1.09028e+00   7.06988e-05
+  11  ANy1         8.18068e-06   2.56434e-04   2.56434e-04  -1.02978e+04
+  12  pNy1         0.00000e+00   6.82039e+01   6.82039e+01   6.25928e-03
+  13  w_y          3.24971e-01   1.70858e-02   1.48442e-04   6.03391e-02
+  14  ANy2         1.13712e-04   2.62020e-04   2.27187e-06   2.81436e+00
+  15  pNy2         1.56831e+00   2.30306e+00   1.99373e-02   2.30430e-04
+  16  w_vw         1.44513e+01   1.00000e-02   1.00000e-02  -3.26455e+01
   17  LM          -1.34420e-04   constant   
  MIGRAD MINIMIZATION HAS CONVERGED.
- MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
- COVARIANCE MATRIX CALCULATED SUCCESSFULLY
- FCN=314.199 FROM HESSE     STATUS=OK            100 CALLS         642 TOTAL
-                     EDM=6.96317e-05    STRATEGY= 1      ERROR MATRIX ACCURATE 
+ FCN=311.803 FROM MIGRAD    STATUS=CONVERGED     376 CALLS         987 TOTAL
+                     EDM=6.87691e-06    STRATEGY= 1  ERROR MATRIX UNCERTAINTY   0.8 per cent
   EXT PARAMETER                                   STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-   1  N0           3.30539e+06   6.12149e+02   5.27668e+00   1.72826e-06
+   1  N0           3.30533e+06   6.15518e+02  -1.09899e+00  -9.48205e-07
    2  tau          6.44004e+01   constant   
-   3  A0           3.61892e-01   2.48500e-04   2.15357e-06   3.19249e-02
-   4  phi          4.12136e+00   7.10604e-04   6.15712e-06  -2.53958e-01
+   3  A0           3.61895e-01   2.48406e-04  -2.37465e-07   5.39719e-01
+   4  phi          4.12135e+00   7.10103e-04   6.23663e-08   6.10969e-02
    5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48664e-03   2.62270e-04   2.27318e-06   2.31444e-01
-   7  w_CBO        2.32498e+00   2.55281e-03   3.27807e-06  -2.10167e+00
-   8  phi_CBO      5.40334e+00   6.97278e-01   9.11736e-04  -1.55058e-02
-   9  ANx2         2.40212e-04   2.63156e-04   2.26972e-06   1.95960e-01
-  10  pNx2        -7.44459e-01   1.75802e+00   9.45245e-03  -3.28958e-04
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         1.74154e-04   2.62562e-04   2.27152e-06   4.24477e+00
-  15  pNy2         5.97507e+00   7.23573e+00   1.30206e-02   3.18805e-04
-  16  w_vw         1.44686e+01   2.52606e-02   1.57364e-05  -2.15639e-01
+   6  A_CBO        2.48532e-03   2.62137e-04   4.31248e-08   8.27325e-01
+   7  w_CBO        2.32499e+00   3.44839e-04   7.80270e-07  -7.98712e+00
+   8  phi_CBO      5.40762e+00   9.54272e-02   1.86676e-04  -1.63893e-02
+   9  ANx2         2.40344e-04   2.61814e-04  -1.30686e-08   2.36424e-01
+  10  pNx2        -7.33380e-01   1.08600e+00   2.68057e-04  -3.36652e-04
+  11  ANy1         4.11836e-04   2.62574e-04   1.13174e-06   8.53205e+00
+  12  pNy1        -2.72805e+00   4.05157e+00  -2.53470e-02  -8.55878e-04
+  13  w_y          3.15337e-01   1.45924e-02  -9.07390e-05   1.89218e-01
+  14  ANy2         1.74107e-04   2.52249e-04   4.14914e-07   9.70825e+00
+  15  pNy2         5.97628e+00   7.14665e+00   5.62303e-02   1.03240e-04
+  16  w_vw         1.44686e+01   2.51180e-02   6.58492e-05  -2.34941e-01
   17  LM          -1.34420e-04   constant   
- MIGRAD MINIMIZATION HAS CONVERGED.
- FCN=314.199 FROM MIGRAD    STATUS=CONVERGED     368 CALLS         665 TOTAL
-                     EDM=7.1636e-09    STRATEGY= 1  ERROR MATRIX UNCERTAINTY   0.0 per cent
-  EXT PARAMETER                                   STEP         FIRST   
-  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-   1  N0           3.30539e+06   6.12147e+02  -3.64294e-01  -1.27772e-09
-   2  tau          6.44004e+01   constant   
-   3  A0           3.61892e-01   2.48500e-04   3.83711e-08  -3.42788e-03
-   4  phi          4.12136e+00   7.10601e-04   1.93873e-07   1.08054e-03
-   5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48663e-03   2.62261e-04  -7.83081e-09  -3.54527e-01
-   7  w_CBO        2.32500e+00   2.55029e-03   2.10895e-05   3.97127e-03
-   8  phi_CBO      5.40912e+00   6.96613e-01   5.78077e-03  -7.87715e-06
-   9  ANx2         2.39988e-04   2.62965e-04  -2.23217e-07  -4.36620e-01
-  10  pNx2        -7.32870e-01   1.75620e+00   1.15898e-02   1.18130e-05
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         1.74013e-04   2.62581e-04  -1.41062e-07   8.78988e-02
-  15  pNy2         5.97358e+00   7.23643e+00  -1.49207e-03   5.02628e-06
-  16  w_vw         1.44686e+01   2.52625e-02  -1.41546e-06   4.22377e-03
-  17  LM          -1.34420e-04   constant   
- EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR= 11    ERR DEF=1
-  3.747e+05 
-  5.055e-04  6.175e-08 
-  2.700e-03  6.920e-10  5.050e-07 
-  1.021e-03  5.218e-10 -2.181e-09  6.878e-08 
- -1.136e-02  1.150e-08  3.710e-08  4.391e-09  6.504e-06 
- -3.447e+00  3.450e-06  1.132e-05  1.130e-06  1.756e-03  4.853e-01 
- -6.312e-05  6.272e-11 -2.002e-10 -5.099e-11 -6.253e-08 -1.671e-05  6.915e-08 
- -9.247e+00  6.898e-06  2.522e-05 -2.728e-07  3.511e-03  9.479e-01 -3.545e-05  3.084e+00 
-  1.812e-04 -2.818e-11 -2.671e-10  4.484e-11 -1.368e-10 -3.765e-08  9.058e-11 -1.513e-08  6.895e-08 
- -7.371e+00  2.034e-06  1.038e-05 -4.905e-06 -1.032e-04 -2.835e-02 -3.020e-06 -4.855e-02 -1.196e-04  5.237e+01 
- -2.211e-02  5.847e-09  2.950e-08 -1.412e-08 -3.706e-07 -1.012e-04 -7.364e-09 -1.809e-04 -4.166e-07  1.788e-01  6.382e-04 
+ EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR= 14    ERR DEF=1
+ ELEMENTS ABOVE DIAGONAL ARE NOT PRINTED.
+  3.789e+05 
+ -8.162e-05  6.171e-08 
+  1.110e-03  8.714e-11  5.042e-07 
+  3.357e-04  7.148e-11 -7.332e-11  6.872e-08 
+ -6.546e-03 -1.200e-09 -1.787e-09  3.653e-10  1.189e-07 
+ -1.121e+00 -1.104e-07  6.279e-07 -2.112e-10  9.906e-06  9.106e-03 
+  6.419e-05  8.508e-12 -3.588e-11  1.075e-12 -5.817e-10  1.197e-07  6.855e-08 
+ -2.634e+00 -2.912e-07  1.391e-06  6.595e-08  1.973e-05 -4.070e-03  2.483e-07  1.179e+00 
+ -7.133e-03  9.520e-10 -1.755e-09 -4.618e-10  5.581e-09  1.113e-06 -4.088e-11  3.049e-06  6.895e-08 
+  7.572e+01  2.464e-05 -2.143e-05 -7.912e-06  1.679e-06 -3.091e-02  2.633e-06 -3.913e-02  5.050e-05  1.642e+01 
+  1.778e-01  8.226e-08 -7.167e-08 -2.588e-08  1.109e-08 -1.118e-04  9.713e-09 -1.491e-04  1.666e-07  5.824e-02  2.129e-04 
+  2.990e-03  6.035e-10  3.668e-10 -5.177e-13  1.957e-09 -1.016e-07  2.827e-11 -1.650e-08 -3.387e-09  3.029e-05  1.121e-07 
+  2.990e-03  6.035e-10  3.668e-10 -5.177e-13  1.957e-09 -1.016e-07  2.827e-11 -1.650e-08 -3.387e-09  3.029e-05  1.121e-07  6.363e-08 
+ -1.068e+02 -4.400e-06  6.064e-06 -9.151e-07  5.623e-04  1.157e-01 -4.758e-06  2.379e-01  1.127e-04  1.047e+00  3.756e-03 
+ -1.068e+02 -4.400e-06  6.064e-06 -9.151e-07  5.623e-04  1.157e-01 -4.758e-06  2.379e-01  1.127e-04  1.047e+00  3.756e-03  1.424e-04  5.107e+01 
+ -3.809e-01 -1.591e-08  1.835e-08 -1.242e-09  1.989e-06  3.892e-04 -1.355e-08  7.955e-04  3.640e-07  4.129e-03  1.478e-05 
+ -3.809e-01 -1.591e-08  1.835e-08 -1.242e-09  1.989e-06  3.892e-04 -1.355e-08  7.955e-04  3.640e-07  4.129e-03  1.478e-05  4.659e-07  1.756e-01  6.309e-04 
  PARAMETER  CORRELATION COEFFICIENTS  
-       NO.  GLOBAL      1      3      4      6      7      8      9     10     14     15     16
-        1  0.01453   1.000  0.003  0.006  0.006 -0.007 -0.008 -0.000 -0.009  0.001 -0.002 -0.001
-        3  0.02460   0.003  1.000  0.004  0.008  0.018  0.020  0.001  0.016 -0.000  0.001  0.001
-        4  0.03115   0.006  0.004  1.000 -0.012  0.020  0.023 -0.001  0.020 -0.001  0.002  0.002
-        6  0.01963   0.006  0.008 -0.012  1.000  0.007  0.006 -0.001 -0.001  0.001 -0.003 -0.002
-        7  0.98895  -0.007  0.018  0.020  0.007  1.000  0.989 -0.093  0.784 -0.000 -0.006 -0.006
-        8  0.98854  -0.008  0.020  0.023  0.006  0.989  1.000 -0.091  0.775 -0.000 -0.006 -0.006
-        9  0.09373  -0.000  0.001 -0.001 -0.001 -0.093 -0.091  1.000 -0.077  0.001 -0.002 -0.001
-       10  0.78390  -0.009  0.016  0.020 -0.001  0.784  0.775 -0.077  1.000 -0.000 -0.004 -0.004
-       14  0.06325   0.001 -0.000 -0.001  0.001 -0.000 -0.000  0.001 -0.000  1.000 -0.063 -0.063
-       15  0.97818  -0.002  0.001  0.002 -0.003 -0.006 -0.006 -0.002 -0.004 -0.063  1.000  0.978
-       16  0.97818  -0.001  0.001  0.002 -0.002 -0.006 -0.006 -0.001 -0.004 -0.063  0.978  1.000
-MINUIT - REFIT 5-PARAM
- **********
- **   94 **FIX            5
- **********
- PARAMETER    5  IS CONSTANT.   IGNORED.
- **********
- **   95 **FIX            6
- **********
- **********
- **   96 **FIX            7
- **********
- **********
- **   97 **FIX            8
- **********
- **********
- **   98 **FIX            9
- **********
- **********
- **   99 **FIX           10
- **********
- **********
- **  100 **FIX           11
- **********
- PARAMETER   11  IS CONSTANT.   IGNORED.
- **********
- **  101 **FIX           12
- **********
- PARAMETER   12  IS CONSTANT.   IGNORED.
- **********
- **  102 **FIX           13
- **********
- PARAMETER   13  IS CONSTANT.   IGNORED.
- **********
- **  103 **FIX           14
- **********
- **********
- **  104 **FIX           15
- **********
- **********
- **  105 **FIX           16
- **********
- **********
- **  106 **MIGRAD
- **********
- START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-04
- FCN=314.199 FROM MIGRAD    STATUS=INITIATE        6 CALLS         671 TOTAL
-                     EDM=1.19876e-12    STRATEGY= 1  ERROR MATRIX UNCERTAINTY  50.0 per cent
-  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
-  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-   1  N0           3.30539e+06   6.12099e+02  -3.64294e-01  -1.27769e-09
-   2  tau          6.44004e+01   constant   
-   3  A0           3.61892e-01   2.48428e-04   3.83711e-08  -3.42763e-03
-   4  phi          4.12136e+00   7.10276e-04   1.93873e-07   1.08048e-03
-   5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48663e-03     fixed    
-   7  w_CBO        2.32500e+00     fixed    
-   8  phi_CBO      5.40912e+00     fixed    
-   9  ANx2         2.39988e-04     fixed    
-  10  pNx2        -7.32870e-01     fixed    
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         1.74013e-04     fixed    
-  15  pNy2         5.97358e+00     fixed    
-  16  w_vw         1.44686e+01     fixed    
-  17  LM          -1.34420e-04   constant   
- MIGRAD MINIMIZATION HAS CONVERGED.
- MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
- COVARIANCE MATRIX CALCULATED SUCCESSFULLY
- FCN=314.199 FROM MIGRAD    STATUS=CONVERGED      31 CALLS         696 TOTAL
-                     EDM=3.22734e-17    STRATEGY= 1      ERROR MATRIX ACCURATE 
-  EXT PARAMETER                                   STEP         FIRST   
-  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-   1  N0           3.30539e+06   6.12099e+02   5.27668e+00  -1.07726e-13
-   2  tau          6.44004e+01   constant   
-   3  A0           3.61892e-01   2.48428e-04   2.15356e-06   5.27901e-07
-   4  phi          4.12136e+00   7.10276e-04   6.15712e-06  -1.13094e-05
-   5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48663e-03     fixed    
-   7  w_CBO        2.32500e+00     fixed    
-   8  phi_CBO      5.40912e+00     fixed    
-   9  ANx2         2.39988e-04     fixed    
-  10  pNx2        -7.32870e-01     fixed    
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         1.74013e-04     fixed    
-  15  pNy2         5.97358e+00     fixed    
-  16  w_vw         1.44686e+01     fixed    
-  17  LM          -1.34420e-04   constant   
- EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  3    ERR DEF=1
-  3.747e+05  5.330e-04  2.858e-03 
-  5.330e-04  6.172e-08  5.981e-10 
-  2.858e-03  5.981e-10  5.045e-07 
- PARAMETER  CORRELATION COEFFICIENTS  
-       NO.  GLOBAL      1      3      4
-        1  0.00744   1.000  0.004  0.007
-        3  0.00486   0.004  1.000  0.003
-        4  0.00739   0.007  0.003  1.000
-MINUIT - 2CBO + Y
- **********
- **  107 **RES 
- **********
-                   PARAMETER   16  w_vw RESTORED TO VARIABLE.
-                   PARAMETER   15  pNy2 RESTORED TO VARIABLE.
-                   PARAMETER   14  ANy2 RESTORED TO VARIABLE.
-                   PARAMETER   10  pNx2 RESTORED TO VARIABLE.
-                   PARAMETER    9  ANx2 RESTORED TO VARIABLE.
-                   PARAMETER    8  phi_CBO RESTORED TO VARIABLE.
-                   PARAMETER    7  w_CBO RESTORED TO VARIABLE.
-                   PARAMETER    6  A_CBO RESTORED TO VARIABLE.
- **********
- **  108 **FIX            0
- **********
- PARAMETER    0  IS UNDEFINED. IGNORED.
- **********
- **  109 **FIX            1
- **********
- **********
- **  110 **FIX            2
- **********
- PARAMETER    2  IS CONSTANT.   IGNORED.
- **********
- **  111 **FIX            3
- **********
- **********
- **  112 **FIX            4
- **********
- **********
- **  113 **FIX            5
- **********
- PARAMETER    5  IS CONSTANT.   IGNORED.
- **********
- **  114 **FIX            6
- **********
- **********
- **  115 **FIX            7
- **********
- **********
- **  116 **FIX           16
- **********
- **********
- **  117 **MIGRAD
- **********
- START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-04
- FCN=314.199 FROM MIGRAD    STATUS=INITIATE       10 CALLS         706 TOTAL
-                     EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
-  EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
-  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-   1  N0           3.30539e+06     fixed    
-   2  tau          6.44004e+01   constant   
-   3  A0           3.61892e-01     fixed    
-   4  phi          4.12136e+00     fixed    
-   5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48663e-03     fixed    
-   7  w_CBO        2.32500e+00     fixed    
-   8  phi_CBO      5.40912e+00   1.05205e-01   1.05205e-01  -7.81321e-06
-   9  ANx2         2.39988e-04   2.61814e-04   2.61814e-04  -4.36624e-01
-  10  pNx2        -7.32870e-01   1.09045e+00   1.09045e+00   1.18188e-05
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         1.74013e-04   2.62581e-04   2.62581e-04   8.78931e-02
-  15  pNy2         5.97358e+00   7.22193e+00   7.22193e+00   5.02727e-06
-  16  w_vw         1.44686e+01     fixed    
-  17  LM          -1.34420e-04   constant   
- MIGRAD MINIMIZATION HAS CONVERGED.
- MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
- COVARIANCE MATRIX CALCULATED SUCCESSFULLY
- FCN=314.199 FROM MIGRAD    STATUS=CONVERGED      56 CALLS         752 TOTAL
-                     EDM=3.06612e-13    STRATEGY= 1      ERROR MATRIX ACCURATE 
-  EXT PARAMETER                                   STEP         FIRST   
-  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-   1  N0           3.30539e+06     fixed    
-   2  tau          6.44004e+01   constant   
-   3  A0           3.61892e-01     fixed    
-   4  phi          4.12136e+00     fixed    
-   5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48663e-03     fixed    
-   7  w_CBO        2.32500e+00     fixed    
-   8  phi_CBO      5.40912e+00   1.05176e-01   9.11744e-04  -5.89605e-06
-   9  ANx2         2.40003e-04   2.61834e-04   2.26972e-06  -1.57779e-05
-  10  pNx2        -7.32877e-01   1.09138e+00   9.46114e-03   2.94397e-07
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         1.74010e-04   2.62038e-04   2.27151e-06  -7.03375e-04
-  15  pNy2         5.97357e+00   1.50415e+00   1.30388e-02   1.99122e-07
-  16  w_vw         1.44686e+01     fixed    
-  17  LM          -1.34420e-04   constant   
- EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  5    ERR DEF=1
-  1.106e-02  1.496e-07 -1.040e-04  3.603e-09 -1.530e-04 
-  1.496e-07  6.856e-08 -1.801e-06  1.119e-10 -8.788e-07 
- -1.040e-04 -1.801e-06  1.191e+00  7.007e-08  1.721e-03 
-  3.603e-09  1.119e-10  7.007e-08  6.866e-08 -2.740e-06 
- -1.530e-04 -8.788e-07  1.721e-03 -2.740e-06  2.262e+00 
- PARAMETER  CORRELATION COEFFICIENTS  
-       NO.  GLOBAL      8      9     10     14     15
-        8  0.00559   1.000  0.005 -0.001  0.000 -0.001
-        9  0.00876   0.005  1.000 -0.006  0.002 -0.002
-       10  0.00645  -0.001 -0.006  1.000  0.000  0.001
-       14  0.00714   0.000  0.002  0.000  1.000 -0.007
-       15  0.00743  -0.001 -0.002  0.001 -0.007  1.000
-MINUIT - FIT WIGGLE + 1CBO
- **********
- **  118 **FIX            8
- **********
- **********
- **  119 **FIX            9
- **********
- **********
- **  120 **FIX           10
- **********
- **********
- **  121 **FIX           11
- **********
- PARAMETER   11  IS CONSTANT.   IGNORED.
- **********
- **  122 **FIX           12
- **********
- PARAMETER   12  IS CONSTANT.   IGNORED.
- **********
- **  123 **FIX           13
- **********
- PARAMETER   13  IS CONSTANT.   IGNORED.
- **********
- **  124 **FIX           14
- **********
- **********
- **  125 **FIX           15
- **********
- **********
- **  126 **FIX           16
- **********
- PARAMETER   16  ALREADY FIXED. IGNORED.
- **********
- **  127 **MIGRAD
- **********
+       NO.  GLOBAL      1      3      4      6      7      8      9     10     11     12     13     14     15     16
+        1  0.08947   1.000 -0.001  0.003  0.002 -0.031 -0.019  0.000 -0.004 -0.044  0.030  0.020  0.019 -0.024 -0.025
+        3  0.03430  -0.001  1.000  0.000  0.001 -0.014 -0.005  0.000 -0.001  0.015  0.024  0.023  0.010 -0.002 -0.003
+        4  0.01870   0.003  0.000  1.000 -0.000 -0.007  0.009 -0.000  0.002 -0.009 -0.007 -0.007  0.002  0.001  0.001
+        6  0.01177   0.002  0.001 -0.000  1.000  0.004 -0.000  0.000  0.000 -0.007 -0.007 -0.007 -0.000 -0.000 -0.000
+        7  0.36083  -0.031 -0.014 -0.007  0.004  1.000  0.301 -0.006  0.053  0.062  0.001  0.002  0.022  0.228  0.230
+        8  0.33702  -0.019 -0.005  0.009 -0.000  0.301  1.000  0.005 -0.039  0.044 -0.080 -0.080 -0.004  0.170  0.162
+        9  0.01073   0.000  0.000 -0.000  0.000 -0.006  0.005  1.000  0.001 -0.001  0.002  0.003  0.000 -0.003 -0.002
+       10  0.08465  -0.004 -0.001  0.002  0.000  0.053 -0.039  0.001  1.000  0.011 -0.009 -0.009 -0.000  0.031  0.029
+       11  0.12270  -0.044  0.015 -0.009 -0.007  0.062  0.044 -0.001  0.011  1.000  0.047  0.043 -0.051  0.060  0.055
+       12  0.98511   0.030  0.024 -0.007 -0.007  0.001 -0.080  0.002 -0.009  0.047  1.000  0.985  0.030  0.036  0.041
+       13  0.98510   0.020  0.023 -0.007 -0.007  0.002 -0.080  0.003 -0.009  0.043  0.985  1.000  0.030  0.036  0.040
+       14  0.10705   0.019  0.010  0.002 -0.000  0.022 -0.004  0.000 -0.000 -0.051  0.030  0.030  1.000  0.079  0.074
+       15  0.97845  -0.024 -0.002  0.001 -0.000  0.228  0.170 -0.003  0.031  0.060  0.036  0.036  0.079  1.000  0.978
+       16  0.97840  -0.025 -0.003  0.001 -0.000  0.230  0.162 -0.002  0.029  0.055  0.041  0.040  0.074  0.978  1.000
 MINUIT - MINOS
  **********
- **  128 **RES 
+ **   94 **RES 
  **********
-                   PARAMETER   15  pNy2 RESTORED TO VARIABLE.
-                   PARAMETER   14  ANy2 RESTORED TO VARIABLE.
-                   PARAMETER   10  pNx2 RESTORED TO VARIABLE.
-                   PARAMETER    9  ANx2 RESTORED TO VARIABLE.
-                   PARAMETER    8  phi_CBO RESTORED TO VARIABLE.
-                   PARAMETER   16  w_vw RESTORED TO VARIABLE.
-                   PARAMETER    7  w_CBO RESTORED TO VARIABLE.
-                   PARAMETER    6  A_CBO RESTORED TO VARIABLE.
-                   PARAMETER    4  phi RESTORED TO VARIABLE.
-                   PARAMETER    3  A0 RESTORED TO VARIABLE.
-                   PARAMETER    1  N0 RESTORED TO VARIABLE.
+ CALL TO MNFREE IGNORED.  THERE ARE NO FIXED PARAMETERS
  **********
- **  129 **MIG      2.5e+04        0.01
+ **   95 **MIG      2.5e+04        0.01
  **********
  START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-05
- FCN=314.199 FROM MIGRAD    STATUS=INITIATE       22 CALLS         774 TOTAL
-                     EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
-  EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
-  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-   1  N0           3.30539e+06   6.12099e+02   6.12099e+02   5.12882e-11
-   2  tau          6.44004e+01   constant   
-   3  A0           3.61892e-01   2.48428e-04   2.48428e-04  -1.11015e-03
-   4  phi          4.12136e+00   7.10276e-04   7.10276e-04  -3.92366e-05
-   5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48663e-03   2.62261e-04   2.62261e-04  -3.55014e-01
-   7  w_CBO        2.32500e+00   2.55023e-03   2.55023e-03   1.39818e-02
-   8  phi_CBO      5.40912e+00   1.05176e-01   1.05176e-01  -6.04306e-06
-   9  ANx2         2.40003e-04   2.61830e-04   2.61830e-04  -1.50391e-05
-  10  pNx2        -7.32877e-01   1.09136e+00   1.09136e+00   2.74938e-07
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         1.74010e-04   2.62038e-04   2.62038e-04  -7.04088e-04
-  15  pNy2         5.97357e+00   1.50411e+00   1.50411e+00   1.95684e-07
-  16  w_vw         1.44686e+01   5.24893e-03   5.24893e-03   8.17359e-03
-  17  LM          -1.34420e-04   constant   
- MIGRAD MINIMIZATION HAS CONVERGED.
- MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
- COVARIANCE MATRIX CALCULATED SUCCESSFULLY
- FCN=314.199 FROM MIGRAD    STATUS=CONVERGED     149 CALLS         901 TOTAL
-                     EDM=2.53435e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+ FCN=311.803 FROM MIGRAD    STATUS=INITIATE       28 CALLS        1015 TOTAL
+                     EDM=6.66489e-06    STRATEGY= 1  ERROR MATRIX UNCERTAINTY   0.8 per cent
   EXT PARAMETER                                   STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-   1  N0           3.30539e+06   6.12149e+02   5.27668e+00  -9.52645e-10
+   1  N0           3.30533e+06   6.15518e+02  -1.09899e+00  -9.48205e-07
    2  tau          6.44004e+01   constant   
-   3  A0           3.61892e-01   2.48500e-04   2.15356e-06  -3.29575e-03
-   4  phi          4.12136e+00   7.10604e-04   6.15712e-06   1.38538e-03
+   3  A0           3.61895e-01   2.48406e-04  -2.37465e-07   5.39718e-01
+   4  phi          4.12135e+00   7.10103e-04   6.23663e-08   6.10994e-02
    5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48665e-03   2.62270e-04   2.27318e-06   1.80482e-04
-   7  w_CBO        2.32500e+00   2.55307e-03   3.27820e-06  -2.59569e-03
-   8  phi_CBO      5.40912e+00   6.97354e-01   9.11744e-04   5.08599e-05
-   9  ANx2         2.40003e-04   2.63173e-04   2.26972e-06  -2.71042e-04
-  10  pNx2        -7.32877e-01   1.75855e+00   9.46082e-03   1.70921e-06
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         1.74010e-04   2.62559e-04   2.27151e-06  -2.87531e-04
-  15  pNy2         5.97357e+00   7.23843e+00   1.30389e-02   9.79949e-06
-  16  w_vw         1.44686e+01   2.52705e-02   1.57504e-05  -8.18480e-04
+   6  A_CBO        2.48532e-03   2.62137e-04   4.31248e-08   8.27324e-01
+   7  w_CBO        2.32499e+00   3.44839e-04   7.80270e-07  -7.98712e+00
+   8  phi_CBO      5.40762e+00   9.54272e-02   1.86676e-04  -1.63893e-02
+   9  ANx2         2.40344e-04   2.61814e-04  -1.30686e-08   2.36425e-01
+  10  pNx2        -7.33380e-01   1.08600e+00   2.68057e-04  -3.36652e-04
+  11  ANy1         4.11836e-04   2.62574e-04   1.13174e-06   8.53205e+00
+  12  pNy1        -2.72805e+00   4.05157e+00  -2.53470e-02  -8.55881e-04
+  13  w_y          3.15337e-01   1.45924e-02  -9.07390e-05   1.89218e-01
+  14  ANy2         1.74107e-04   2.52249e-04   4.14914e-07   9.70824e+00
+  15  pNy2         5.97628e+00   7.14665e+00   5.62303e-02   1.03240e-04
+  16  w_vw         1.44686e+01   2.51180e-02   6.58492e-05  -2.34945e-01
   17  LM          -1.34420e-04   constant   
- EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR= 11    ERR DEF=1
-  3.747e+05 
-  5.064e-04  6.175e-08 
-  2.696e-03  6.919e-10  5.050e-07 
-  1.085e-03  5.152e-10 -2.216e-09  6.879e-08 
- -1.155e-02  1.145e-08  3.741e-08  1.463e-10  6.518e-06 
- -3.500e+00  3.435e-06  1.141e-05 -3.346e-08  1.760e-03  4.863e-01 
-  1.681e-05  5.457e-11 -2.446e-10 -2.678e-12 -6.764e-08 -1.811e-05  6.926e-08 
- -9.397e+00  6.870e-06  2.541e-05 -2.605e-06  3.520e-03  9.505e-01 -3.833e-05  3.093e+00 
-  1.684e-04 -2.644e-11 -2.617e-10  6.883e-11  5.801e-10  1.593e-07  1.126e-10  3.628e-07  6.894e-08 
- -8.721e+00  2.180e-06  1.109e-05 -4.718e-06 -2.497e-05 -6.890e-03 -3.575e-06 -5.608e-03 -1.198e-04  5.239e+01 
- -2.681e-02  6.352e-09  3.196e-08 -1.367e-08 -9.776e-08 -2.641e-05 -9.541e-09 -3.108e-05 -4.177e-07  1.789e-01  6.386e-04 
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ FCN=311.803 FROM MIGRAD    STATUS=CONVERGED     148 CALLS        1135 TOTAL
+                     EDM=7.61323e-09    STRATEGY= 1  ERROR MATRIX UNCERTAINTY   0.2 per cent
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  N0           3.30533e+06   6.17097e+02  -8.48187e-02  -4.83423e-08
+   2  tau          6.44004e+01   constant   
+   3  A0           3.61895e-01   2.48262e-04  -1.98765e-07   1.64682e-02
+   4  phi          4.12135e+00   7.10287e-04  -1.61846e-07   6.41280e-03
+   5  R           -6.05915e+01   constant   
+   6  A_CBO        2.48532e-03   2.62197e-04  -6.93646e-08   5.17609e-02
+   7  w_CBO        2.32503e+00   2.55241e-03  -6.36735e-08   4.43018e-02
+   8  phi_CBO      5.41878e+00   6.97275e-01  -1.77205e-05  -9.84908e-05
+   9  ANx2         2.39946e-04   2.62934e-04  -1.72647e-09   2.07371e-02
+  10  pNx2        -7.11059e-01   1.75614e+00  -2.51482e-05  -8.05042e-06
+  11  ANy1         4.11562e-04   2.66152e-04  -1.45181e-07  -2.00091e-01
+  12  pNy1        -2.72593e+00   3.93616e+00  -3.19453e-03   4.62343e-05
+  13  w_y          3.15344e-01   1.42805e-02  -1.13936e-05  -1.75271e-02
+  14  ANy2         1.73773e-04   2.62515e-04   6.96462e-08  -1.15249e-01
+  15  pNy2         5.98059e+00   7.25622e+00  -4.80825e-03   8.27852e-05
+  16  w_vw         1.44686e+01   2.53554e-02  -2.31365e-06  -7.29777e-02
+  17  LM          -1.34420e-04   constant   
+ EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR= 14    ERR DEF=1
+ ELEMENTS ABOVE DIAGONAL ARE NOT PRINTED.
+  3.808e+05 
+ -1.238e-04  6.163e-08 
+  1.124e-03  1.551e-10  5.045e-07 
+  1.550e-04  8.047e-11 -3.107e-11  6.875e-08 
+ -1.412e-02  1.167e-08  3.667e-08  4.569e-09  6.515e-06 
+ -3.517e+00  3.330e-06  1.122e-05  1.171e-06  1.759e-03  4.862e-01 
+  9.685e-05 -9.955e-11 -4.001e-10 -3.019e-11 -6.196e-08 -1.660e-05  6.913e-08 
+ -7.314e+00  6.478e-06  2.247e-05  2.354e-06  3.514e-03  9.492e-01 -3.317e-05  3.084e+00 
+ -9.772e-03  2.720e-10 -2.354e-09 -4.580e-10  4.262e-09  1.260e-06  2.258e-11  3.109e-06  7.084e-08 
+  8.587e+01  2.074e-05 -2.695e-05 -1.047e-05  1.114e-04  2.746e-02 -1.316e-08  7.692e-02  1.739e-05  1.549e+01 
+  2.084e-01  6.540e-08 -9.155e-08 -3.525e-08  3.934e-07  7.714e-05  1.277e-09  2.262e-04  5.504e-08  5.537e-02  2.039e-04 
+ -3.341e-04  2.813e-11 -2.107e-10  7.370e-11  4.508e-10 -4.221e-08  1.052e-10 -7.414e-08  1.497e-10  3.771e-06  2.513e-08 
+ -3.341e-04  2.813e-11 -2.107e-10  7.370e-11  4.508e-10 -4.221e-08  1.052e-10 -7.414e-08  1.497e-10  3.771e-06  2.513e-08  6.891e-08 
+ -2.911e+01  3.237e-07  5.132e-06 -6.183e-06 -3.295e-05 -1.732e-02 -2.440e-06 -2.486e-02  4.225e-06  3.107e-01  1.563e-03 
+ -2.911e+01  3.237e-07  5.132e-06 -6.183e-06 -3.295e-05 -1.732e-02 -2.440e-06 -2.486e-02  4.225e-06  3.107e-01  1.563e-03  9.129e-06  5.265e+01 
+ -1.177e-01 -6.311e-09  4.137e-09 -2.359e-08 -1.443e-07 -7.497e-05 -6.253e-09 -1.159e-04  1.470e-08  1.251e-03  6.351e-06 
+ -1.177e-01 -6.311e-09  4.137e-09 -2.359e-08 -1.443e-07 -7.497e-05 -6.253e-09 -1.159e-04  1.470e-08  1.251e-03  6.351e-06  4.106e-08  1.800e-01  6.429e-04 
  PARAMETER  CORRELATION COEFFICIENTS  
-       NO.  GLOBAL      1      3      4      6      7      8      9     10     14     15     16
-        1  0.01476   1.000  0.003  0.006  0.007 -0.007 -0.008  0.000 -0.009  0.001 -0.002 -0.002
-        3  0.02451   0.003  1.000  0.004  0.008  0.018  0.020  0.001  0.016 -0.000  0.001  0.001
-        4  0.03128   0.006  0.004  1.000 -0.012  0.021  0.023 -0.001  0.020 -0.001  0.002  0.002
-        6  0.01879   0.007  0.008 -0.012  1.000  0.000 -0.000 -0.000 -0.006  0.001 -0.002 -0.002
-        7  0.98897  -0.007  0.018  0.021  0.000  1.000  0.989 -0.101  0.784  0.001 -0.001 -0.002
-        8  0.98856  -0.008  0.020  0.023 -0.000  0.989  1.000 -0.099  0.775  0.001 -0.001 -0.001
-        9  0.10110   0.000  0.001 -0.001 -0.000 -0.101 -0.099  1.000 -0.083  0.002 -0.002 -0.001
-       10  0.78413  -0.009  0.016  0.020 -0.006  0.784  0.775 -0.083  1.000  0.001 -0.000 -0.001
-       14  0.06339   0.001 -0.000 -0.001  0.001  0.001  0.001  0.002  0.001  1.000 -0.063 -0.063
-       15  0.97817  -0.002  0.001  0.002 -0.002 -0.001 -0.001 -0.002 -0.000 -0.063  1.000  0.978
-       16  0.97817  -0.002  0.001  0.002 -0.002 -0.002 -0.001 -0.001 -0.001 -0.063  0.978  1.000
+       NO.  GLOBAL      1      3      4      6      7      8      9     10     11     12     13     14     15     16
+        1  0.09634   1.000 -0.001  0.003  0.001 -0.009 -0.008  0.001 -0.007 -0.059  0.035  0.024 -0.002 -0.007 -0.008
+        3  0.03266  -0.001  1.000  0.001  0.001  0.018  0.019 -0.002  0.015  0.004  0.021  0.018  0.000  0.000 -0.001
+        4  0.03181   0.003  0.001  1.000 -0.000  0.020  0.023 -0.002  0.018 -0.012 -0.010 -0.009 -0.001  0.001  0.000
+        6  0.01502   0.001  0.001 -0.000  1.000  0.007  0.006 -0.000  0.005 -0.007 -0.010 -0.009  0.001 -0.003 -0.004
+        7  0.98866  -0.009  0.018  0.020  0.007  1.000  0.988 -0.092  0.784  0.006  0.011  0.011  0.001 -0.002 -0.002
+        8  0.98825  -0.008  0.019  0.023  0.006  0.988  1.000 -0.091  0.775  0.007  0.010  0.008 -0.000 -0.003 -0.004
+        9  0.09251   0.001 -0.002 -0.002 -0.000 -0.092 -0.091  1.000 -0.072  0.000 -0.000  0.000  0.002 -0.001 -0.001
+       10  0.78403  -0.007  0.015  0.018  0.005  0.784  0.775 -0.072  1.000  0.007  0.011  0.009 -0.000 -0.002 -0.003
+       11  0.06607  -0.059  0.004 -0.012 -0.007  0.006  0.007  0.000  0.007  1.000  0.017  0.014  0.002  0.002  0.002
+       12  0.98519   0.035  0.021 -0.010 -0.010  0.011  0.010 -0.000  0.011  0.017  1.000  0.985  0.004  0.011  0.013
+       13  0.98519   0.024  0.018 -0.009 -0.009  0.011  0.008  0.000  0.009  0.014  0.985  1.000  0.007  0.015  0.018
+       14  0.02078  -0.002  0.000 -0.001  0.001  0.001 -0.000  0.002 -0.000  0.002  0.004  0.007  1.000  0.005  0.006
+       15  0.97819  -0.007  0.000  0.001 -0.003 -0.002 -0.003 -0.001 -0.002  0.002  0.011  0.015  0.005  1.000  0.978
+       16  0.97820  -0.008 -0.001  0.000 -0.004 -0.002 -0.004 -0.001 -0.003  0.002  0.013  0.018  0.006  0.978  1.000
  **********
- **  130 **MINO      2.5e+04
+ **   96 **MINO      2.5e+04
  **********
                          POSITIVE MINOS ERROR NOT CALCULATED FOR PARAMETER 10
                          NEGATIVE MINOS ERROR NOT CALCULATED FOR PARAMETER 10
                          POSITIVE MINOS ERROR NOT CALCULATED FOR PARAMETER 15
                          NEGATIVE MINOS ERROR NOT CALCULATED FOR PARAMETER 15
- FCN=313.97 FROM MINOS     STATUS=NEW MINIMU   9392 CALLS       10293 TOTAL
+                         POSITIVE MINOS ERROR NOT CALCULATED FOR PARAMETER 16
+ FCN=311.389 FROM MINOS     STATUS=NEW MINIMU  15320 CALLS       16455 TOTAL
                      EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
   EXT PARAMETER                  PARABOLIC         MINOS ERRORS        
   NO.   NAME      VALUE            ERROR      NEGATIVE      POSITIVE   
-   1  N0           3.30539e+06   6.12066e+02  -6.12148e+02   6.12149e+02
+   1  N0           3.30533e+06   6.15539e+02  -6.14252e+02   6.14360e+02
    2  tau          6.44004e+01   constant   
-   3  A0           3.61892e-01   2.48566e-04  -2.48501e-04   2.48500e-04
-   4  phi          4.12136e+00   7.13819e-04  -7.10605e-04   7.10599e-04
+   3  A0           3.61895e-01   2.48186e-04  -2.48608e-04   2.48605e-04
+   4  phi          4.12135e+00   7.10320e-04  -7.10663e-04   7.10655e-04
    5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48675e-03   2.62350e-04  -2.62275e-04   2.62273e-04
-   7  w_CBO        2.32500e+00   2.55595e-03  -2.55149e-03   2.57003e-03
-   8  phi_CBO      5.40876e+00   6.98225e-01  -6.96504e-01   7.02027e-01
-   9  ANx2         2.39907e-04   2.71630e-04  -2.63071e-04   2.62909e-04
-  10  pNx2        -7.34286e-01   1.76701e+00                            
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         2.14190e-04   2.74630e-04  -5.85073e-04   2.62032e-04
-  15  pNy2         1.90337e+01   1.23957e+00                            
-  16  w_vw         1.46484e+01   2.52705e-02                            
+   6  A_CBO        2.48536e-03   2.62184e-04  -2.62294e-04   2.62288e-04
+   7  w_CBO        2.32503e+00   2.54637e-03  -2.55188e-03   2.57045e-03
+   8  phi_CBO      5.41807e+00   6.95309e-01  -6.96760e-01   7.02288e-01
+   9  ANx2         2.39985e-04   2.60421e-04  -2.63055e-04   2.62895e-04
+  10  pNx2        -7.13737e-01   1.75734e+00                            
+  11  ANy1         4.11510e-04   2.65094e-04  -2.65907e-04   2.65967e-04
+  12  pNy1        -2.72643e+00   3.90252e+00  -4.57958e+00   4.29278e+00
+  13  w_y          3.15342e-01   1.40559e-02  -1.68279e-02   1.54186e-02
+  14  ANy2         2.41847e-04   2.63740e-04  -6.37647e-04   2.62041e-04
+  15  pNy2        -4.39396e+00   1.08150e+00                            
+  16  w_vw         1.42353e+01   2.53554e-02                            
   17  LM          -1.34420e-04   constant   
  NEW MINIMUM FOUND.  GO BACK TO MINIMIZATION STEP.
  =================================================
@@ -1231,113 +991,124 @@ MINUIT - MINOS
                                                   V
 
  START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 5.00e-05
- FCN=313.97 FROM MIGRAD    STATUS=INITIATE       24 CALLS       10317 TOTAL
+ FCN=311.389 FROM MIGRAD    STATUS=INITIATE       30 CALLS       16485 TOTAL
                      EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
   EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-   1  N0           3.30539e+06   6.12066e+02  -3.49063e-03  -5.34011e-09
+   1  N0           3.30533e+06   6.15539e+02  -2.00540e-01  -3.93906e-08
    2  tau          6.44004e+01   constant   
-   3  A0           3.61892e-01   2.48566e-04  -9.60887e-08  -3.33177e-02
-   4  phi          4.12136e+00   7.13819e-04   1.02710e-06   8.61169e-02
+   3  A0           3.61895e-01   2.48186e-04   4.59248e-08   3.76632e-02
+   4  phi          4.12135e+00   7.10320e-04   3.37074e-07   2.62006e-02
    5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48675e-03   2.62350e-04  -5.90267e-08  -1.78098e-01
-   7  w_CBO        2.32500e+00   2.55595e-03  -1.29525e-06   1.99302e-02
-   8  phi_CBO      5.40876e+00   6.98225e-01  -3.75604e-04  -3.28170e-04
-   9  ANx2         2.39907e-04   2.71630e-04   1.58691e-07  -2.46250e+00
-  10  pNx2        -7.34286e-01   1.76701e+00  -4.23204e-03   1.25574e-04
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         2.14190e-04   2.74630e-04  -5.40954e-08  -8.83924e-02
-  15  pNy2         1.90337e+01   1.23957e+00  -4.45304e-03  -1.62462e-04
-  16  w_vw         1.46484e+01   2.52705e-02   2.52705e-02  -3.82540e+00
+   6  A_CBO        2.48536e-03   2.62184e-04  -2.09416e-07  -1.71116e-01
+   7  w_CBO        2.32503e+00   2.54637e-03   1.26064e-06  -1.07623e-02
+   8  phi_CBO      5.41807e+00   6.95309e-01   3.02784e-04  -7.18910e-05
+   9  ANx2         2.39985e-04   2.60421e-04  -2.26406e-07  -1.80089e-01
+  10  pNx2        -7.13737e-01   1.75734e+00   2.24730e-03   7.44360e-05
+  11  ANy1         4.11510e-04   2.65094e-04   4.43698e-08   2.26937e-02
+  12  pNy1        -2.72643e+00   3.90252e+00   3.58621e-03  -5.68379e-06
+  13  w_y          3.15342e-01   1.40559e-02   1.30103e-05   5.16870e-03
+  14  ANy2         2.41847e-04   2.63740e-04  -2.27511e-07  -4.19201e-01
+  15  pNy2        -4.39396e+00   1.08150e+00  -9.57346e-04  -7.06363e-05
+  16  w_vw         1.42353e+01   2.53554e-02   2.53554e-02   6.24634e+01
   17  LM          -1.34420e-04   constant   
  MIGRAD MINIMIZATION HAS CONVERGED.
- FCN=313.61 FROM MIGRAD    STATUS=CONVERGED     432 CALLS       10725 TOTAL
-                     EDM=4.67424e-06    STRATEGY= 1  ERROR MATRIX UNCERTAINTY   0.1 per cent
+ FCN=310.353 FROM MIGRAD    STATUS=CONVERGED     341 CALLS       16796 TOTAL
+                     EDM=3.10161e-06    STRATEGY= 1  ERROR MATRIX UNCERTAINTY   0.2 per cent
   EXT PARAMETER                                   STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-   1  N0           3.30539e+06   6.12142e+02   5.13632e-01   1.14012e-06
+   1  N0           3.30533e+06   6.10611e+02  -1.71252e-01   6.20659e-07
    2  tau          6.44004e+01   constant   
-   3  A0           3.61892e-01   2.48423e-04  -2.92628e-07  -4.05985e+00
-   4  phi          4.12136e+00   7.10497e-04  -4.91144e-07  -5.52901e-01
+   3  A0           3.61895e-01   2.47876e-04  -7.79725e-08  -5.70471e-01
+   4  phi          4.12135e+00   7.09401e-04  -4.80228e-07  -5.40174e-02
    5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48723e-03   2.62356e-04   2.19417e-07   7.34350e-01
-   7  w_CBO        2.32500e+00   2.54553e-03   2.72466e-05  -3.07731e+00
-   8  phi_CBO      5.40954e+00   6.95911e-01   7.82894e-03   1.20405e-02
-   9  ANx2         2.40403e-04   2.60906e-04   4.69534e-07   2.34109e+00
-  10  pNx2        -7.33560e-01   1.74935e+00   1.76829e-02  -7.63751e-04
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         2.65292e-04   2.49345e-04  -5.26462e-07  -1.45498e+01
-  15  pNy2         2.76069e+01   7.27009e+00  -1.97728e-02   1.29196e-03
-  16  w_vw         1.46811e+01   2.65781e-02  -1.91519e-05  -9.18293e-01
+   6  A_CBO        2.48500e-03   2.61681e-04   1.54186e-07   1.99971e-01
+   7  w_CBO        2.32502e+00   3.59839e-04   1.73894e-08  -1.99181e+00
+   8  phi_CBO      5.41638e+00   1.00624e-01   5.72095e-05  -1.17981e-03
+   9  ANx2         2.39426e-04   2.60641e-04   1.70804e-07   5.36928e-01
+  10  pNx2        -7.16174e-01   1.08837e+00  -2.75699e-04  -9.62847e-06
+  11  ANy1         4.11885e-04   2.64730e-04   3.99238e-08   1.15998e+00
+  12  pNy1        -2.73263e+00   5.62725e-01   4.14865e-04  -3.87333e-03
+  13  w_y          3.15319e-01   2.02932e-03  -7.87409e-08   5.09746e-01
+  14  ANy2         3.60256e-04   2.55537e-04  -1.43312e-06   5.61685e+00
+  15  pNy2        -9.88561e+00   3.70558e+00   1.68937e-02   1.67248e-03
+  16  w_vw         1.42140e+01   1.33867e-02   2.14803e-05  -8.68977e-01
   17  LM          -1.34420e-04   constant   
- EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR= 11    ERR DEF=1
-  3.747e+05 
- -1.806e-05  6.171e-08 
- -1.951e-04  8.668e-11  5.048e-07 
-  1.488e-04 -7.218e-11 -1.203e-10  6.883e-08 
- -8.624e-03  9.767e-09  3.428e-08  5.637e-09  6.480e-06 
- -3.175e+00  3.233e-06  1.082e-05  1.353e-06  1.751e-03  4.843e-01 
- -2.452e-05  1.190e-10 -1.976e-10 -3.177e-11 -5.958e-08 -1.598e-05  6.807e-08 
- -6.690e+00  5.250e-06  2.226e-05  7.175e-07  3.487e-03  9.433e-01 -3.252e-05  3.060e+00 
-  1.560e-03 -9.114e-10 -1.947e-09  6.592e-10 -1.085e-08 -1.930e-06  1.978e-09 -1.096e-05  6.217e-08 
- -6.928e+00  4.653e-06  1.389e-05 -3.400e-06  1.038e-04  2.408e-02 -3.188e-05  8.129e-02  6.420e-05  5.285e+01 
- -1.739e-02  1.175e-08  4.280e-08 -9.486e-09  3.196e-07  7.690e-05 -1.104e-07  2.427e-04  2.059e-07  1.915e-01  7.064e-04 
+ EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR= 14    ERR DEF=1
+ ELEMENTS ABOVE DIAGONAL ARE NOT PRINTED.
+  3.728e+05 
+  6.855e-04  6.144e-08 
+  2.774e-03 -6.279e-10  5.033e-07 
+ -9.290e-04  2.886e-10  5.711e-10  6.848e-08 
+  2.093e-03  2.056e-10 -7.645e-10 -2.629e-10  1.295e-07 
+ -6.839e-01 -1.246e-07 -2.206e-07  2.093e-07  3.738e-06  1.013e-02 
+ -1.201e-03  4.046e-10  9.101e-10 -4.237e-10 -4.178e-10  2.662e-07  6.793e-08 
+  5.667e-01 -7.849e-07 -1.261e-06  8.950e-07  8.214e-06 -2.442e-03  1.286e-06  1.185e+00 
+ -8.404e-04  2.933e-10  6.999e-10 -3.193e-10 -3.690e-10  1.493e-07 -4.535e-10  8.844e-07  7.008e-08 
+  8.648e+00 -7.845e-07 -8.302e-06  1.710e-06 -2.122e-05  6.084e-03  2.336e-06  8.935e-03  1.289e-06  3.167e-01 
+ -3.356e-02  1.493e-10  1.546e-08 -1.384e-09  7.721e-08 -2.031e-05 -2.931e-09 -4.059e-05 -2.309e-09  2.848e-04  4.118e-06 
+  1.059e-04  9.140e-10  4.236e-09 -1.413e-09  9.285e-10 -1.799e-06 -1.530e-09 -1.751e-07 -9.514e-10 -6.367e-06 -1.717e-08 
+  1.059e-04  9.140e-10  4.236e-09 -1.413e-09  9.285e-10 -1.799e-06 -1.530e-09 -1.751e-07 -9.514e-10 -6.367e-06 -1.717e-08  6.530e-08 
+  7.618e+00  1.936e-05  6.984e-05 -2.443e-05  1.346e-04 -1.808e-02 -2.699e-05  1.996e-02 -1.574e-05  1.566e-02  3.939e-04 
+  7.618e+00  1.936e-05  6.984e-05 -2.443e-05  1.346e-04 -1.808e-02 -2.699e-05  1.996e-02 -1.574e-05  1.566e-02  3.939e-04 -5.879e-05  1.373e+01 
+  3.063e-02  6.982e-08  2.433e-07 -8.468e-08  5.912e-07 -1.003e-04 -8.922e-08 -8.174e-06 -4.579e-08 -9.427e-05  1.873e-06 
+  3.063e-02  6.982e-08  2.433e-07 -8.468e-08  5.912e-07 -1.003e-04 -8.922e-08 -8.174e-06 -4.579e-08 -9.427e-05  1.873e-06 -1.613e-07  4.861e-02  1.792e-04 
  PARAMETER  CORRELATION COEFFICIENTS  
-       NO.  GLOBAL      1      3      4      6      7      8      9     10     14     15     16
-        1  0.01862   1.000 -0.000 -0.000  0.001 -0.006 -0.007 -0.000 -0.006  0.010 -0.002 -0.001
-        3  0.03260  -0.000  1.000  0.000 -0.001  0.015  0.019  0.002  0.012 -0.015  0.003  0.002
-        4  0.03120  -0.000  0.000  1.000 -0.001  0.019  0.022 -0.001  0.018 -0.011  0.003  0.002
-        6  0.01732   0.001 -0.001 -0.001  1.000  0.008  0.007 -0.000  0.002  0.010 -0.002 -0.001
-        7  0.98906  -0.006  0.015  0.019  0.008  1.000  0.989 -0.090  0.783 -0.017  0.006  0.005
-        8  0.98870  -0.007  0.019  0.022  0.007  0.989  1.000 -0.088  0.775 -0.011  0.005  0.004
-        9  0.09612  -0.000  0.002 -0.001 -0.000 -0.090 -0.088  1.000 -0.071  0.030 -0.017 -0.016
-       10  0.78321  -0.006  0.012  0.018  0.002  0.783  0.775 -0.071  1.000 -0.025  0.006  0.005
-       14  0.07640   0.010 -0.015 -0.011  0.010 -0.017 -0.011  0.030 -0.025  1.000  0.035  0.031
-       15  0.99089  -0.002  0.003  0.003 -0.002  0.006  0.005 -0.017  0.006  0.035  1.000  0.991
-       16  0.99089  -0.001  0.002  0.002 -0.001  0.005  0.004 -0.016  0.005  0.031  0.991  1.000
+       NO.  GLOBAL      1      3      4      6      7      8      9     10     11     12     13     14     15     16
+        1  0.05299   1.000  0.005  0.006 -0.006  0.010 -0.011 -0.008  0.001 -0.005  0.025 -0.027  0.001  0.003  0.004
+        3  0.02983   0.005  1.000 -0.004  0.004  0.002 -0.005  0.006 -0.003  0.004 -0.006  0.000  0.014  0.021  0.021
+        4  0.04824   0.006 -0.004  1.000  0.003 -0.003 -0.003  0.005 -0.002  0.004 -0.021  0.011  0.023  0.027  0.026
+        6  0.03922  -0.006  0.004  0.003  1.000 -0.003  0.008 -0.006  0.003 -0.005  0.012 -0.003 -0.021 -0.025 -0.024
+        7  0.26782   0.010  0.002 -0.003 -0.003  1.000  0.103 -0.004  0.021 -0.004 -0.105  0.106  0.010  0.101  0.123
+        8  0.26644  -0.011 -0.005 -0.003  0.008  0.103  1.000  0.010 -0.022  0.006  0.107 -0.099 -0.070 -0.048 -0.074
+        9  0.04725  -0.008  0.006  0.005 -0.006 -0.004  0.010  1.000  0.005 -0.007  0.016 -0.006 -0.023 -0.028 -0.026
+       10  0.05773   0.001 -0.003 -0.002  0.003  0.021 -0.022  0.005  1.000  0.003  0.015 -0.018 -0.001  0.005 -0.001
+       11  0.03292  -0.005  0.004  0.004 -0.005 -0.004  0.006 -0.007  0.003  1.000  0.009 -0.004 -0.014 -0.016 -0.013
+       12  0.33609   0.025 -0.006 -0.021  0.012 -0.105  0.107  0.016  0.015  0.009  1.000  0.249 -0.044  0.008 -0.013
+       13  0.33385  -0.027  0.000  0.011 -0.003  0.106 -0.099 -0.006 -0.018 -0.004  0.249  1.000 -0.033  0.052  0.069
+       14  0.13214   0.001  0.014  0.023 -0.021  0.010 -0.070 -0.023 -0.001 -0.014 -0.044 -0.033  1.000 -0.062 -0.047
+       15  0.98082   0.003  0.021  0.027 -0.025  0.101 -0.048 -0.028  0.005 -0.016  0.008  0.052 -0.062  1.000  0.980
+       16  0.98097   0.004  0.021  0.026 -0.024  0.123 -0.074 -0.026 -0.001 -0.013 -0.013  0.069 -0.047  0.980  1.000
                          POSITIVE MINOS ERROR NOT CALCULATED FOR PARAMETER 10
                          NEGATIVE MINOS ERROR NOT CALCULATED FOR PARAMETER 10
-                         POSITIVE MINOS ERROR NOT CALCULATED FOR PARAMETER 15
-                         NEGATIVE MINOS ERROR NOT CALCULATED FOR PARAMETER 15
-                         POSITIVE MINOS ERROR NOT CALCULATED FOR PARAMETER 16
- FCN=313.61 FROM MINOS     STATUS=PROBLEMS     9706 CALLS       20431 TOTAL
-                     EDM=4.67424e-06    STRATEGY= 1  ERROR MATRIX UNCERTAINTY   0.1 per cent
+ FCN=310.353 FROM MINOS     STATUS=PROBLEMS    14806 CALLS       31602 TOTAL
+                     EDM=3.10161e-06    STRATEGY= 1  ERROR MATRIX UNCERTAINTY   0.2 per cent
   EXT PARAMETER                  PARABOLIC         MINOS ERRORS        
   NO.   NAME      VALUE            ERROR      NEGATIVE      POSITIVE   
-   1  N0           3.30539e+06   6.12142e+02  -6.12360e+02   6.11939e+02
+   1  N0           3.30533e+06   6.10611e+02  -6.14269e+02   6.14354e+02
    2  tau          6.44004e+01   constant   
-   3  A0           3.61892e-01   2.48423e-04  -2.48377e-04   2.48624e-04
-   4  phi          4.12136e+00   7.10497e-04  -7.10470e-04   7.10736e-04
+   3  A0           3.61895e-01   2.47876e-04  -2.48553e-04   2.48665e-04
+   4  phi          4.12135e+00   7.09401e-04  -7.10616e-04   7.10704e-04
    5  R           -6.05915e+01   constant   
-   6  A_CBO        2.48723e-03   2.62356e-04  -2.62300e-04   2.62250e-04
-   7  w_CBO        2.32500e+00   2.54553e-03  -2.54986e-03   2.57034e-03
-   8  phi_CBO      5.40954e+00   6.95911e-01  -6.96114e-01   7.02028e-01
-   9  ANx2         2.40403e-04   2.60906e-04  -2.63162e-04   2.62824e-04
-  10  pNx2        -7.33560e-01   1.74935e+00                            
-  11  ANy1         0.00000e+00   constant   
-  12  pNy1         0.00000e+00   constant   
-  13  w_y          0.00000e+00   constant   
-  14  ANy2         2.65292e-04   2.49345e-04  -2.61431e-04   2.62427e-04
-  15  pNy2         2.76069e+01   7.27009e+00                            
-  16  w_vw         1.46811e+01   2.65781e-02  -7.42498e-02              
+   6  A_CBO        2.48500e-03   2.61681e-04  -2.62289e-04   2.62269e-04
+   7  w_CBO        2.32502e+00   3.59839e-04  -2.54492e-03   2.57892e-03
+   8  phi_CBO      5.41638e+00   1.00624e-01  -6.94891e-01   7.04628e-01
+   9  ANx2         2.39426e-04   2.60641e-04  -2.63152e-04   2.62811e-04
+  10  pNx2        -7.16174e-01   1.08837e+00                            
+  11  ANy1         4.11885e-04   2.64730e-04  -2.65939e-04   2.65950e-04
+  12  pNy1        -2.73263e+00   5.62725e-01  -4.55553e+00   4.30238e+00
+  13  w_y          3.15319e-01   2.02932e-03  -1.67417e-02   1.54511e-02
+  14  ANy2         3.60256e-04   2.55537e-04  -2.62146e-04   2.61765e-04
+  15  pNy2        -9.88561e+00   3.70558e+00  -4.19186e+00   5.21701e+00
+  16  w_vw         1.42140e+01   1.33867e-02  -1.46501e-02   2.00199e-02
   17  LM          -1.34420e-04   constant   
  **********
- **  131 **SHO COR 
+ **   97 **SHO COR 
  **********
  PARAMETER  CORRELATION COEFFICIENTS  
-       NO.  GLOBAL      1      3      4      6      7      8      9     10     14     15     16
-        1  0.01862   1.000 -0.000 -0.000  0.001 -0.006 -0.007 -0.000 -0.006  0.010 -0.002 -0.001
-        3  0.03260  -0.000  1.000  0.000 -0.001  0.015  0.019  0.002  0.012 -0.015  0.003  0.002
-        4  0.03120  -0.000  0.000  1.000 -0.001  0.019  0.022 -0.001  0.018 -0.011  0.003  0.002
-        6  0.01732   0.001 -0.001 -0.001  1.000  0.008  0.007 -0.000  0.002  0.010 -0.002 -0.001
-        7  0.98906  -0.006  0.015  0.019  0.008  1.000  0.989 -0.090  0.783 -0.017  0.006  0.005
-        8  0.98870  -0.007  0.019  0.022  0.007  0.989  1.000 -0.088  0.775 -0.011  0.005  0.004
-        9  0.09612  -0.000  0.002 -0.001 -0.000 -0.090 -0.088  1.000 -0.071  0.030 -0.017 -0.016
-       10  0.78321  -0.006  0.012  0.018  0.002  0.783  0.775 -0.071  1.000 -0.025  0.006  0.005
-       14  0.07640   0.010 -0.015 -0.011  0.010 -0.017 -0.011  0.030 -0.025  1.000  0.035  0.031
-       15  0.99089  -0.002  0.003  0.003 -0.002  0.006  0.005 -0.017  0.006  0.035  1.000  0.991
-       16  0.99089  -0.001  0.002  0.002 -0.001  0.005  0.004 -0.016  0.005  0.031  0.991  1.000
+       NO.  GLOBAL      1      3      4      6      7      8      9     10     11     12     13     14     15     16
+        1  0.05299   1.000  0.005  0.006 -0.006  0.010 -0.011 -0.008  0.001 -0.005  0.025 -0.027  0.001  0.003  0.004
+        3  0.02983   0.005  1.000 -0.004  0.004  0.002 -0.005  0.006 -0.003  0.004 -0.006  0.000  0.014  0.021  0.021
+        4  0.04824   0.006 -0.004  1.000  0.003 -0.003 -0.003  0.005 -0.002  0.004 -0.021  0.011  0.023  0.027  0.026
+        6  0.03922  -0.006  0.004  0.003  1.000 -0.003  0.008 -0.006  0.003 -0.005  0.012 -0.003 -0.021 -0.025 -0.024
+        7  0.26782   0.010  0.002 -0.003 -0.003  1.000  0.103 -0.004  0.021 -0.004 -0.105  0.106  0.010  0.101  0.123
+        8  0.26644  -0.011 -0.005 -0.003  0.008  0.103  1.000  0.010 -0.022  0.006  0.107 -0.099 -0.070 -0.048 -0.074
+        9  0.04725  -0.008  0.006  0.005 -0.006 -0.004  0.010  1.000  0.005 -0.007  0.016 -0.006 -0.023 -0.028 -0.026
+       10  0.05773   0.001 -0.003 -0.002  0.003  0.021 -0.022  0.005  1.000  0.003  0.015 -0.018 -0.001  0.005 -0.001
+       11  0.03292  -0.005  0.004  0.004 -0.005 -0.004  0.006 -0.007  0.003  1.000  0.009 -0.004 -0.014 -0.016 -0.013
+       12  0.33609   0.025 -0.006 -0.021  0.012 -0.105  0.107  0.016  0.015  0.009  1.000  0.249 -0.044  0.008 -0.013
+       13  0.33385  -0.027  0.000  0.011 -0.003  0.106 -0.099 -0.006 -0.018 -0.004  0.249  1.000 -0.033  0.052  0.069
+       14  0.13214   0.001  0.014  0.023 -0.021  0.010 -0.070 -0.023 -0.001 -0.014 -0.044 -0.033  1.000 -0.062 -0.047
+       15  0.98082   0.003  0.021  0.027 -0.025  0.101 -0.048 -0.028  0.005 -0.016  0.008  0.052 -0.062  1.000  0.980
+       16  0.98097   0.004  0.021  0.026 -0.024  0.123 -0.074 -0.026 -0.001 -0.013 -0.013  0.069 -0.047  0.980  1.000
+ ELEMENTS ABOVE DIAGONAL ARE NOT PRINTED.
