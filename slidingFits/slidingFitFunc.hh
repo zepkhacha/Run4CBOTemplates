@@ -113,7 +113,7 @@ double calcnu(double par[], double i){
 
   nu = par[0]*exp(-1.*time/par[1]) * (1 + par[2]*cos((blindr)*time - phi));
   // now add x-terms
-  nu *= 1.0 + par[5]*cos(par[6]*(time) - par[7]) + par[8]*cos(2*par[7]*(time)- par[9]);
+  nu *= 1.0 + par[5]*cos(par[6]*(time) - par[7]) + par[8]*cos(2*par[6]*(time)- par[9]);
   // now add y-terms
   nu *= (1.0 + par[10] * cos(par[12]*time - par[11])
              + par[13] * cos(par[15]*time - par[14]));
