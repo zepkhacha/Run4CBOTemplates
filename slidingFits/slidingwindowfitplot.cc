@@ -370,7 +370,6 @@ int main(int argc, char* argv[]){
   // assign number of bins to this window
   // use longer windows at later times
   // maintain equal statistics in each window
-  // first window is hard coded to be 117 bins
   
   fitrangelow  = startBin + (windowNo);
 
@@ -380,7 +379,7 @@ int main(int argc, char* argv[]){
      double c = 0.55;
      double insideLog = 1.0 - c*c*exp(-((startBin-fitrangelow)*0.1492)/tau) 
                             + c*c*exp(-((startBin+117-fitrangelow)*0.1492)/tau);
-     // if insideLog term is below threshold, set deltaT = 1100 bins ~160us
+     // if insideLog term is below threshold, set deltaT to some max window size
      double deltaT;
      if (insideLog<0.08){
         deltaT = 1100*0.1492;
@@ -532,7 +531,7 @@ int main(int argc, char* argv[]){
      minimizer.DefineParameter(13, "ANy2", 0.004, 0.0001, 0, 0);
      minimizer.DefineParameter(14, "pNy2", pNy2, 0.0000001, 0, 0);
      double w_vw_guess = (2.3)*(2*M_PI);
-     minimizer.DefineParameter(15, "w_vw", w_vw_guess, 0.01, 0.5*w_vw_guess, 1.5*w_vw_guess);
+     minimizer.DefineParameter(15, "w_vw", w_vw_guess, 0.01, 0.8*w_vw_guess, 1.2*w_vw_guess);
 
      minimizer.DefineParameter(16, "LM", LM, 0.0, -0.1, 0.1); // FIX
      
