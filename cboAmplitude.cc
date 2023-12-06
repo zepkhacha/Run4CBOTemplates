@@ -403,6 +403,17 @@ int main(int argc, char* argv[]){
     double linphi_VW_err = fitVW.GetParError(1);
     printf("FIT RESULTS: w_0 %f phi_0 %f\n", lin_wVW, linphi_VW);
 
+    // fit for 2CBO
+    TF1 fit2CBO ("fit2CBO", "[0]*x - [1]", gphaseAdvance_2cbo.GetPointX(0), gphaseAdvance_2cbo.GetPointX(gphaseAdvance_2cbo.GetN()-1));
+    gphaseAdvance_2cbo.Fit("fit2CBO", "", "", 50, 100);
+    fit2CBO.SetRange(50,100);
+
+    double lin_w2CBO = fit2CBO.GetParameter(0);
+    double linw2CBO_err = fit2CBO.GetParError(0);
+    double linphi_2CBO = fit2CBO.GetParameter(1);
+    double linphi_2CBO_err = fit2CBO.GetParError(1);
+    printf("FIT RESULTS: w_0 %f phi_0 %f\n", lin_w2CBO, linphi_2CBO);
+
     // now draw residual for CBO
     for (int i=0; i<gSlidingVal.GetN(); i++) {
         gLinearResidual.SetPoint(i, gSlidingVal.GetPointX(i), gSlidingVal.GetPointY(i) - fit.Eval(gSlidingVal.GetPointX(i)));
@@ -417,6 +428,13 @@ int main(int argc, char* argv[]){
         gphaseAdvanceR_vw.SetPoint(i, gphaseAdvance_vw.GetPointX(i), 
         within2Pi(gphaseAdvance_vw.GetPointY(i) - fitVW.Eval(gphaseAdvance_vw.GetPointX(i))) );
         gphaseAdvanceR_vw.SetPointError(i, 0, gphaseAdvance_vw.GetErrorY(i));
+    }
+
+    // now draw residual for 2CBO
+    for (int i=0; i<gphaseAdvance_2cbo.GetN(); i++) {
+        gphaseAdvanceR_2cbo.SetPoint(i, gphaseAdvance_2cbo.GetPointX(i), 
+        within2Pi(gphaseAdvance_2cbo.GetPointY(i) - fit2CBO.Eval(gphaseAdvance_2cbo.GetPointX(i))) );
+        gphaseAdvanceR_2cbo.SetPointError(i, 0, gphaseAdvance_2cbo.GetErrorY(i));
     }
     
     gLinearResidual.SetMinimum(-0.5);
@@ -509,6 +527,10 @@ int main(int argc, char* argv[]){
     c.Print(outputFilename.c_str());
 
     gphaseAdvanceR_vw.Draw(drawOption.c_str());
+    c.Draw("Y+");
+    c.Print(outputFilename.c_str());
+
+    gphaseAdvanceR_2cbo.Draw(drawOption.c_str());
     c.Draw("Y+");
     c.Print(outputFilename.c_str());
     
