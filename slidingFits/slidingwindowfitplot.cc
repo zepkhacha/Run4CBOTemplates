@@ -647,35 +647,48 @@ int main(int argc, char* argv[]){
      minimizer.Command("RES");
      minimizer.Migrad();
 
-     printf("MINUIT - REFIT 5-PARAM\n");
-     // fit all but 5-params and refit
-     minimizer.Command("FIX 5");
-     minimizer.Command("FIX 6");
-     minimizer.Command("FIX 7");
-     minimizer.Command("FIX 8");
-     minimizer.Command("FIX 9");
-     minimizer.Command("FIX 10");
-     minimizer.Command("FIX 11");
-     minimizer.Command("FIX 12");
-     minimizer.Command("FIX 13");
-     minimizer.Command("FIX 14");
-     minimizer.Command("FIX 15");
-     minimizer.Command("FIX 16");
-     minimizer.Migrad();
+     //printf("MINUIT - REFIT 5-PARAM\n");
+     //// fit all but 5-params and refit
+     //minimizer.Command("FIX 5");
+     //minimizer.Command("FIX 6");
+     //minimizer.Command("FIX 7");
+     //minimizer.Command("FIX 8");
+     //minimizer.Command("FIX 9");
+     //minimizer.Command("FIX 10");
+     //minimizer.Command("FIX 11");
+     //minimizer.Command("FIX 12");
+     //minimizer.Command("FIX 13");
+     //minimizer.Command("FIX 14");
+     //minimizer.Command("FIX 15");
+     //minimizer.Command("FIX 16");
+     //minimizer.Migrad();
 
-     printf("MINUIT - 2CBO + Y\n");
-     // fix all but 2-CBO and y-terms
-     minimizer.Command("RES");
-     minimizer.Command("FIX 0");
-     minimizer.Command("FIX 1");
-     minimizer.Command("FIX 2");
-     minimizer.Command("FIX 3");
-     minimizer.Command("FIX 4");
-     minimizer.Command("FIX 5");
-     minimizer.Command("FIX 6");
-     minimizer.Command("FIX 7");
-     minimizer.Command("FIX 16");
-     minimizer.Migrad();
+     //printf("MINUIT - 2CBO + Y\n");
+     //// fix all but 2-CBO and y-terms
+     //minimizer.Command("RES");
+     //minimizer.Command("FIX 0");
+     //minimizer.Command("FIX 1");
+     //minimizer.Command("FIX 2");
+     //minimizer.Command("FIX 3");
+     //minimizer.Command("FIX 4");
+     //minimizer.Command("FIX 5");
+     //minimizer.Command("FIX 6");
+     //minimizer.Command("FIX 7");
+     //minimizer.Command("FIX 16");
+     //minimizer.Migrad();
+
+     //printf("MINUIT - FIT WIGGLE + 1CBO\n");
+     //// fix CBO parameters and only fit wiggle
+     //minimizer.Command("FIX 8");
+     //minimizer.Command("FIX 9");
+     //minimizer.Command("FIX 10");
+     //minimizer.Command("FIX 11");
+     //minimizer.Command("FIX 12");
+     //minimizer.Command("FIX 13");
+     //minimizer.Command("FIX 14");
+     //minimizer.Command("FIX 15");
+     //minimizer.Command("FIX 16");
+     //minimizer.Migrad();
        
      printf("MINUIT - MINOS\n");
      minimizer.Command("RES");
