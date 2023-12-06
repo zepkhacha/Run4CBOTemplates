@@ -7,7 +7,7 @@ runlist="
 for run in ${runlist};
 do
 
-    for calo in {1..4};
+    for calo in {1..24};
     do
         echo "run $run calo $calo" 
         ./cboAmplitude -s slidingFits/run${run}_calo${calo}_windowFits.root \

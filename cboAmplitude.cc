@@ -230,7 +230,8 @@ int main(int argc, char* argv[]){
     gphaseAdvance_2cbo.SetMarkerStyle(7);
     gphaseAdvance_vw.SetMarkerStyle(7);
     
-    //gax2.SetMaximum(0.005);
+    gax2.SetMaximum(0.001);
+    gax2.SetMinimum(-0.001);
     //gay1.SetMaximum(0.005);
     //gay2.SetMaximum(0.005);
     //gax2.SetMinimum(-0.005);
@@ -360,8 +361,8 @@ int main(int argc, char* argv[]){
         gpw2.SetPoint(graphEntry, time, slidingFit_w_vw);
         gpw2.SetPointError(graphEntry, 0, slidingFit_w_vwerr);
         
-        gphaseAdvance_2cbo.SetPoint(graphEntry, time, (2*slidingFit_wCBO*time - slidingFit_phiCBO)));
-        gphaseAdvance_vw.SetPoint(graphEntry, time, (slidingFit_w_vw*time - slidingFit_py2)));
+        gphaseAdvance_2cbo.SetPoint(graphEntry, time, (2*slidingFit_wCBO*time - slidingFit_phiCBO));
+        gphaseAdvance_vw.SetPoint(graphEntry, time, (slidingFit_w_vw*time - slidingFit_py2));
         
         graphEntry++;
     }// end for loop over window fits

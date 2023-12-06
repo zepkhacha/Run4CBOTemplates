@@ -15,7 +15,7 @@ formatB="/gm2data/zkhechad/run45/envelope/formats/formatB_sBin_constraintOn.txt"
 formatC="/gm2data/zkhechad/run45/envelope/formats/formatC_mBin_constraintOff.txt"
 formatD="/gm2data/zkhechad/run45/envelope/formats/formatD_mBin_constraintOn.txt"
 
-mainDirectory="/gm2data/zkhechad/cboTemplates/aMethod_dec2023/"
+mainDirectory="/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/"
 mkdir -p ${mainDirectory}/slidingFits/run${run}
 outputDirectory="${mainDirectory}/slidingFits/run${run}/"
 
