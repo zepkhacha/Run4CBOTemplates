@@ -43,10 +43,12 @@ for window in $(seq ${start} ${step} ${end}); do
 
 #-p ${mainDirectory}/cboIsolate/run${run}.root \
 #-q ${mainDirectory}fullFits/run${run}/sBin_constraintOn_cE0.0_seed0_run${run}_calo${calo}.root \
+
    ./slidingwindowfitplot \
-      -w ${window}  -n ${calo} -p ${mainDirectory}/cboIsolate/run${run}_calo${calo}.root \
+      -w ${window}  -n ${calo} \
+      -p ${mainDirectory}/cboIsolate/run${run}_calo${calo}.root \
       -a 1 \
-      -q ${mainDirectory}fullFits/run${run}/sBin_constraintOn_cE0.0_seed0_run${run}_calo${calo}.root \
+      -q ${outputDirectory}/run${run}_calo${calo}_window${prevWindowLabel}.root \
       -i /gm2data/cornell/histograms/aMethod/histogram_a_run${run}.root \
       -o ${outputDirectory}/run${run}_calo${calo}_window${windowLabel}.root \
       -c 0 \
