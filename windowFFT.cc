@@ -99,15 +99,12 @@ int main(int argc, char* argv[]){
     TCanvas *canvas = new TCanvas();
     canvas->Print(Form("%s.pdf[", outputFilename));
 
+    prevStop = 0.0;
     for (int entry=0; entry<t->GetEntries(); entry++){
         t->GetEntry(entry);
         //printf("doing entry %i (%f, %f)\n", entry, fitStart, fitStop);
         //int fitrangelow = int(fitStart / 0.1492);
 
-        if (entry==0){
-            prevStart=fitStart;
-            prevStop=fitStop;
-        }
         if (fitStart < prevStop){
             continue;
         }else{
