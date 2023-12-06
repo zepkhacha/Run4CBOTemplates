@@ -209,6 +209,9 @@ int main(int argc, char* argv[]){
     
     TGraphErrors gphaseAdvance_2cbo;
     TGraphErrors gphaseAdvance_vw;
+
+    TGraphErrors gphaseAdvanceR_2cbo;
+    TGraphErrors gphaseAdvanceR_vw;
     
     TGraph gAmpvFres;
     
@@ -229,6 +232,10 @@ int main(int argc, char* argv[]){
     gpw2.SetMarkerStyle(7);
     gphaseAdvance_2cbo.SetMarkerStyle(7);
     gphaseAdvance_vw.SetMarkerStyle(7);
+
+    gphaseAdvanceR_2cbo.SetMarkerStyle(7);
+    gphaseAdvanceR_vw.SetMarkerStyle(7);
+
     
     gax2.SetMaximum(0.001);
     gax2.SetMinimum(-0.001);
@@ -270,6 +277,8 @@ int main(int argc, char* argv[]){
     
     gphaseAdvance_2cbo.SetTitle("2CBO Phase Advance; Window Start [#mus]; 2CBO Phase Advance [rad]");
     gphaseAdvance_vw.SetTitle("vw Phase Advance; Window Start [#mus]; vw Phase Advance [rad]");
+    gphaseAdvanceR_2cbo.SetTitle("2CBO Phase Advance Residual; Window Start [#mus]; 2CBO Residual [rad]");
+    gphaseAdvanceR_vw.SetTitle("vw Phase Advance Residual; Window Start [#mus]; vw Residual [rad]");
     
     // get fullFitResults
     fullFitResults->GetEntry(0);
@@ -382,11 +391,31 @@ int main(int argc, char* argv[]){
     double phi_0 = fit.GetParameter(1);
     double phi_0_err = fit.GetParError(1);
     printf("FIT RESULTS: w_0 %f phi_0 %f\n", w_0, phi_0);
-    
-    // now draw residual
+
+    // fit for vw 
+    TF1 fitVW ("fitVW", "[0]*x - [1]", gphaseAdvance_vw.GetPointX(0), gphaseAdvance_vw.GetPointX(gphaseAdvance_vw.GetN()-1));
+    gphaseAdvance_vw.Fit("fitVW", "", "", 50, 100);
+    fitVW.SetRange(50,100);
+
+    double lin_wVW = fitVW.GetParameter(0);
+    double linwVW_err = fitVW.GetParError(0);
+    double linphi_VW = fitVW.GetParameter(1);
+    double linphi_VW_err = fitVW.GetParError(1);
+    printf("FIT RESULTS: w_0 %f phi_0 %f\n", lin_wVW, linphi_VW);
+
+    // now draw residual for CBO
     for (int i=0; i<gSlidingVal.GetN(); i++) {
         gLinearResidual.SetPoint(i, gSlidingVal.GetPointX(i), gSlidingVal.GetPointY(i) - fit.Eval(gSlidingVal.GetPointX(i)));
         gLinearResidual.SetPointError(i, 0, gSlidingVal.GetErrorY(i));
+    }
+    
+    gLinearResidual.SetMinimum(-0.5);
+    gLinearResidual.SetMaximum(0.5);
+
+    // now draw residual for VW
+    for (int i=0; i<gphaseAdvance_vw.GetN(); i++) {
+        gphaseAdvanceR_vw.SetPoint(i, gphaseAdvance_vw.GetPointX(i), gphaseAdvance_vw.GetPointY(i) - fitVW.Eval(gphaseAdvance_vw.GetPointX(i)));
+        gphaseAdvanceR_vw.SetPointError(i, 0, gphaseAdvance_vw.GetErrorY(i));
     }
     
     gLinearResidual.SetMinimum(-0.5);
@@ -475,6 +504,10 @@ int main(int argc, char* argv[]){
     c.Print(outputFilename.c_str());
     
     gphaseAdvance_vw.Draw(drawOption.c_str());
+    c.Draw("Y+");
+    c.Print(outputFilename.c_str());
+
+    gphaseAdvanceR_vw.Draw(drawOption.c_str());
     c.Draw("Y+");
     c.Print(outputFilename.c_str());
     
