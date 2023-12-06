@@ -405,8 +405,8 @@ int main(int argc, char* argv[]){
 
     // fit for 2CBO
     TF1 fit2CBO ("fit2CBO", "[0]*x - [1]", gphaseAdvance_2cbo.GetPointX(0), gphaseAdvance_2cbo.GetPointX(gphaseAdvance_2cbo.GetN()-1));
-    gphaseAdvance_2cbo.Fit("fit2CBO", "", "", 50, 100);
-    fit2CBO.SetRange(50,100);
+    gphaseAdvance_2cbo.Fit("fit2CBO", "", "", 50, 180);
+    fit2CBO.SetRange(50,180);
 
     double lin_w2CBO = fit2CBO.GetParameter(0);
     double linw2CBO_err = fit2CBO.GetParError(0);
