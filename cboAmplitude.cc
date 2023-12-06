@@ -237,12 +237,15 @@ int main(int argc, char* argv[]){
     //gax2.SetMinimum(-0.005);
     //gay1.SetMinimum(-0.005);
     //gay2.SetMinimum(-0.005);
-    //gpy1.SetMaximum(M_PI);
-    //gpy1.SetMinimum(-M_PI);
-    //gpy2.SetMaximum(M_PI);
-    //gpy2.SetMinimum(-M_PI);
-    //gpx2.SetMaximum(M_PI);
-    //gpx2.SetMinimum(-M_PI);
+    gpy1.SetMaximum(M_PI);
+    gpy1.SetMinimum(-M_PI);
+    gpy2.SetMaximum(M_PI);
+    gpy2.SetMinimum(-M_PI);
+    gpx2.SetMaximum(M_PI);
+    gpx2.SetMinimum(-M_PI);
+
+    gpw2.SetMaximum(14.6);
+    gpw2.SetMinimum(14.2);
     
     gSlidingAmplitude.SetMaximum(20);
     gSlidingAmplitude.SetMinimum(-1);
