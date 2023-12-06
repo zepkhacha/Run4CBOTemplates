@@ -533,7 +533,7 @@ int main(int argc, char* argv[]){
     minimizer.DefineParameter(4, "R", R, 0, -1000, 1000); // FIX
 
     minimizer.DefineParameter(5, "A_CBO", A_CBO, 1E-5, 0, 0);
-    minimizer.DefineParameter(6, "w_CBO", window_wCBO, 0.001, 0.0, window_wCBO+0.015);
+    minimizer.DefineParameter(6, "w_CBO", window_wCBO, 0.001, 0.0, window_wCBO+0.01);
     minimizer.DefineParameter(7, "phi_CBO", phi_CBO, 0.0001, 0, 0);
 
     minimizer.DefineParameter(8, "ANx2", ANx2, 0.000001, 0, 0);
