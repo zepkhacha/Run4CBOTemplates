@@ -336,7 +336,7 @@ int main(int argc, char* argv[]){
         gSlidingAmplitude.SetPoint(graphEntry, time, slidingFit_A_CBO * 1E3);
         gSlidingAmplitude.SetPointError(graphEntry, 0, slidingFit_A_CBOerr * 1E3);
         
-        gSlidingFrequency.SetPoint(graphEntry, time, slidingFit_wCBO / (2*M_PI));
+        gSlidingFrequency.SetPoint(graphEntry, time, slidingFit_wCBO );
         gSlidingFrequency.SetPointError(graphEntry, 0, slidingFit_wCBOerr / (2*M_PI));
         
         gSlidingPhase.SetPoint(graphEntry, time, slidingFit_phiCBO);
@@ -395,7 +395,7 @@ int main(int argc, char* argv[]){
     axesInitialized = true;
     
     // initialize outpout files
-    TFile *f = TFile::Open(rootOutputFilename.c_str(),"RECREATE");
+    //TFile *f = TFile::Open(rootOutputFilename.c_str(),"RECREATE");
     
     TCanvas c;
     std::string outputFilename = Form("%s.pdf", rootOutputFilename.c_str());
@@ -477,20 +477,20 @@ int main(int argc, char* argv[]){
     
     c.Print(Form("%s]", outputFilename.c_str()));
     
-    f->cd();
-    
-    gSlidingAmplitude.SetTitle("gSlidingAmplitude");
-    gSlidingAmplitude.SetName("gSlidingAmplitude");
-    gSlidingAmplitude.Write();
-    gSlidingFrequency.SetTitle("gSlidingFrequency");
-    gSlidingFrequency.SetName("gSlidingFrequency");
-    gSlidingFrequency.Write();
-    gSlidingPhase.SetTitle("gSlidingPhase");
-    gSlidingPhase.SetName("gSlidingPhase");
-    gSlidingPhase.Write();
-    
-    fullFitFile.Close();
-    slidingFile.Close();
-    f->Close();
+    //f->cd();
+    //
+    //gSlidingAmplitude.SetTitle("gSlidingAmplitude");
+    //gSlidingAmplitude.SetName("gSlidingAmplitude");
+    //gSlidingAmplitude.Write();
+    //gSlidingFrequency.SetTitle("gSlidingFrequency");
+    //gSlidingFrequency.SetName("gSlidingFrequency");
+    //gSlidingFrequency.Write();
+    //gSlidingPhase.SetTitle("gSlidingPhase");
+    //gSlidingPhase.SetName("gSlidingPhase");
+    //gSlidingPhase.Write();
+    //
+    //fullFitFile.Close();
+    //slidingFile.Close();
+    //f->Close();
     
 } // end main
