@@ -235,7 +235,6 @@ int main(int argc, char* argv[]){
 
     gphaseAdvanceR_2cbo.SetMarkerStyle(7);
     gphaseAdvanceR_vw.SetMarkerStyle(7);
-
     
     gax2.SetMaximum(0.001);
     gax2.SetMinimum(-0.001);
@@ -422,6 +421,14 @@ int main(int argc, char* argv[]){
         gLinearResidual.SetPoint(i, gSlidingVal.GetPointX(i), gSlidingVal.GetPointY(i) - fit.Eval(gSlidingVal.GetPointX(i)));
         gLinearResidual.SetPointError(i, 0, gSlidingVal.GetErrorY(i));
     }
+    
+    // fit a*exp(-(x-t)/T) + b*t + c
+    TF1 fitLinearCBOResidual ("fitCBORes", "[0]*exp(-(x-[1])/[2]) +[3]*x + [4]"),
+    gLinearResidual.GetPointX(0),
+    gLinearResidual.GetPointX(gLinearResidual.GetN()-1));
+    gLinearResidual.Fit("fitCBORes", "", "", 30, 100);
+    fitLinearCBOResidual.SetRange(30,100);
+    
 
     // now draw residual for VW
     for (int i=0; i<gphaseAdvance_vw.GetN(); i++) {
