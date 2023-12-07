@@ -257,6 +257,9 @@ int main(int argc, char* argv[]){
     gSlidingAmplitude.SetMaximum(20);
     gSlidingAmplitude.SetMinimum(-1);
     
+    gLinearResidual.SetMinimum(-1.0);
+    gLinearResidual.SetMaximum(+1.0);
+    
     gFullFitResidual.SetTitle("(#omega_{CBO}t - #phi_{CBO})_{window} - (#omega_{CBO}t - #phi_{CBO})_{full};Window Start [#mus];CBO Phase Residual [rad]");
     gSlidingVal.SetTitle("CBO Phase Advance from Sliding Windows;Window Start [us];(#omega_{CBO}t - #phi_{CBO}) [rad]");
     gLinearResidual.SetTitle("(#omega_{CBO}t - #phi_{CBO})_{window} - (#omega_{0}t - #phi_{0})_{late};Window Start [us];CBO Phase Residual [rad]");
@@ -419,9 +422,6 @@ int main(int argc, char* argv[]){
         gLinearResidual.SetPoint(i, gSlidingVal.GetPointX(i), gSlidingVal.GetPointY(i) - fit.Eval(gSlidingVal.GetPointX(i)));
         gLinearResidual.SetPointError(i, 0, gSlidingVal.GetErrorY(i));
     }
-    
-    gLinearResidual.SetMinimum(-0.5);
-    gLinearResidual.SetMaximum(0.5);
 
     // now draw residual for VW
     for (int i=0; i<gphaseAdvance_vw.GetN(); i++) {
@@ -437,8 +437,6 @@ int main(int argc, char* argv[]){
         gphaseAdvanceR_2cbo.SetPointError(i, 0, gphaseAdvance_2cbo.GetErrorY(i));
     }
     
-    gLinearResidual.SetMinimum(-0.5);
-    gLinearResidual.SetMaximum(0.5);
     
     // only add option 'a' for first plot, and only use palette for individual calos
     //std::string drawOption = Form("%sPE%s", axesInitialized ? "" : "A", (calo != 0 || runs.size() > 1) ? " PMC PLC" : "");
