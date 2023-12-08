@@ -549,6 +549,12 @@ int main(int argc, char* argv[]){
     minimizer.DefineParameter(15, "w_vw", w_vw_guess, 0.01, 0.8*w_vw_guess, 1.2*w_vw_guess);
 
     minimizer.DefineParameter(16, "LM", LM, 0.0, -0.1, 0.1); // FIX
+    
+    minimizer.DefineParameter(17, "wCBO_expCoeff", wCBO_expCoeff, 15, 0.01, 0, 0);
+    minimizer.DefineParameter(18, "wCBO_expOffset", wCBO_expOffset, 20, 0.01, 0, 0);
+    minimizer.DefineParameter(19, "wCBO_expT", wCBO_expT, 7, 0.01, 0, 0);
+    minimizer.DefineParameter(20, "wCBO_linCoeff", wCBO_linCoeff, 0.0, 0.001, 0, 0.0001);
+    minimizer.DefineParameter(21, "wCBO_const", wCBO_const, 0.0, 0.001, 0, 0);
 
     printf("MINUIT - FIT ONLY WIGGLE\n");
     // fix CBO parameters and only fit wiggle
