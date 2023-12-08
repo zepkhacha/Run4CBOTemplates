@@ -314,7 +314,8 @@ int main(int argc, char* argv[]){
         slidingFit_py2    = within2Pi(slidingFit_py2);
         
         double slidingVal = (slidingFit_wCBO * time - slidingFit_phiCBO);
-        double slidingValError = std::sqrt(std::pow(slidingFit_wCBOerr * time, 2) + std::pow(slidingFit_phiCBOerr, 2) - 2 * slidingFit_wCBO_phiCBO_cov * time);
+        //double slidingValError = std::sqrt(std::pow(slidingFit_wCBOerr * time, 2) + std::pow(slidingFit_phiCBOerr, 2) - 2 * slidingFit_wCBO_phiCBO_cov * time);
+        double slidingValError = std::sqrt( std::pow(slidingFit_wCBOerr * time, 2)+std::pow(slidingFit_phiCBOerr, 2));
         
         double fullFitVal = (fullFit_wCBO * (1.0 + fullFit_A_ct*exp(-time/24.4)/time) * time - fullFit_phi);
         double residual = slidingVal - fullFitVal;
@@ -419,13 +420,17 @@ int main(int argc, char* argv[]){
     // now draw residual for CBO
     for (int i=0; i<gSlidingVal.GetN(); i++) {
         gLinearResidual.SetPoint(i, gSlidingVal.GetPointX(i), gSlidingVal.GetPointY(i) - fit.Eval(gSlidingVal.GetPointX(i)));
-        gLinearResidual.SetPointError(i, 0, gSlidingVal.GetErrorY(i));
+        //gLinearResidual.SetPointError(i, 0, gSlidingVal.GetErrorY(i));
     }
     
     // fit a*exp(-(x-t)/T) + b*t + c
     TF1 fitLinearCBOResidual ("fitCBORes", "[0]*exp(-(x-[1])/[2]) +[3]*x + [4]",
     gLinearResidual.GetPointX(0),
     gLinearResidual.GetPointX(gLinearResidual.GetN()-1));
+    fitLinearCBOResidual.SetParameter(0,15);
+    fitLinearCBOResidual.SetParameter(1,20);
+    fitLinearCBOResidual.SetParameter(2,7);
+    fitLinearCBOResidual.SetParLimits(3,0,0);
     gLinearResidual.Fit("fitCBORes", "", "", 30, 100);
     fitLinearCBOResidual.SetRange(30,100);
     
