@@ -423,7 +423,7 @@ int main(int argc, char* argv[]){
     }
     
     // fit a*exp(-(x-t)/T) + b*t + c
-    TF1 fitLinearCBOResidual ("fitCBORes", "[0]*exp(-(x-[1])/[2]) +[3]*x + [4]"),
+    TF1 fitLinearCBOResidual ("fitCBORes", "[0]*exp(-(x-[1])/[2]) +[3]*x + [4]",
     gLinearResidual.GetPointX(0),
     gLinearResidual.GetPointX(gLinearResidual.GetN()-1));
     gLinearResidual.Fit("fitCBORes", "", "", 30, 100);
