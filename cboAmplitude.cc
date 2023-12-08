@@ -420,7 +420,7 @@ int main(int argc, char* argv[]){
     // now draw residual for CBO
     for (int i=0; i<gSlidingVal.GetN(); i++) {
         gLinearResidual.SetPoint(i, gSlidingVal.GetPointX(i), gSlidingVal.GetPointY(i) - fit.Eval(gSlidingVal.GetPointX(i)));
-        //gLinearResidual.SetPointError(i, 0, gSlidingVal.GetErrorY(i));
+        gLinearResidual.SetPointError(i, 0, gSlidingVal.GetErrorY(i));
     }
     
     // fit a*exp(-(x-t)/T) + b*t + c
@@ -430,7 +430,7 @@ int main(int argc, char* argv[]){
     fitLinearCBOResidual.SetParameter(0,15);
     fitLinearCBOResidual.SetParameter(1,20);
     fitLinearCBOResidual.SetParameter(2,7);
-    fitLinearCBOResidual.SetParLimits(3,0,0);
+    //fitLinearCBOResidual.SetParLimits(3,0,0);
     gLinearResidual.Fit("fitCBORes", "", "", 30, 100);
     fitLinearCBOResidual.SetRange(30,100);
     
