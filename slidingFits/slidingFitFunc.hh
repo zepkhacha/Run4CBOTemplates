@@ -110,6 +110,8 @@ double calcnu(double par[], double i){
   double phi = par[3];
 
   double nu = 0.0;
+    
+    double w_CBO = par[6]*(
 
   nu = par[0]*exp(-1.*time/par[1]) * (1 + par[2]*cos((blindr)*time - phi));
   // now add x-terms
