@@ -257,6 +257,13 @@ int main(int argc, char* argv[]){
     double fitStart = fitrangelow  * 0.1492;
     double fitStop  = fitrangehigh * 0.1492;
 
+    double wCBO_expCoeff, wCBO_expCoefferr;
+    double wCBO_expOffset, wCBO_expOffseterr;
+    double wCBO_expT, wCBO_expTerr;
+    double wCBO_linCoeff, wCBO_linCoefferr;
+    double wCBO_const, wCBO_consterr;
+    
+
     //*************
     // get CBO terms from CBO Isolate
     //*************
@@ -345,6 +352,12 @@ int main(int argc, char* argv[]){
 
     fitresults->Branch("LM", &LM);
 
+    fitresults->Branch("wCBO_expCoeff", &wCBO_expCoeff);
+    fitresults->Branch("wCBO_expOffset", &wCBO_expOffset);
+    fitresults->Branch("wCBO_expT", &wCBO_expT);
+    fitresults->Branch("wCBO_linCoeff", &wCBO_linCoeff);
+    fitresults->Branch("wCBO_const", &wCBO_const);
+
     fitresults->Branch("N0err", &N0err);
     fitresults->Branch("A0err", &A0err);
     fitresults->Branch("tauerr", &tauerr);
@@ -369,6 +382,12 @@ int main(int argc, char* argv[]){
     fitresults->Branch("ANy2err", &ANy2err);
     fitresults->Branch("pNy2err", &pNy2err);
     fitresults->Branch("w_vwerr", &w_vwerr);
+
+    fitresults->Branch("wCBO_expCoefferr", &wCBO_expCoefferr);
+    fitresults->Branch("wCBO_expOffseterr", &wCBO_expOffseterr);
+    fitresults->Branch("wCBO_expTerr", &wCBO_expTerr);
+    fitresults->Branch("wCBO_linCoefferr", &wCBO_linCoefferr);
+    fitresults->Branch("wCBO_consterr", &wCBO_consterr);
 
     // assign number of bins to this window
     // use longer windows at later times
@@ -515,11 +534,11 @@ int main(int argc, char* argv[]){
     printf("done fitting cbo isolate\n");
 
     // Now do a 28 parameter fit
-    double par[17];
-    double errorplus[17];
-    double errorminus[17];
+    double par[22];
+    double errorplus[22];
+    double errorminus[22];
 
-    TMinuit minimizer(17);
+    TMinuit minimizer(22);
     minimizer.Command("SET PRINTOUT 1"); // change to level 1
     minimizer.Command("SET NOWARNINGS");
     minimizer.SetFCN(minuitFunction);
@@ -549,12 +568,12 @@ int main(int argc, char* argv[]){
     minimizer.DefineParameter(15, "w_vw", w_vw_guess, 0.01, 0.8*w_vw_guess, 1.2*w_vw_guess);
 
     minimizer.DefineParameter(16, "LM", LM, 0.0, -0.1, 0.1); // FIX
-    
-    minimizer.DefineParameter(17, "wCBO_expCoeff", wCBO_expCoeff, 15, 0.01, 0, 0);
-    minimizer.DefineParameter(18, "wCBO_expOffset", wCBO_expOffset, 20, 0.01, 0, 0);
-    minimizer.DefineParameter(19, "wCBO_expT", wCBO_expT, 7, 0.01, 0, 0);
-    minimizer.DefineParameter(20, "wCBO_linCoeff", wCBO_linCoeff, 0.0, 0.001, 0, 0.0001);
-    minimizer.DefineParameter(21, "wCBO_const", wCBO_const, 0.0, 0.001, 0, 0);
+
+    minimizer.DefineParameter(17, "wCBO_expCoeff", 15, 0.01, 0, 0);
+    minimizer.DefineParameter(18, "wCBO_expOffset", 20, 0.01, 0, 0);
+    minimizer.DefineParameter(19, "wCBO_expT", 7, 0.01, 0, 0);
+    minimizer.DefineParameter(20, "wCBO_linCoeff", 0.0, 0.001, 0, 0.0001);
+    minimizer.DefineParameter(21, "wCBO_const", 0.0, 0.001, 0, 0);
 
     printf("MINUIT - FIT ONLY WIGGLE\n");
     // fix CBO parameters and only fit wiggle
@@ -703,7 +722,7 @@ int main(int argc, char* argv[]){
     minimizer.Command("MIG 25000 0.01");
     minimizer.Command("MINO 25000");
 
-    TString varname[17];
+    TString varname[22];
     TString chnam;
     double val, err, xlolim, xuplim;
     int iuint;
@@ -711,7 +730,7 @@ int main(int argc, char* argv[]){
     int npari, nparx, istat;
     double eplus, eminus, eparab, globc;
 
-    for(int k=0; k<17; k++){
+    for(int k=0; k<22; k++){
         minimizer.mnpout(k, chnam, val, err, xlolim, xuplim, iuint);
         par[k] = val;
         varname[k] = chnam;
@@ -720,7 +739,7 @@ int main(int argc, char* argv[]){
         errorminus[k] = eminus;
     }
 
-    for(int k=0; k<17; k++){
+    for(int k=0; k<22; k++){
         fprintf(stderr, "%s \t %12.5e + %9.3e %9.3e\n",
                 varname[k].Data(), par[k], errorplus[k], errorminus[k]);
     }
@@ -729,8 +748,8 @@ int main(int argc, char* argv[]){
     fprintf(stderr, "chisq/ndf : %f / %d\n", fmin, fitrangehigh-fitrangelow - noFreeParams);
     fprintf(stderr, "reduced chisq: %f +- %f\n", fmin/(fitrangehigh-fitrangelow - noFreeParams), sqrt(2./(fitrangehigh-fitrangelow-noFreeParams)));
     minimizer.Command("SHO COR");
-    double covariance[17][17];
-    minimizer.mnemat(&covariance[0][0],17);
+    double covariance[22][22];
+    minimizer.mnemat(&covariance[0][0],22);
 
     chisq  = fmin;
     rchisq = fmin/(fitrangehigh-fitrangelow-noFreeParams);
@@ -756,6 +775,12 @@ int main(int argc, char* argv[]){
     w_vw = par[15];
 
     LM = par[16];
+
+    wCBO_expCoeff = par[17];
+    wCBO_expOffset = par[18];
+    wCBO_expT = par[19];
+    wCBO_linCoeff = par[20];
+    wCBO_const = par[21];
 
     N0err = sqrt(-errorplus[0]*errorminus[0]);
     tauerr = sqrt(-errorplus[1]*errorminus[1]);
