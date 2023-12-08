@@ -570,7 +570,7 @@ int main(int argc, char* argv[]){
     minimizer.DefineParameter(16, "LM", LM, 0.0, -0.1, 0.1); // FIX
 
     minimizer.DefineParameter(17, "wCBO_expCoeff", 15, 0.01, 0, 0);
-    minimizer.DefineParameter(18, "wCBO_expOffset", 20, 0.01, 0, 0);
+    minimizer.DefineParameter(18, "wCBO_expOffset", 0, 0, 0, 0);
     minimizer.DefineParameter(19, "wCBO_expT", 7, 0.01, 0, 0);
     minimizer.DefineParameter(20, "wCBO_linCoeff", 0.0, 0.001, 0, 0.0001);
     minimizer.DefineParameter(21, "wCBO_const", 0.0, 0.001, 0, 0);
