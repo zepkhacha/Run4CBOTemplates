@@ -430,7 +430,7 @@ int main(int argc, char* argv[]){
     fitLinearCBOResidual.SetParameter(0,15);
     fitLinearCBOResidual.SetParameter(1,20);
     fitLinearCBOResidual.SetParameter(2,7);
-    //fitLinearCBOResidual.SetParLimits(3,0,0);
+    fitLinearCBOResidual.SetParLimits(3,-0.0001,0.0001);
     gLinearResidual.Fit("fitCBORes", "", "", 30, 100);
     fitLinearCBOResidual.SetRange(30,100);
     
