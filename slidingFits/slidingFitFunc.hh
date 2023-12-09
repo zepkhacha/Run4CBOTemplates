@@ -111,17 +111,17 @@ double calcnu(double par[], double i){
 
     double nu = 0.0;
 
-    double w_CBO = par[6]*( par[17]*exp( -(time-par[18])/par[19] ) + par[20]*time + par[21]);
+    double w_CBO = par[6]*(1 +  par[17]*exp( -(time-par[18])/par[19] ) + par[20]*time + par[21]);
 
-            nu = par[0]*exp(-1.*time/par[1]) * (1 + par[2]*cos((blindr)*time - phi));
-            // now add x-terms
-            nu *= 1.0 + par[5]*cos(w_CBO*(time) - par[7]) + par[8]*cos(2*w_CBO*(time)- par[9]);
-            // now add y-terms
-            nu *= (1.0 + par[10] * cos(par[12]*time - par[11])
-                + par[13] * cos(par[15]*time - par[14]));
-            // now add LM 
-            nu *= (1.0 - par[16]*lambda->GetBinContent(i));
-            return nu; 
+    nu = par[0]*exp(-1.*time/par[1]) * (1 + par[2]*cos((blindr)*time - phi));
+    // now add x-terms
+    nu *= 1.0 + par[5]*cos(w_CBO*(time) - par[7]) + par[8]*cos(2*w_CBO*(time)- par[9]);
+    // now add y-terms
+    nu *= (1.0 + par[10] * cos(par[12]*time - par[11])
+            + par[13] * cos(par[15]*time - par[14]));
+    // now add LM 
+    nu *= (1.0 - par[16]*lambda->GetBinContent(i));
+    return nu; 
 
-            }
+}
 
