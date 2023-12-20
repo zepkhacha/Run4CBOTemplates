@@ -21,11 +21,11 @@ outputDirectory="${mainDirectory}/slidingFits/run${run}/"
 
 # -p points to kevin-style fits
 #-q ${mainDirectory}fullFits/run${run}/sBin_constraintOn_cE0.0_seed0_run${run}_calo${calo}.root \
+#-W ${outputDirectory}/run${run}_calo${calo}_window1300.root \
 
 echo "performing window 0"
 ./slidingwindowfitplot -p ${mainDirectory}/cboIsolate/run${run}_calo${calo}.root \
 -a 1 \
--W ${outputDirectory}/run${run}_calo${calo}_window1300.root \
 -w 0 -n ${calo} -q ${mainDirectory}fullFits/run${run}/sBin_constraintOn_cE0.0_seed0_run${run}_calo${calo}.root \
 -i /gm2data/cornell/histograms/aMethod/histogram_a_run${run}.root \
 -o ${outputDirectory}/run${run}_calo${calo}_window0000.root \
@@ -44,6 +44,8 @@ for window in $(seq ${start} ${step} ${end}); do
 
 #-p ${mainDirectory}/cboIsolate/run${run}.root \
 #-q ${mainDirectory}fullFits/run${run}/sBin_constraintOn_cE0.0_seed0_run${run}_calo${calo}.root \
+#-W ${outputDirectory}/run${run}_calo${calo}_window1300.root \
+
    ./slidingwindowfitplot \
       -w ${window}  -n ${calo} -p ${mainDirectory}/cboIsolate/run${run}_calo${calo}.root \
       -a 1 \
@@ -55,7 +57,6 @@ for window in $(seq ${start} ${step} ${end}); do
       -a 0 \
       -b ${frFile} \
       -f ${formatB} \
-      -W ${outputDirectory}/run${run}_calo${calo}_window1300.root \
       2>&1 > ${outputDirectory}/run${run}_calo${calo}_window${windowLabel}.log &
 
    wait
