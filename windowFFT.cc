@@ -179,9 +179,9 @@ int main(int argc, char* argv[]){
             double fa = 1000000 * (myblinders.paramToFreq(R) / (2*M_PI));
 
             double full_fy = 1000000*full_wy / (2*M_PI);
-            double full_fVW = 6702413 - (full_fy);
+            double full_fVW = 6702413 - (2*full_fy);
 
-            printf("fCBO %f fVW %f fy %f\n", fCBO, fVW, fy);
+            printf("fCBO %f fVW %f fy %f full_fy %f full_fVW %f \n", fCBO, fVW, fy, full_fy, full_fVW);
             TLine *l_fx   = new TLine(fx,0.,fx,fftMaxY); 
             TLine *l_fy   = new TLine(fy,0.,fy,fftMaxY); 
             TLine *l_fa   = new TLine(fa,0.,fa,fftMaxY); 
