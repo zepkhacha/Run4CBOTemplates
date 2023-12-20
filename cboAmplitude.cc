@@ -256,8 +256,8 @@ int main(int argc, char* argv[]){
     gSlidingAmplitude.SetMaximum(20);
     gSlidingAmplitude.SetMinimum(-1);
     
-    gLinearResidual.SetMinimum(-3.0);
-    gLinearResidual.SetMaximum(+3.0);
+    gLinearResidual.SetMinimum(-1.0);
+    gLinearResidual.SetMaximum(+1.0);
     
     gFullFitResidual.SetTitle("(#omega_{CBO}t - #phi_{CBO})_{window} - (#omega_{CBO}t - #phi_{CBO})_{full};Window Start [#mus];CBO Phase Residual [rad]");
     gSlidingVal.SetTitle("CBO Phase Advance from Sliding Windows;Window Start [us];(#omega_{CBO}t - #phi_{CBO}) [rad]");

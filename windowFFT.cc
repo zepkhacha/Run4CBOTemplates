@@ -31,10 +31,10 @@ void parse_cmdline(int argc, char** argv,
     }
 }
 
-//double wy(double kappa, double wcbo){
-//    double x = (4*M_PI)/(0.1492*kappa*wcbo) - 1.0;
-//    return kappa*wcbo*sqrt(x);
-//}
+double wy(double kappa, double wcbo){
+    double x = (4*M_PI)/(0.1492*kappa*wcbo) - 1.0;
+    return kappa*wcbo*sqrt(x);
+}
 
 int main(int argc, char* argv[]){
 
@@ -94,6 +94,7 @@ int main(int argc, char* argv[]){
     t_full->SetBranchAddress("R", &full_R);
 
     t_full->GetEntry(0);
+    double full_wy= wy(full_Ky, full_wCBO);
 
     TH1D *rFFTSum = new TH1D("residua", "residua", r_nBins, startTime, 650.0644);
     TCanvas *canvas = new TCanvas();
@@ -177,6 +178,8 @@ int main(int argc, char* argv[]){
             double fVW = 1000000*w_vw / (2*M_PI);
             double fa = 1000000 * (myblinders.paramToFreq(R) / (2*M_PI));
 
+            double full_fy = 1000000*full_wy / (2*M_PI);
+            double full_fVW = 6702413 - (full_fy);
 
             printf("fCBO %f fVW %f fy %f\n", fCBO, fVW, fy);
             TLine *l_fx   = new TLine(fx,0.,fx,fftMaxY); 
@@ -187,6 +190,9 @@ int main(int argc, char* argv[]){
             TLine *l_fVO  = new TLine(fVO ,0.,fVO ,fftMaxY);           
             TLine *l_fVW  = new TLine(fVW ,0.,fVW ,fftMaxY);    
 
+            TLine *l_full_fy = new TLine(full_fy, 0., full_fy, fftMaxY);
+            TLine *l_full_fVW = new TLine(full_fVW, 0., full_fy, fftMaxY);
+
             l_fx  ->SetLineColor(kRed);
             l_fy  ->SetLineColor(kRed);
             l_fa  ->SetLineColor(kRed);
@@ -194,6 +200,9 @@ int main(int argc, char* argv[]){
             l_2CBO->SetLineColor(kRed);
             l_fVO ->SetLineColor(kRed);
             l_fVW ->SetLineColor(kRed);
+
+            l_full_fy->SetLineColor(kBlue);
+            l_full_fVW->SetLineColor(kBlue);
 
             l_fx  ->SetLineStyle(2);
             l_fy  ->SetLineStyle(2);
@@ -203,6 +212,9 @@ int main(int argc, char* argv[]){
             l_fVO ->SetLineStyle(2);
             l_fVW ->SetLineStyle(2);
 
+            l_full_fy->SetLineStyle(2);
+            l_full_fVW->SetLineStyle(2);
+
             //l_fx  ->Draw("SAME");
             l_fy  ->Draw("SAME");
             l_fa  ->Draw("SAME");
@@ -210,6 +222,9 @@ int main(int argc, char* argv[]){
             l_2CBO->Draw("SAME");
             //l_fVO ->Draw("SAME");
             l_fVW ->Draw("SAME");
+
+            l_full_fy->Draw("SAME");
+            l_full_fVW->Draw("SAME");
 
             TLatex latex;
             latex.SetTextSize(0.05);
@@ -222,6 +237,9 @@ int main(int argc, char* argv[]){
             latex.DrawLatex(-20000+ fy, 0.5*fftMaxY,"f_{y}");
             latex.DrawLatex(-50000+ fVW, 0.7*fftMaxY,"f_{VW}");
             //latex.DrawLatex(-50000+ fVO, 0.7*fftMaxY,"f_{VO}");
+
+            latex.DrawLatex(-50000+ full_fy, 0.7*fftMaxY,"(full) f_{y}");
+            latex.DrawLatex(-50000+ full_fVW, 0.7*fftMaxY,"(full) f_{VW}");
 
             canvas->Print(Form("%s.pdf", outputFilename));
 
