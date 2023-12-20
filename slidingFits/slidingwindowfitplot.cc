@@ -396,7 +396,7 @@ int main(int argc, char* argv[]){
     fitrangelow  = startBin + (windowNo);
 
     if (windowNo == 0){
-        windowBins = 30;
+        windowBins = 160;
     }else{
         double c = 0.55;
         double insideLog = 1.0 - c*c*exp(-((startBin-fitrangelow)*0.1492)/tau) 
@@ -416,8 +416,8 @@ int main(int argc, char* argv[]){
         // now round to nearest 10.0
         windowBins = int (windowBins/10.0) * 10;
         // if deltaT < 17us, set it back to 17us
-        if (windowBins < 30){
-            windowBins = 30;
+        if (windowBins < 120){
+            windowBins = 120;
         }
 
     }
@@ -552,28 +552,28 @@ int main(int argc, char* argv[]){
     minimizer.DefineParameter(4, "R", R, 0, -1000, 1000); // FIX
 
     minimizer.DefineParameter(5, "A_CBO", A_CBO, 1E-5, 0, 0);
-    minimizer.DefineParameter(6, "w_CBO", window_wCBO, 0.001, 0.0, window_wCBO+0.01);
+    minimizer.DefineParameter(6, "w_CBO", window_wCBO, 0.001, 0. 0);
     minimizer.DefineParameter(7, "phi_CBO", phi_CBO, 0.0001, 0, 0);
 
-    minimizer.DefineParameter(8, "ANx2", ANx2, 0.000001, 0, 0);
-    minimizer.DefineParameter(9, "pNx2", pNx2, 0.001, 0, 0);
+    minimizer.DefineParameter(8, "ANx2", ANx2, 0, 0, 0);
+    minimizer.DefineParameter(9, "pNx2", pNx2, 0, 0, 0);
 
     minimizer.DefineParameter(10, "ANy1", 0, 0, 0, 0);
     minimizer.DefineParameter(11, "pNy1", 0, 0, 0, 0);
     minimizer.DefineParameter(12, "w_y" , 0, 0, 0, 0);
 
-    minimizer.DefineParameter(13, "ANy2", 0.004, 0.0001, 0, 0);
-    minimizer.DefineParameter(14, "pNy2", pNy2, 0.0000001, 0, 0);
+    minimizer.DefineParameter(13, "ANy2", 0, 0, 0, 0);
+    minimizer.DefineParameter(14, "pNy2", 0, 0, 0, 0);
     double w_vw_guess = (2.3)*(2*M_PI);
-    minimizer.DefineParameter(15, "w_vw", w_vw_guess, 0.01, 0.8*w_vw_guess, 1.2*w_vw_guess);
+    minimizer.DefineParameter(15, "w_vw", 0, 0, 0, 0);
 
     minimizer.DefineParameter(16, "LM", LM, 0.0, -0.1, 0.1); // FIX
 
-    minimizer.DefineParameter(17, "wCBO_expCoeff", 15, 0.01, 0, 0);
+    minimizer.DefineParameter(17, "wCBO_expCoeff", 0, 0, 0, 0);
     minimizer.DefineParameter(18, "wCBO_expOffset", 0, 0, 0, 0);
-    minimizer.DefineParameter(19, "wCBO_expT", 7, 0.01, 0, 0);
-    minimizer.DefineParameter(20, "wCBO_linCoeff", 0.0, 0.001, 0, 0.0001);
-    minimizer.DefineParameter(21, "wCBO_const", 0.0, 0.001, 0, 0);
+    minimizer.DefineParameter(19, "wCBO_expT", 0, 0, 0, 0);
+    minimizer.DefineParameter(20, "wCBO_linCoeff", 0, 0, 0, 0);
+    minimizer.DefineParameter(21, "wCBO_const", 0, 0, 0, 0);
 
     printf("MINUIT - FIT ONLY WIGGLE\n");
     // fix CBO parameters and only fit wiggle
