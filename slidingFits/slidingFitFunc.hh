@@ -82,6 +82,12 @@ double cbo(double time, double amp){
     return 1.0 + amp*exp(-time/24.4)/time;
 }
 
+double wy(double kappa, double wcbo){
+    double x = (4*M_PI)/(0.1492*kappa*wcbo) - 1.0;
+    return kappa*wcbo*sqrt(x);
+}
+
+
 double calcnuCboIsolate(double par[], double i){
     double time = (i-0.5) * 0.1492 + startTime;
     double nu = (1.0 + par[0]*cos((par[1])*time - par[2]));

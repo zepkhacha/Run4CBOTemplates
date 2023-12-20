@@ -272,7 +272,8 @@ int main(int argc, char* argv[]){
     TFile* cboFullFit = new TFile(cboRefFilename, "READ");
 
     double guess_ANx1, guess_w, guess_p;
-    //double guess_ANy1, guess_pNy1, guess_Ky, guess_A_ct;
+    double guess_AVW, guess_pVW, guess_wVW;
+
     TTree* cboFullFitResults = (TTree*) cboFullFit->Get("fitresults");
 
     cboFullFitResults->SetBranchAddress("N0"   , &N0     );
@@ -295,6 +296,11 @@ int main(int argc, char* argv[]){
     cboFullFitResults->SetBranchAddress("LM"   , &LM     );
 
     cboFullFitResults->GetEntry(0);
+
+    guess_AVW = ANy2;
+    guess_pVW = pNy2;
+    guess_wVW = wy(Ky, guess_w);
+
     printf("A_CBO %f w_CBO %f phi_CBO %f N0 %f R %f tau %f \n", guess_ANx1, guess_w, guess_p, N0, R, tau);
     // we are setting these results as starting guesses for fitCboIsolate
     cboFullFit->Close();
@@ -562,10 +568,9 @@ int main(int argc, char* argv[]){
     minimizer.DefineParameter(11, "pNy1", 0, 0, 0, 0);
     minimizer.DefineParameter(12, "w_y" , 0, 0, 0, 0);
 
-    minimizer.DefineParameter(13, "ANy2", 0, 0, 0, 0);
-    minimizer.DefineParameter(14, "pNy2", 0, 0, 0, 0);
-    double w_vw_guess = (2.3)*(2*M_PI);
-    minimizer.DefineParameter(15, "w_vw", 0, 0, 0, 0);
+    minimizer.DefineParameter(13, "ANy2", guess_AVW, 0, 0, 0);
+    minimizer.DefineParameter(14, "pNy2", guess_pVW, 0, 0, 0);
+    minimizer.DefineParameter(15, "w_vw", guess_wVW, 0, 0, 0);
 
     minimizer.DefineParameter(16, "LM", LM, 0.0, -0.1, 0.1); // FIX
 
