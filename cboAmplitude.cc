@@ -256,8 +256,8 @@ int main(int argc, char* argv[]){
     gSlidingAmplitude.SetMaximum(20);
     gSlidingAmplitude.SetMinimum(-1);
     
-    gLinearResidual.SetMinimum(-1.0);
-    gLinearResidual.SetMaximum(+1.5);
+    //gLinearResidual.SetMinimum(-1.0);
+    //gLinearResidual.SetMaximum(+1.5);
     
     gFullFitResidual.SetTitle("(#omega_{CBO}t - #phi_{CBO})_{window} - (#omega_{CBO}t - #phi_{CBO})_{full};Window Start [#mus];CBO Phase Residual [rad]");
     gSlidingVal.SetTitle("CBO Phase Advance from Sliding Windows;Window Start [us];(#omega_{CBO}t - #phi_{CBO}) [rad]");
@@ -431,8 +431,8 @@ int main(int argc, char* argv[]){
     fitLinearCBOResidual.SetParameter(1,20);
     fitLinearCBOResidual.SetParameter(2,7);
     fitLinearCBOResidual.SetParLimits(3,-0.0001,0.0001);
-    gLinearResidual.Fit("fitCBORes", "", "", 30, 100);
-    fitLinearCBOResidual.SetRange(30,100);
+    gLinearResidual.Fit("fitCBORes", "", "", 35, 200);
+    fitLinearCBOResidual.SetRange(30,200);
     
 
     // now draw residual for VW
