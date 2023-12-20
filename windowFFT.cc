@@ -191,7 +191,7 @@ int main(int argc, char* argv[]){
             TLine *l_fVW  = new TLine(fVW ,0.,fVW ,fftMaxY);    
 
             TLine *l_full_fy = new TLine(full_fy, 0., full_fy, fftMaxY);
-            TLine *l_full_fVW = new TLine(full_fVW, 0., full_fy, fftMaxY);
+            TLine *l_full_fVW = new TLine(full_fVW, 0., full_fVW, fftMaxY);
 
             l_fx  ->SetLineColor(kRed);
             l_fy  ->SetLineColor(kRed);
