@@ -315,7 +315,8 @@ int main(int argc, char* argv[]){
         
         double slidingVal = (slidingFit_wCBO * time - slidingFit_phiCBO);
         //double slidingValError = std::sqrt(std::pow(slidingFit_wCBOerr * time, 2) + std::pow(slidingFit_phiCBOerr, 2) - 2 * slidingFit_wCBO_phiCBO_cov * time);
-        double slidingValError = std::sqrt( std::pow(slidingFit_wCBOerr * time, 2)+std::pow(slidingFit_phiCBOerr, 2));
+        double slidingValError = std::sqrt( std::pow((slidingFit_wCBOerr * time)/(slidingFit_wCBO * time), 2)
+                                           +std::pow( slidingFit_phiCBOerr/slidingFit_phiCBO, 2));
         
         double fullFitVal = (fullFit_wCBO * (1.0 + fullFit_A_ct*exp(-time/24.4)/time) * time - fullFit_phi);
         double residual = slidingVal - fullFitVal;
