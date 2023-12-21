@@ -238,8 +238,8 @@ int main(int argc, char* argv[]){
             latex.DrawLatex(-50000+ fVW, 0.7*fftMaxY,"f_{VW}");
             //latex.DrawLatex(-50000+ fVO, 0.7*fftMaxY,"f_{VO}");
 
-            latex.DrawLatex(-50000+ full_fy, 0.7*fftMaxY,"(full) f_{y}");
-            latex.DrawLatex(-50000+ full_fVW, 0.7*fftMaxY,"(full) f_{VW}");
+            latex.DrawLatex(-50000+ full_fy, 0.1*fftMaxY,"(full) f_{y}");
+            latex.DrawLatex(-50000+ full_fVW, 0.5*fftMaxY,"(full) f_{VW}");
 
             canvas->Print(Form("%s.pdf", outputFilename));
 

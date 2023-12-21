@@ -299,7 +299,7 @@ int main(int argc, char* argv[]){
 
     guess_AVW = ANy2;
     guess_pVW = pNy2;
-    guess_wVW = wy(Ky, guess_w);
+    guess_wVW = (6702413*2*M_PI)/1000000 - 2*wy(Ky, guess_w);
 
     printf("A_CBO %f w_CBO %f phi_CBO %f N0 %f R %f tau %f \n", guess_ANx1, guess_w, guess_p, N0, R, tau);
     // we are setting these results as starting guesses for fitCboIsolate

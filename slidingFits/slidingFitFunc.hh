@@ -87,7 +87,6 @@ double wy(double kappa, double wcbo){
     return kappa*wcbo*sqrt(x);
 }
 
-
 double calcnuCboIsolate(double par[], double i){
     double time = (i-0.5) * 0.1492 + startTime;
     double nu = (1.0 + par[0]*cos((par[1])*time - par[2]));
