@@ -568,7 +568,7 @@ int main(int argc, char* argv[]){
     minimizer.DefineParameter(11, "pNy1", 0, 0, 0, 0);
     minimizer.DefineParameter(12, "w_y" , 0, 0, 0, 0);
 
-    minimizer.DefineParameter(13, "ANy2", guess_AVW, 0, 0, 0);
+    minimizer.DefineParameter(13, "ANy2", guess_AVW, 0.0001, 0, 0);
     minimizer.DefineParameter(14, "pNy2", guess_pVW, 0, 0, 0);
     minimizer.DefineParameter(15, "w_vw", guess_wVW, 0, 0, 0);
 
