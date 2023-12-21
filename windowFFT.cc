@@ -212,8 +212,8 @@ int main(int argc, char* argv[]){
             l_fVO ->SetLineStyle(2);
             l_fVW ->SetLineStyle(2);
 
-            l_full_fy->SetLineStyle(2);
-            l_full_fVW->SetLineStyle(2);
+            l_full_fy->SetLineStyle(3);
+            l_full_fVW->SetLineStyle(3);
 
             //l_fx  ->Draw("SAME");
             l_fy  ->Draw("SAME");
@@ -238,6 +238,7 @@ int main(int argc, char* argv[]){
             latex.DrawLatex(-50000+ fVW, 0.7*fftMaxY,"f_{VW}");
             //latex.DrawLatex(-50000+ fVO, 0.7*fftMaxY,"f_{VO}");
 
+            latex.SetTextColor(kBlue);
             latex.DrawLatex(-50000+ full_fy, 0.1*fftMaxY,"(full) f_{y}");
             latex.DrawLatex(-50000+ full_fVW, 0.5*fftMaxY,"(full) f_{VW}");
 
