@@ -132,6 +132,14 @@ int main(int argc, char* argv[]){
     double fullchisq, slidingchisq;
     double slidingFit_w_y, slidingFit_w_vw;
     double slidingFit_w_yerr, slidingFit_w_vwerr;
+
+    double wCBO_expCoeff, wCBO_expOffset, wCBO_expT, wCBO_linCoeff, wCBO_const;
+
+    slidingResults->SetBranchAddress("wCBO_expCoeff", &wCBO_expCoeff);
+    slidingResults->SetBranchAddress("wCBO_expOffset", &wCBO_expOffset);
+    slidingResults->SetBranchAddress("wCBO_expT", &wCBO_expT);
+    slidingResults->SetBranchAddress("wCBO_linCoeff", &wCBO_linCoeff);
+    slidingResults->SetBranchAddress("wCBO_const", &wCBO_linCoeff);
     
     fullFit_pNx1 = invert(fullFit_A_CNx1, fullFit_A_SNx1);
     
@@ -208,6 +216,7 @@ int main(int argc, char* argv[]){
     TGraphErrors gpw2;
 
     TGraphErrors gpx1_atWindowStart;
+    TGraphErrors gSlidingFrequency_tDependent;
     
     TGraphErrors gphaseAdvance_2cbo;
     TGraphErrors gphaseAdvance_vw;
@@ -222,6 +231,7 @@ int main(int argc, char* argv[]){
     gSlidingVal.SetMarkerStyle(7);
     gSlidingAmplitude.SetMarkerStyle(7);
     gSlidingFrequency.SetMarkerStyle(7);
+    gSlidingFrequency_tDependent.SetMarkerStyle(7);
     gSlidingPhase.SetMarkerStyle(7);
     gAmpvFres.SetMarkerStyle(7);
     gax2.SetMarkerStyle(7);
@@ -268,6 +278,7 @@ int main(int argc, char* argv[]){
     
     gSlidingAmplitude.SetTitle("A_CBO v time;Window Start [#mus]; A_{CBO} [10^{-3}]");
     gSlidingFrequency.SetTitle("w_CBO v time;Window Start [#mus]; #omega_{CBO} [MHz]");
+    gSlidingFrequency_tDependent.SetTitle("w_CBO(t) v time;Window Start [#mus]; #omega_{CBO} [MHz]");
     gSlidingPhase.SetTitle("p_CBO v time;Window Start [#mus]; #phi_{CBO} [rad]");
     gAmpvFres.SetTitle("w_CBO vs A_CBO; w_CBO [rad/s]; A_CBO [10^{-3}]");
     gpx1_atWindowStart.SetTitle("p_CBO at window start; Window Start [#mus]; #phi_{CBO} [rad]");
@@ -358,11 +369,17 @@ int main(int argc, char* argv[]){
         
         gSlidingFrequency.SetPoint(graphEntry, time, slidingFit_wCBO );
         gSlidingFrequency.SetPointError(graphEntry, 0, slidingFit_wCBOerr / (2*M_PI));
+
+        double wCBO_t = slidingFit_wCBO*
+                (1 +  wCBO_expCoeff*exp( -(time-wCBO_expOffset)/wCBO_expT ) + wCBO_expT*time +wCBO_const );
+        gSlidingFrequency_tDependent.SetPoint(graphEntry, time, wCBO_t);
+        // TODO: fix this error bar
+        gSlidingFrequency_tDependent.SetPointError(graphEntry, 0, slidingFit_wCBOerr / (2*M_PI));
         
         gSlidingPhase.SetPoint(graphEntry, time, slidingFit_phiCBO);
         gSlidingPhase.SetPointError(graphEntry, 0, slidingFit_phiCBOerr);
 
-        gpx1_atWindowStart.SetPoint(graphEntry, time, within2Pi(slidingVal + (slidingFit_wCBO*time)));
+        gpx1_atWindowStart.SetPoint(graphEntry, time, within2Pi(slidingFit_phiCBO - (slidingFit_wCBO*time)));
         gpx1_atWindowStart.SetPointError(graphEntry, 0, slidingFit_phiCBOerr);
         
         gAmpvFres.SetPoint(graphEntry, slidingFit_wCBO, slidingFit_A_CBO*1E3);
@@ -475,6 +492,10 @@ int main(int argc, char* argv[]){
     c.Print(outputFilename.c_str());
     
     gSlidingFrequency.Draw(drawOption.c_str());
+    c.Draw("Y+");
+    c.Print(outputFilename.c_str());
+
+    gSlidingFrequency_tDependent.Draw(drawOption.c_str());
     c.Draw("Y+");
     c.Print(outputFilename.c_str());
     
