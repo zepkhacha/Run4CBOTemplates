@@ -206,6 +206,8 @@ int main(int argc, char* argv[]){
     TGraphErrors gay2;
     TGraphErrors gpy2;
     TGraphErrors gpw2;
+
+    TGraphErrors gpx1_atWindowStart;
     
     TGraphErrors gphaseAdvance_2cbo;
     TGraphErrors gphaseAdvance_vw;
@@ -235,6 +237,7 @@ int main(int argc, char* argv[]){
 
     gphaseAdvanceR_2cbo.SetMarkerStyle(7);
     gphaseAdvanceR_vw.SetMarkerStyle(7);
+    gpx1_atWindowStart.SetMarkerStyle(7);
     
     gax2.SetMaximum(0.001);
     gax2.SetMinimum(-0.001);
@@ -267,6 +270,7 @@ int main(int argc, char* argv[]){
     gSlidingFrequency.SetTitle("w_CBO v time;Window Start [#mus]; #omega_{CBO} [MHz]");
     gSlidingPhase.SetTitle("p_CBO v time;Window Start [#mus]; #phi_{CBO} [rad]");
     gAmpvFres.SetTitle("w_CBO vs A_CBO; w_CBO [rad/s]; A_CBO [10^{-3}]");
+    gpx1_atWindowStart.SetTitle("p_CBO at window start; Window Start [#mus]; #phi_{CBO} [rad]");
     
     gax2.SetTitle("Ax2; Window Start [#mus]; Ax2 ");
     gpx2.SetTitle("px2; Window Start [#mus]; px2 [rad]");
@@ -357,6 +361,9 @@ int main(int argc, char* argv[]){
         
         gSlidingPhase.SetPoint(graphEntry, time, slidingFit_phiCBO);
         gSlidingPhase.SetPointError(graphEntry, 0, slidingFit_phiCBOerr);
+
+        gpx1_atWindowStart.SetPoint(graphEntry, time, slidingVal + (slidingFit_wCBO*time));
+        gpx1_atWindowStart.SetPointError(graphEntry, time, slidingFit_phiCBOerr);
         
         gAmpvFres.SetPoint(graphEntry, slidingFit_wCBO, slidingFit_A_CBO*1E3);
         
@@ -472,6 +479,10 @@ int main(int argc, char* argv[]){
     c.Print(outputFilename.c_str());
     
     gSlidingPhase.Draw(drawOption.c_str());
+    c.Draw("Y+");
+    c.Print(outputFilename.c_str());
+
+    gpx1_atWindowStart.Draw(drawOption.c_str());
     c.Draw("Y+");
     c.Print(outputFilename.c_str());
     
