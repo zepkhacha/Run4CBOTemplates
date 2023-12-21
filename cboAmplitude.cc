@@ -362,8 +362,8 @@ int main(int argc, char* argv[]){
         gSlidingPhase.SetPoint(graphEntry, time, slidingFit_phiCBO);
         gSlidingPhase.SetPointError(graphEntry, 0, slidingFit_phiCBOerr);
 
-        gpx1_atWindowStart.SetPoint(graphEntry, time, slidingVal + (slidingFit_wCBO*time));
-        gpx1_atWindowStart.SetPointError(graphEntry, time, slidingFit_phiCBOerr);
+        gpx1_atWindowStart.SetPoint(graphEntry, time, within2Pi(slidingVal + (slidingFit_wCBO*time)));
+        gpx1_atWindowStart.SetPointError(graphEntry, 0, slidingFit_phiCBOerr);
         
         gAmpvFres.SetPoint(graphEntry, slidingFit_wCBO, slidingFit_A_CBO*1E3);
         
