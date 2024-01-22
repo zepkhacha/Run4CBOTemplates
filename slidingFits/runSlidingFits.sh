@@ -32,7 +32,7 @@ echo "performing window 0"
 -c 0 -s 0 -a 0 -b ${frFile} -f ${formatB} 2>&1 > ${outputDirectory}/run${run}_calo${calo}_window0000.log 
 echo "done performing window 0" 
 
-step=20
+step=40
 start=${step}
 end=2600
 

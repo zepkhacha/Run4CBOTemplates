@@ -555,8 +555,8 @@ int main(int argc, char* argv[]){
     minimizer.DefineParameter(6, "w_CBO", window_wCBO, 0.001, 0, 0);
     minimizer.DefineParameter(7, "phi_CBO", phi_CBO, 0.0001, 0, 0);
 
-    minimizer.DefineParameter(8, "ANx2", ANx2, 0, 0, 0);
-    minimizer.DefineParameter(9, "pNx2", pNx2, 0, 0, 0);
+    minimizer.DefineParameter(8, "ANx2", 0, 0, 0, 0);
+    minimizer.DefineParameter(9, "pNx2", 0, 0, 0, 0);
 
     minimizer.DefineParameter(10, "ANy1", 0, 0, 0, 0);
     minimizer.DefineParameter(11, "pNy1", 0, 0, 0, 0);
