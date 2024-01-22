@@ -460,7 +460,7 @@ int main(int argc, char* argv[]){
     //TFile *f = TFile::Open(rootOutputFilename.c_str(),"RECREATE");
     
     TCanvas c;
-    std::string outputFilename = Form("%s.pdf", rootOutputFilename.c_str());
+    std::string outputFilename = Form("pdf/%s.pdf", rootOutputFilename.c_str());
     c.Print(Form("%s[", outputFilename.c_str()));
     
     gSlidingAmplitude.Draw(drawOption.c_str());
