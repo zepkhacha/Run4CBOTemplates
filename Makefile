@@ -48,6 +48,12 @@ cboAmplitude: cboAmplitude.o
 cboAmplitude.o: cboAmplitude.cc 
 	g++ -c -Wall -Wextra cboAmplitude.cc $(shell root-config --libs --cflags) -I /cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/include -ffast-math -O2
 
+plots: plots.o
+	g++ -o plots plots.o $(shell root-config --libs) -L/cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/slf7.x86_64.e15.prof/lib -lgm2util_blinders -lMinuit
+
+plots.o: plots.cc 
+	g++ -c -Wall -Wextra plots.cc $(shell root-config --libs --cflags) -I /cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/include -ffast-math -O2
+
 windowFFT: windowFFT.o
 	g++ -o windowFFT windowFFT.o $(shell root-config --libs) -L/cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/slf7.x86_64.e15.prof/lib -lgm2util_blinders -lMinuit
 
@@ -67,7 +73,7 @@ makeTemplate.o: makeTemplate.cc
 	g++ -c -Wall -Wextra makeTemplate.cc $(shell root-config --libs --cflags) -I /cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/include -ffast-math -O2
 
 clean:
-	rm cboAmplitudeBinned.o cboAmplitudeBinned cboResidual.o cboResidual dataDivFcn_noCBO.o dataDivFcn_noCBO windowFFT.o windowFFT compareCalo.o compareCalo
+	rm cboAmplitudeBinned.o cboAmplitudeBinned cboResidual.o cboResidual dataDivFcn_noCBO.o dataDivFcn_noCBO windowFFT.o windowFFT compareCalo.o compareCalo plots.o plots
 
 cboAmplitudeBinned: cboAmplitudeBinned.o
 	g++ -o cboAmplitudeBinned cboAmplitudeBinned.o $(shell root-config --libs) -L/cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/slf7.x86_64.e15.prof/lib -lgm2util_blinders -lMinuit

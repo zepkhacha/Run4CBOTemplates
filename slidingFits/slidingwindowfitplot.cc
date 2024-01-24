@@ -40,7 +40,8 @@ void parse_cmdline(int argc, char** argv,
         char* &inputFilename, char* &outputFilename, char* &boostFilename, char* &cboIsolateFilename,
         char* &cboRefFilename, 
         bool* asymmetry, double* c_e_scale, int* seed, int* windowNo,
-        char* &windowFilename){
+        char* &windowFilename,
+        int* desiredCalo){
     const char* const opts = "hf:o:i:b:a:c:s:p:q:w:n:W:";
     bool done = false;
     while(!done){
@@ -58,7 +59,7 @@ void parse_cmdline(int argc, char** argv,
             case 'c': *c_e_scale = std::stod(optarg); break;
             case 's': *seed   = atoi(optarg); break;
             case 'w': *windowNo = atoi(optarg); break;
-            case 'n': desiredCalo = atoi(optarg); break;
+            case 'n': *desiredCalo = atoi(optarg); break;
             case 'W': windowFilename = optarg; break;
             default: printhelp(); exit(1);
         }
@@ -96,7 +97,7 @@ int main(int argc, char* argv[]){
     parse_cmdline(argc,argv,
             formatFilename, 
             inputFilename, outputFilename, boostFilename, cboIsolateFilename,cboRefFilename,
-            &asymmetry, &c_e_scale, &desiredSeed, &windowNo, windowFilename);
+            &asymmetry, &c_e_scale, &desiredSeed, &windowNo, windowFilename, &desiredCalo);
 
     // read in parameters for fit type
     printf("reading format from %s\n", formatFilename);
@@ -316,6 +317,7 @@ int main(int argc, char* argv[]){
     fitresults->Branch("fitStart", &fitStart);
     fitresults->Branch("fitStop",  &fitStop );
     fitresults->Branch("windowBins", &windowBins);
+    fitresults->Branch("caloNum", &desiredCalo);
 
     fitresults->Branch("pBinTau", &pBinTau);
     fitresults->Branch("pBinPhi", &pBinPhi);
@@ -396,7 +398,7 @@ int main(int argc, char* argv[]){
     fitrangelow  = startBin + (windowNo);
 
     if (windowNo == 0){
-        windowBins = 120;
+        windowBins = 240;
     }else{
         double c = 0.55;
         double insideLog = 1.0 - c*c*exp(-((startBin-fitrangelow)*0.1492)/tau) 
@@ -416,11 +418,12 @@ int main(int argc, char* argv[]){
         // now round to nearest 10.0
         windowBins = int (windowBins/10.0) * 10;
         // if deltaT < 17us, set it back to 17us
-        if (windowBins < 120){
-            windowBins = 120;
+        if (windowBins < 240){
+            windowBins = 240;
         }
 
     }
+    windowBins = 240; // hard-coding 34us bins for now
     printf("windowBins = %i\n", windowBins);
 
     fitrangehigh = fitrangelow+windowBins;
