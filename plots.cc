@@ -343,7 +343,7 @@ int main(int argc, char* argv[]){
 
     TCanvas c;
     std::string rootOutputFilename = "plots";
-    std::string outputFilename = Form("pdf/%s.pdf", rootOutputFilename.c_str());
+    std::string outputFilename = Form("%s.pdf", rootOutputFilename.c_str());
     c.Print(Form("%s[", outputFilename.c_str()));
 
     TMultiGraph mgSlidingAmplitude;
