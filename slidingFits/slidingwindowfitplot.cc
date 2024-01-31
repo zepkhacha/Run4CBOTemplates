@@ -424,6 +424,7 @@ int main(int argc, char* argv[]){
 
     }
     windowBins = 240; // hard-coding 34us bins for now
+
     printf("windowBins = %i\n", windowBins);
 
     fitrangehigh = fitrangelow+windowBins;

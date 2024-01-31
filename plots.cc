@@ -274,7 +274,7 @@ int main(int argc, char* argv[]){
         double w_0_err = fit.GetParError(0);
         double phi_0 = fit.GetParameter(1);
         double phi_0_err = fit.GetParError(1);
-        //printf("CALO %i FIT RESULTS: w_0 %f phi_0 %f\n", i+1, w_0, phi_0);
+        printf("CALO %i FIT RESULTS: w_0 %f phi_0 %f\n", i+1, w_0, phi_0);
 
         // now draw residual for CBO
         for (int j=0; j<gSlidingCboPA[i].GetN(); j++) {
@@ -412,6 +412,8 @@ int main(int argc, char* argv[]){
         gSlidingCboPA[i].SetMarkerColor(i+1);
         mgSlidingCboPA.Add(&gSlidingCboPA[i]);
         lSlidingFrequency->AddEntry(&gSlidingCboPA[i], Form("calo%i", i+1));
+        gSlidingCboPA[i].Draw("APE");
+        c.Print(outputFilename.c_str());
     }
     c.Clear();
     mgSlidingCboPA.SetMaximum(1500);
