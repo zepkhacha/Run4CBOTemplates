@@ -267,8 +267,8 @@ int main(int argc, char* argv[]){
     // fit first time to get w_0 and phi_0
     for (int i=0; i<24; i++){
         TF1 fit ("fit", "[0]*x - [1]", gSlidingCboPA[i].GetPointX(0), gSlidingCboPA[i].GetPointX(gSlidingCboPA[i].GetN()-1));
-        gSlidingCboPA[i].Fit("fit", "", "", 50, 200);
         fit.SetRange(50, 200);
+        gSlidingCboPA[i].Fit("fit", "", "", 50, 200);
 
         double w_0 = fit.GetParameter(0);
         double w_0_err = fit.GetParError(0);
@@ -412,8 +412,8 @@ int main(int argc, char* argv[]){
         gSlidingCboPA[i].SetMarkerColor(i+1);
         mgSlidingCboPA.Add(&gSlidingCboPA[i]);
         lSlidingFrequency->AddEntry(&gSlidingCboPA[i], Form("calo%i", i+1));
-        gSlidingCboPA[i].Draw("APE");
-        c.Print(outputFilename.c_str());
+        //gSlidingCboPA[i].Draw("APE");
+        //c.Print(outputFilename.c_str());
     }
     c.Clear();
     mgSlidingCboPA.SetMaximum(1500);
