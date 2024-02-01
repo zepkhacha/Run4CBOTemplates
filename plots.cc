@@ -269,12 +269,14 @@ int main(int argc, char* argv[]){
 
     // fit first time to get w_0 and phi_0
     for (int i=0; i<24; i++){
-        TF1 fit ("fit", "[0]*x - [1]", gSlidingCboPA[i].GetPointX(0), gSlidingCboPA[i].GetPointX(gSlidingCboPA[i].GetN()-1));
+
+        //TF1 fit ("fit", "[0]*x - [1]", gSlidingCboPA[i].GetPointX(0), gSlidingCboPA[i].GetPointX(gSlidingCboPA[i].GetN()-1));
+        TF1 fit ("fit", "[0]*x - [1]", 50, 100);
         fit.SetParLimits(1,-M_PI,+M_PI);
         printf("FIRST CALL to FIT()\n");
-        gSlidingCboPA[i].Fit("fit", "WFM", "", 50, 150);
+        gSlidingCboPA[i].Fit("fit", "MW", "", 50, 100);
         //printf("SECOND CALL to FIT()\n");
-        //gSlidingCboPA[i].Fit("fit", "M", "", 50, 150);
+        //gSlidingCboPA[i].Fit("fit", "M", "", 50, 100);
         gLinearResidualFits.push_back(fit);
 
         double w_0 = fit.GetParameter(0);
