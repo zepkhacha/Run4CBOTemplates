@@ -562,14 +562,14 @@ int main(int argc, char* argv[]){
     minimizer.DefineParameter(8, "ANx2", 0, 0, 0, 0);
     minimizer.DefineParameter(9, "pNx2", 0, 0, 0, 0);
 
-    minimizer.DefineParameter(10, "ANy1", 0, 0, 0, 0);
-    minimizer.DefineParameter(11, "pNy1", 0, 0, 0, 0);
-    minimizer.DefineParameter(12, "w_y" , 0, 0, 0, 0);
+    minimizer.DefineParameter(10, "ANy1", ANy1, 1E-6, 0, 0);
+    minimizer.DefineParameter(11, "pNy1", pNy1, 0.0001, 0, 0);
+    minimizer.DefineParameter(12, "w_y" , 0, 0.001, 0, 0);
 
-    minimizer.DefineParameter(13, "ANy2", 0, 0, 0, 0);
-    minimizer.DefineParameter(14, "pNy2", 0, 0, 0, 0);
+    minimizer.DefineParameter(13, "ANy2", ANy2, 1E-6, 0, 0);
+    minimizer.DefineParameter(14, "pNy2", pNy2, 0.0001, 0, 0);
     double w_vw_guess = (2.3)*(2*M_PI);
-    minimizer.DefineParameter(15, "w_vw", 0, 0, 0, 0);
+    minimizer.DefineParameter(15, "w_vw", w_vw_guess, 0.001, 0, 0);
 
     minimizer.DefineParameter(16, "LM", LM, 0.0, -0.1, 0.1); // FIX
 
