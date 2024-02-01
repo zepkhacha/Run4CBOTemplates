@@ -111,6 +111,8 @@ int main(int argc, char* argv[]){
     std::vector<TGraphErrors> gSlidingAmplitude    ;
     std::vector<TGraphErrors> gSlidingFrequency    ;
     std::vector<TGraphErrors> gSlidingPhase        ;
+
+    std::vector<TF1> gLinearResidualFits ;
     //    std::vector<TGraphErrors> gax2                 ;
     //    std::vector<TGraphErrors> gpx2                 ;
     //    std::vector<TGraphErrors> gay1                 ;
@@ -139,6 +141,7 @@ int main(int argc, char* argv[]){
         gSlidingAmplitude[i].SetMarkerStyle(7);
         gSlidingFrequency[i].SetMarkerStyle(7);
         gSlidingPhase[i].SetMarkerStyle(7);
+
     }
 
     //    gAmpvFres.SetMarkerStyle(7);
@@ -227,7 +230,7 @@ int main(int argc, char* argv[]){
         double slidingValError = std::sqrt( std::pow((slidingFit_wCBOerr * time)/(slidingFit_wCBO * time), 2)
                 +std::pow( slidingFit_phiCBOerr/slidingFit_phiCBO, 2));
 
-        gSlidingCboPA[caloNum-1].SetPoint(gSlidingCboPA[caloNum-1].GetN(), time, slidingVal);
+        gSlidingCboPA[caloNum-1].SetPoint(gSlidingCboPA[caloNum-1].GetN(), time, (slidingVal));
         gSlidingCboPA[caloNum-1].SetPointError(gSlidingCboPA[caloNum-1].GetN()-1, 0, slidingValError);
 
         gSlidingAmplitude[caloNum-1].SetPoint(gSlidingAmplitude[caloNum-1].GetN(), time, slidingFit_A_CBO * 1E3);
@@ -267,8 +270,9 @@ int main(int argc, char* argv[]){
     // fit first time to get w_0 and phi_0
     for (int i=0; i<24; i++){
         TF1 fit ("fit", "[0]*x - [1]", gSlidingCboPA[i].GetPointX(0), gSlidingCboPA[i].GetPointX(gSlidingCboPA[i].GetN()-1));
-        fit.SetRange(50, 200);
-        gSlidingCboPA[i].Fit("fit", "", "", 50, 200);
+        fit.SetParLimits(1,-M_PI,+M_PI);
+        gSlidingCboPA[i].Fit("fit", "M", "", 50, 150);
+        gLinearResidualFits.push_back(fit);
 
         double w_0 = fit.GetParameter(0);
         double w_0_err = fit.GetParError(0);
@@ -370,7 +374,7 @@ int main(int argc, char* argv[]){
     lLinearResidual  ->SetTextSize(0.01);
     lSlidingCboPA    ->SetTextSize(0.01);
 
-    for (int i=0; i<gSlidingAmplitude.size(); i++){
+    for (unsigned int i=0; i<gSlidingAmplitude.size(); i++){
         gSlidingAmplitude[i].SetLineColor(i+1);
         gSlidingAmplitude[i].SetMarkerColor(i+1);
         mgSlidingAmplitude.Add(&gSlidingAmplitude[i]);
@@ -381,7 +385,7 @@ int main(int argc, char* argv[]){
     lSlidingAmplitude->Draw();
     c.Print(outputFilename.c_str());
 
-    for (int i=0; i<gSlidingFrequency.size(); i++){
+    for (unsigned int i=0; i<gSlidingFrequency.size(); i++){
         gSlidingFrequency[i].SetLineColor(i+1);
         gSlidingFrequency[i].SetMarkerColor(i+1);
         mgSlidingFrequency.Add(&gSlidingFrequency[i]);
@@ -394,7 +398,7 @@ int main(int argc, char* argv[]){
     //lSlidingFrequency->Draw();
     c.Print(outputFilename.c_str());
 
-    for (int i=0; i<gSlidingPhase.size(); i++){
+    for (unsigned int i=0; i<gSlidingPhase.size(); i++){
         gSlidingPhase[i].SetLineColor(i+1);
         gSlidingPhase[i].SetMarkerColor(i+1);
         mgSlidingPhase.Add(&gSlidingPhase[i]);
@@ -407,13 +411,14 @@ int main(int argc, char* argv[]){
     //lSlidingFrequency->Draw();
     c.Print(outputFilename.c_str());
 
-    for (int i=0; i<gSlidingCboPA.size(); i++){
+    for (unsigned int i=0; i<gSlidingCboPA.size(); i++){
         gSlidingCboPA[i].SetLineColor(i+1);
         gSlidingCboPA[i].SetMarkerColor(i+1);
+        gSlidingCboPA[i].SetTitle(Form("calo%i", i+1));
         mgSlidingCboPA.Add(&gSlidingCboPA[i]);
         lSlidingFrequency->AddEntry(&gSlidingCboPA[i], Form("calo%i", i+1));
-        //gSlidingCboPA[i].Draw("APE");
-        //c.Print(outputFilename.c_str());
+        gSlidingCboPA[i].Draw("APE");
+        c.Print(outputFilename.c_str());
     }
     c.Clear();
     mgSlidingCboPA.SetMaximum(1500);
@@ -422,7 +427,7 @@ int main(int argc, char* argv[]){
     //lSlidingFrequency->Draw();
     c.Print(outputFilename.c_str());
 
-    for (int i=0; i<gLinearResidual.size(); i++){
+    for (unsigned int i=0; i<gLinearResidual.size(); i++){
         gLinearResidual[i].SetLineColor(1);
         gLinearResidual[i].SetMarkerColor(1);
         gLinearResidual[i].SetTitle(Form("Linear Residual Calo %i", i+1));
@@ -444,7 +449,6 @@ int main(int argc, char* argv[]){
     mgLinearResidual.Draw("AP");
     //lSlidingFrequency->Draw();
     c.Print(outputFilename.c_str());
-
 
     //    gSlidingCboPA.Draw(drawOption.c_str());
     //    fit.Draw("SAME");
