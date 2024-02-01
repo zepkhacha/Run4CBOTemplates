@@ -142,6 +142,8 @@ int main(int argc, char* argv[]){
         gSlidingFrequency[i].SetMarkerStyle(7);
         gSlidingPhase[i].SetMarkerStyle(7);
 
+        gSlidingAmplitude[i].SetMinimum(0);
+
     }
 
     //    gAmpvFres.SetMarkerStyle(7);
