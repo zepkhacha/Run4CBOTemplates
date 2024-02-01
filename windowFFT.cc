@@ -98,7 +98,7 @@ int main(int argc, char* argv[]){
 
     TH1D *rFFTSum = new TH1D("residua", "residua", r_nBins, startTime, 650.0644);
     TCanvas *canvas = new TCanvas();
-    canvas->Print(Form("pdf/%s.pdf[", outputFilename));
+    canvas->Print(Form("%s.pdf[", outputFilename));
 
     prevStop = 0.0;
     for (int entry=0; entry<t->GetEntries(); entry++){
