@@ -227,7 +227,7 @@ int main(int argc, char* argv[]){
             l_full_fVW->Draw("SAME");
 
             TLatex latex;
-            latex.SetTextSize(0.05);
+            latex.SetTextSize(0.03);
             latex.SetTextAngle(90);
             latex.SetTextColor(kRed);
             //latex.DrawLatex(-50000+ fx, 0.7*fftMaxY,"f_{x}");

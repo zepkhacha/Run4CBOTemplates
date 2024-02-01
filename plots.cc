@@ -272,6 +272,7 @@ int main(int argc, char* argv[]){
         TF1 fit ("fit", "[0]*x - [1]", gSlidingCboPA[i].GetPointX(0), gSlidingCboPA[i].GetPointX(gSlidingCboPA[i].GetN()-1));
         fit.SetParLimits(1,-M_PI,+M_PI);
         gSlidingCboPA[i].Fit("fit", "M", "", 50, 150);
+        gSlidingCboPA[i].Fit("fit", "M", "", 50, 150);
         gLinearResidualFits.push_back(fit);
 
         double w_0 = fit.GetParameter(0);
