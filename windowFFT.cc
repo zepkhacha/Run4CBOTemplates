@@ -212,8 +212,8 @@ int main(int argc, char* argv[]){
             l_fVO ->SetLineStyle(2);
             l_fVW ->SetLineStyle(2);
 
-            l_full_fy->SetLineStyle(2);
-            l_full_fVW->SetLineStyle(2);
+            l_full_fy->SetLineStyle(3);
+            l_full_fVW->SetLineStyle(3);
 
             //l_fx  ->Draw("SAME");
             l_fy  ->Draw("SAME");
