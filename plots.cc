@@ -369,7 +369,7 @@ int main(int argc, char* argv[]){
     mgSlidingFrequency.SetTitle("w_CBO v time;Window Start [#mus]; #omega_{CBO} [MHz]");
     mgSlidingPhase.SetTitle("p_CBO v time;Window Start [#mus]; #phi_{CBO} [rad]");
 
-    TLegend *lSlidingAmplitude = new TLegend(0.1,0.1,0.3,0.5);
+    TLegend *lSlidingAmplitude = new TLegend(0.8,0.7,0.8,0.9);
     TLegend *lSlidingFrequency = new TLegend(0.1,0.1,0.3,0.5);
     TLegend *lSlidingPhase     = new TLegend(0.1,0.1,0.3,0.5);
     TLegend *lLinearResidual   = new TLegend(0.1,0.1,0.3,0.5);
