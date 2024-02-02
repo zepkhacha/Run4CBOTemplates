@@ -365,7 +365,8 @@ int main(int argc, char* argv[]){
         gay1[i].SetLineColor(1);
         gay1[i].SetMarkerColor(1);
         gay1[i].SetTitle(Form("calo%i A_y1", i+1));
-        gay1[i].Draw("A_y1.pdf");
+        gay1[i].Draw("APE");
+        c.Print("A_y1.pdf");
         gay1[i].SetLineColor(i+1);
         gay1[i].SetMarkerColor(i+1);
         mgay1.Add(&gay1[i]);
