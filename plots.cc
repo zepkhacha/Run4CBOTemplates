@@ -359,12 +359,19 @@ int main(int argc, char* argv[]){
     c.Print(outputFilename.c_str());
 
     // PLOT 1-Y SLIDING AMPLITUDE
+    c.Clear();
+    c.Print("A_y1.pdf[");
     for (unsigned int i=0; i<gay1.size(); i++){
+        gay1[i].SetLineColor(1);
+        gay1[i].SetMarkerColor(1);
+        gay1[i].SetTitle(Form("calo%i A_y1", i+1));
+        gay1[i].Draw("A_y1.pdf");
         gay1[i].SetLineColor(i+1);
         gay1[i].SetMarkerColor(i+1);
         mgay1.Add(&gay1[i]);
         lSlidingAmplitude->AddEntry(&gay1[i], Form("calo%i", i+1));
     }
+    c.Print("A_y1.pdf]");
     c.Clear();
     mgay1.SetMinimum(0);
     mgay1.SetMaximum(12);
