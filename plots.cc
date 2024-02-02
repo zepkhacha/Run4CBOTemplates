@@ -107,18 +107,21 @@ int main(int argc, char* argv[]){
     slidingResults->SetBranchAddress("fitStop" , &fitStop );
 
     std::vector<TGraphErrors> gLinearResidual      ;
+
     std::vector<TGraphErrors> gSlidingCboPA          ;
+
     std::vector<TGraphErrors> gSlidingAmplitude    ;
+    std::vector<TGraphErrors> gay1                 ;
+    std::vector<TGraphErrors> gay2                 ;
+
     std::vector<TGraphErrors> gSlidingFrequency    ;
+
     std::vector<TGraphErrors> gSlidingPhase        ;
 
     std::vector<TF1> gLinearResidualFits ;
-    //    std::vector<TGraphErrors> gax2                 ;
     //    std::vector<TGraphErrors> gpx2                 ;
-    //    std::vector<TGraphErrors> gay1                 ;
     //    std::vector<TGraphErrors> gpy1                 ;
     //    std::vector<TGraphErrors> gpw1                 ;
-    //    std::vector<TGraphErrors> gay2                 ;
     //    std::vector<TGraphErrors> gpy2                 ;
     //    std::vector<TGraphErrors> gpw2                 ;
     //    std::vector<TGraphErrors> gphaseAdvance_2cbo   ;
@@ -132,76 +135,24 @@ int main(int argc, char* argv[]){
         gLinearResidual.push_back(temp);
         gSlidingCboPA.push_back(temp);
         gSlidingAmplitude.push_back(temp);
+        gay1.push_back(temp);
+        gay2.push_back(temp);
         gSlidingFrequency.push_back(temp);
         gSlidingPhase.push_back(temp);
 
         gLinearResidual[i].SetMarkerStyle(7);
         gSlidingCboPA[i].SetMarkerStyle(7);
         gSlidingAmplitude[i].SetMarkerStyle(7);
-        gSlidingAmplitude[i].SetMarkerStyle(7);
+        gay1[i].SetMarkerStyle(7);
+        gay2[i].SetMarkerStyle(7);
         gSlidingFrequency[i].SetMarkerStyle(7);
         gSlidingPhase[i].SetMarkerStyle(7);
 
         gSlidingAmplitude[i].SetMinimum(0);
+        gay1[i].SetMinimum(0);
+        gay2[i].SetMinimum(0);
 
     }
-
-    //    gAmpvFres.SetMarkerStyle(7);
-    //    gax2.SetMarkerStyle(7);
-    //    gpx2.SetMarkerStyle(7);
-    //    gay1.SetMarkerStyle(7);
-    //    gpy1.SetMarkerStyle(7);
-    //    gpw1.SetMarkerStyle(7);
-    //    gay2.SetMarkerStyle(7);
-    //    gpy2.SetMarkerStyle(7);
-    //    gpw2.SetMarkerStyle(7);
-    //    gphaseAdvance_2cbo.SetMarkerStyle(7);
-    //    gphaseAdvance_vw.SetMarkerStyle(7);
-    //
-    //    gphaseAdvanceR_2cbo.SetMarkerStyle(7);
-    //    gphaseAdvanceR_vw.SetMarkerStyle(7);
-    //    
-    //    gax2.SetMaximum(0.001);
-    //    gax2.SetMinimum(-0.01);
-    //    //gay1.SetMaximum(0.005);
-    //    //gay2.SetMaximum(0.005);
-    //    //gax2.SetMinimum(-0.005);
-    //    //gay1.SetMinimum(-0.005);
-    //    //gay2.SetMinimum(-0.005);
-    //    gpy1.SetMaximum(M_PI);
-    //    gpy1.SetMinimum(-M_PI);
-    //    gpy2.SetMaximum(M_PI);
-    //    gpy2.SetMinimum(-M_PI);
-    //    gpx2.SetMaximum(M_PI);
-    //    gpx2.SetMinimum(-M_PI);
-    //
-    //    gpw2.SetMaximum(14.6);
-    //    gpw2.SetMinimum(14.2);
-    //    
-    //    gSlidingAmplitude.SetMaximum(20);
-    //    gSlidingAmplitude.SetMinimum(-1);
-    //    
-    //    gLinearResidual.SetMinimum(-1.0);
-    //    gLinearResidual.SetMaximum(+1.0);
-    //    
-    //    gAmpvFres.SetTitle("w_CBO vs A_CBO; w_CBO [rad/s]; A_CBO [10^{-3}]");
-    //    
-    //    gax2.SetTitle("Ax2; Window Start [#mus]; Ax2 ");
-    //    gpx2.SetTitle("px2; Window Start [#mus]; px2 [rad]");
-    //    gay1.SetTitle("Ay1; Window Start [#mus]; Ay1 ");
-    //    gpy1.SetTitle("py1; Window Start [#mus]; py1 [rad]");
-    //    gay2.SetTitle("Ay2; Window Start [#mus]; Ay2 ");
-    //    gpy2.SetTitle("py2; Window Start [#mus]; py2 [rad]");
-    //    gpw1.SetTitle("w_y;  Window Start [#mus]; w_y [rad/s]");
-    //    gpw2.SetTitle("w_vw; Window Start [#mus]; w_vw [rad/s]");
-    //    
-    //    gphaseAdvance_2cbo.SetTitle("2CBO Phase Advance; Window Start [#mus]; 2CBO Phase Advance [rad]");
-    //    gphaseAdvance_vw.SetTitle("vw Phase Advance; Window Start [#mus]; vw Phase Advance [rad]");
-    //    gphaseAdvanceR_2cbo.SetTitle("2CBO Phase Advance Residual; Window Start [#mus]; 2CBO Residual [rad]");
-    //    gphaseAdvanceR_vw.SetTitle("vw Phase Advance Residual; Window Start [#mus]; vw Residual [rad]");
-    //    
-    //    double previousResidual = 0.0;
-    //    printf("getting window results...\n");
 
     // get sliding window results
     int graphEntry = 0;
@@ -237,6 +188,12 @@ int main(int argc, char* argv[]){
 
         gSlidingAmplitude[caloNum-1].SetPoint(gSlidingAmplitude[caloNum-1].GetN(), time, slidingFit_A_CBO * 1E3);
         gSlidingAmplitude[caloNum-1].SetPointError(gSlidingAmplitude[caloNum-1].GetN()-1, 0, slidingFit_A_CBOerr * 1E3);
+
+        gay1[caloNum-1].SetPoint(gay1[caloNum-1].GetN(), time, slidingFit_Ay1 * 1E3);
+        gay1[caloNum-1].SetPointError(gay1[caloNum-1].GetN()-1, 0, slidingFit_Ay1err * 1E3);
+
+        gay2[caloNum-1].SetPoint(gay2[caloNum-1].GetN(), time, slidingFit_Ay2 * 1E3);
+        gay2[caloNum-1].SetPointError(gay2[caloNum-1].GetN()-1, 0, slidingFit_Ay2err * 1E3);
 
         gSlidingFrequency[caloNum-1].SetPoint(gSlidingFrequency[caloNum-1].GetN(), time, slidingFit_wCBO );
         gSlidingFrequency[caloNum-1].SetPointError(gSlidingFrequency[caloNum-1].GetN()-1, 0, slidingFit_wCBOerr / (2*M_PI));
@@ -358,29 +315,36 @@ int main(int argc, char* argv[]){
     c.Print(Form("%s[", outputFilename.c_str()));
 
     TMultiGraph mgSlidingAmplitude;
+    TMultiGraph mgay1;
+    TMultiGraph mgay2;
     TMultiGraph mgSlidingFrequency;
     TMultiGraph mgSlidingPhase;
     TMultiGraph mgLinearResidual;
     TMultiGraph mgSlidingCboPA;
 
     mgSlidingAmplitude.SetTitle("A_CBO v time;Window Start [#mus]; A_{CBO} [10^{-3}]");
+    mgay1.SetTitle("A_y1 v time; Window Start [#mus]; A_{y1} [10^{-3}]");
+    mgay2.SetTitle("A_y2 v time; Window Start [#mus]; A_{y2} [10^{-3}]");
     mgSlidingCboPA.SetTitle("CBO Phase Advance from Sliding Windows;Window Start [us];(#omega_{CBO}t - #phi_{CBO}) [rad]");
     mgLinearResidual.SetTitle("(#omega_{CBO}t - #phi_{CBO})_{window} - (#omega_{0}t - #phi_{0})_{late};Window Start [us];CBO Phase Residual [rad]");
     mgSlidingFrequency.SetTitle("w_CBO v time;Window Start [#mus]; #omega_{CBO} [MHz]");
     mgSlidingPhase.SetTitle("p_CBO v time;Window Start [#mus]; #phi_{CBO} [rad]");
 
-    TLegend *lSlidingAmplitude = new TLegend(0.8,0.7,0.8,0.9);
+    TLegend *lSlidingAmplitude = new TLegend(0.7,0.6,0.9,0.9);
+    TLegend *lay1              = new TLegend(0.7,0.6,0.9,0.9);
     TLegend *lSlidingFrequency = new TLegend(0.1,0.1,0.3,0.5);
     TLegend *lSlidingPhase     = new TLegend(0.1,0.1,0.3,0.5);
     TLegend *lLinearResidual   = new TLegend(0.1,0.1,0.3,0.5);
     TLegend *lSlidingCboPA     = new TLegend(0.1,0.1,0.3,0.5);
 
     lSlidingAmplitude->SetTextSize(0.01);
+    lay1             ->SetTextSize(0.01);
     lSlidingFrequency->SetTextSize(0.01);
     lSlidingPhase    ->SetTextSize(0.01);
     lLinearResidual  ->SetTextSize(0.01);
     lSlidingCboPA    ->SetTextSize(0.01);
 
+    // PLOT 1-CBO SLIDING AMPLITUDE
     for (unsigned int i=0; i<gSlidingAmplitude.size(); i++){
         gSlidingAmplitude[i].SetLineColor(i+1);
         gSlidingAmplitude[i].SetMarkerColor(i+1);
@@ -394,6 +358,22 @@ int main(int argc, char* argv[]){
     lSlidingAmplitude->Draw();
     c.Print(outputFilename.c_str());
 
+    // PLOT 1-Y SLIDING AMPLITUDE
+    for (unsigned int i=0; i<gay1.size(); i++){
+        gay1[i].SetLineColor(i+1);
+        gay1[i].SetMarkerColor(i+1);
+        mgay1.Add(&gay1[i]);
+        lSlidingAmplitude->AddEntry(&gay1[i], Form("calo%i", i+1));
+    }
+    c.Clear();
+    mgay1.SetMinimum(0);
+    mgay1.SetMaximum(12);
+    mgay1.Draw("APE");
+    lSlidingAmplitude->Draw();
+    c.Print(outputFilename.c_str());
+
+    // PLOT 2-Y SLIDING AMPLITUDE
+    // PLOT 1-CBO SLIDING FREQ
     for (unsigned int i=0; i<gSlidingFrequency.size(); i++){
         gSlidingFrequency[i].SetLineColor(i+1);
         gSlidingFrequency[i].SetMarkerColor(i+1);
@@ -406,6 +386,12 @@ int main(int argc, char* argv[]){
     mgSlidingFrequency.Draw("APE");
     //lSlidingFrequency->Draw();
     c.Print(outputFilename.c_str());
+
+    // PLOT 1-Y SLIDING FREQ
+    // PLOT 2-Y SLIDING FREQ
+    // PLOT 1-CBO SLIDING PHASE
+    // PLOT 1-Y SLIDING PHASE
+    // PLOT 2-Y SLIDING PHASE
 
     for (unsigned int i=0; i<gSlidingPhase.size(); i++){
         gSlidingPhase[i].SetLineColor(i+1);
@@ -459,72 +445,6 @@ int main(int argc, char* argv[]){
     //lSlidingFrequency->Draw();
     c.Print(outputFilename.c_str());
 
-    //    gSlidingCboPA.Draw(drawOption.c_str());
-    //    fit.Draw("SAME");
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //    
-    //    //TLine line (0, 0, 240, 0);
-    //    //line.SetLineStyle(kDotted);
-    //    //line.Draw();
-    //    //c.Print(outputFilename.c_str());
-    //    
-    //    gLinearResidual.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //    
-    //    gAmpvFres.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //    
-    //    gax2.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //    
-    //    gpx2.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //    
-    //    gay1.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //    
-    //    gpy1.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //    
-    //    gay2.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //    
-    //    gpy2.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //    
-    //    gpw1.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //    
-    //    gpw2.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //    
-    //    gphaseAdvance_2cbo.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //    
-    //    gphaseAdvance_vw.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //
-    //    gphaseAdvanceR_vw.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //
-    //    gphaseAdvanceR_2cbo.Draw(drawOption.c_str());
-    //    c.Draw("Y+");
-    //    c.Print(outputFilename.c_str());
-    //    
     c.Print(Form("%s]", outputFilename.c_str()));
 
 } // end main
