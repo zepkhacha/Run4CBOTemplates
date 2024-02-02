@@ -389,6 +389,7 @@ int main(int argc, char* argv[]){
     }
     c.Clear();
     mgSlidingAmplitude.SetMinimum(0);
+    mgSlidingAmplitude.SetMaximum(8);
     mgSlidingAmplitude.Draw("APE");
     lSlidingAmplitude->Draw();
     c.Print(outputFilename.c_str());
