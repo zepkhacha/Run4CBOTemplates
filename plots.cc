@@ -388,6 +388,7 @@ int main(int argc, char* argv[]){
         lSlidingAmplitude->AddEntry(&gSlidingAmplitude[i], Form("calo%i", i+1));
     }
     c.Clear();
+    mgSlidingAmplitude.SetMinimum(0);
     mgSlidingAmplitude.Draw("APE");
     lSlidingAmplitude->Draw();
     c.Print(outputFilename.c_str());
