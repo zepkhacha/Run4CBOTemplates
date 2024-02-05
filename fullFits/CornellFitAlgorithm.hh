@@ -72,8 +72,16 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
   double phi = par[3];
   // common in all bins
   double nu = 0.0;
+
+  int calcnuRangeLower = magicBin-1;
+  int calcnuRangeUpper = magicBin+1;
+  if (pBinTau or pBinPhi){
+      calcnuRangeLower = binRange.first;
+      calcnuRangeUpper = binRange.second;
+  }
+
   // start iterating bin-by-bin
-  for (int b=binRange.first; b<=binRange.second; b++){
+  for (int b=calcnuRangeLower; b<=calcnuRangeUpper; b++){
 
       double b_dp = dp_p0[b];
       double binNu = 0.0;

@@ -16,20 +16,16 @@ formatC="/gm2data/zkhechad/run45/envelope/formats/formatC_mBin_constraintOff.txt
 formatD="/gm2data/zkhechad/run45/envelope/formats/formatD_mBin_constraintOn.txt"
 
 mainDirectory="/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/"
-mkdir -p ${mainDirectory}/slidingFits/run${run}
-outputDirectory="${mainDirectory}/slidingFits/run${run}/"
-
-# -p points to kevin-style fits
-#-q ${mainDirectory}fullFits/run${run}/sBin_constraintOn_cE0.0_seed0_run${run}_calo${calo}.root \
-#-W ${outputDirectory}/run${run}_calo${calo}_window1300.root \
+mkdir -p ${mainDirectory}/slidingFits/${run}
+outputDirectory="${mainDirectory}/slidingFits/${run}/"
 
 echo "performing window 0"
-./slidingwindowfitplot -p ${mainDirectory}/cboIsolate/run${run}_calo${calo}.root \
+./slidingwindowfitplot -p ${mainDirectory}/cboIsolate/${run}_calo${calo}.root \
 -a 1 \
--w 0 -n ${calo} -q ${mainDirectory}fullFits/run${run}/sBin_constraintOn_cE0.0_seed0_run${run}_calo${calo}.root \
--i /gm2data/cornell/histograms/aMethod/histogram_a_run${run}.root \
--o ${outputDirectory}/run${run}_calo${calo}_window0000.root \
--c 0 -s 0 -a 0 -b ${frFile} -f ${formatB} 2>&1 > ${outputDirectory}/run${run}_calo${calo}_window0000.log 
+-w 0 -n ${calo} -q ${mainDirectory}fullFits/${run}/sBin_constraintOn_cE0.0_seed0_${run}_calo${calo}.root \
+-i /gm2data/cornell/histograms/aMethod/histogram_a_${run}.root \
+-o ${outputDirectory}/${run}_calo${calo}_window0000.root \
+-c 0 -s 0 -a 0 -b ${frFile} -f ${formatB} 2>&1 > ${outputDirectory}/${run}_calo${calo}_window0000.log 
 echo "done performing window 0" 
 
 step=40
@@ -47,19 +43,19 @@ for window in $(seq ${start} ${step} ${end}); do
 #-W ${outputDirectory}/run${run}_calo${calo}_window1300.root \
 
    ./slidingwindowfitplot \
-      -w ${window}  -n ${calo} -p ${mainDirectory}/cboIsolate/run${run}_calo${calo}.root \
+      -w ${window}  -n ${calo} -p ${mainDirectory}/cboIsolate/${run}_calo${calo}.root \
       -a 1 \
-      -q ${mainDirectory}fullFits/run${run}/sBin_constraintOn_cE0.0_seed0_run${run}_calo${calo}.root \
-      -i /gm2data/cornell/histograms/aMethod/histogram_a_run${run}.root \
-      -o ${outputDirectory}/run${run}_calo${calo}_window${windowLabel}.root \
+      -q ${mainDirectory}fullFits/${run}/sBin_constraintOn_cE0.0_seed0_${run}_calo${calo}.root \
+      -i /gm2data/cornell/histograms/aMethod/histogram_a_${run}.root \
+      -o ${outputDirectory}/${run}_calo${calo}_window${windowLabel}.root \
       -c 0 \
       -s 0 \
       -a 0 \
       -b ${frFile} \
       -f ${formatB} \
-      2>&1 > ${outputDirectory}/run${run}_calo${calo}_window${windowLabel}.log &
+      2>&1 > ${outputDirectory}/${run}_calo${calo}_window${windowLabel}.log &
 
    wait
 done 
 
-#hadd -f ${mainDirectory}/slidingFits/run${run}_calo${calo}_windowFits.root ${outputDirectory}/run${run}_calo${calo}_window{0000..3050..10}.root
+hadd -f ${mainDirectory}/slidingFits/${run}_calo${calo}_windowFits.root ${outputDirectory}/${run}_calo${calo}_window{0000..2600..40}.root

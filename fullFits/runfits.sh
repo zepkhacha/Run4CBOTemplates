@@ -11,21 +11,21 @@ formatE='/gm2data/zkhechad/run45/bdfits/formats/formatE_mBin_mop_constraintOn_wc
 run4='/gm2data/cornell/histograms/aMethod/histogram_a_run4.root'
 run5='/gm2data/cornell/histograms/aMethod/histogram_a_run5.root'
 
-for dat in 4 5;  do # dat = run number
+for dat in noRF ;  do # dat = run number
 
     # full-fit on calo sum, kevin-style 
     cE=0.0;
     seedNo=0;
     for caloNum in {1..24}; do
       ./fitplot \
-      -i /gm2data/cornell/histograms/aMethod/histogram_a_run${dat}.root \
-      -o sBin_constraintOn_cE${cE}_seed${seedNo}_run${dat}_calo${caloNum}.root \
+      -i /gm2data/cornell/histograms/aMethod/histogram_a_${dat}.root \
+      -o sBin_constraintOn_cE${cE}_seed${seedNo}_${dat}_calo${caloNum}.root \
       -n $caloNum \
       -c ${cE} \
       -s ${seedNo} \
       -a 1 \
       -b $transform \
-      -f $formatB | tee sBin_constraintOn_cE${cE}_seed${seedNo}_run${dat}_calo${caloNum}.log &
+      -f $formatB | tee sBin_constraintOn_cE${cE}_seed${seedNo}_${dat}_calo${caloNum}.log &
     done
     wait
 
