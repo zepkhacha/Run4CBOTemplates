@@ -142,7 +142,9 @@ int main(int argc, char* argv[]){
         }
         //expcorr[i] = xact/mdl;
     }
+    boostdata->Close();
 
+    TFile* output = new TFile(outputFilename, "RECREATE");
     TH1D* bestfit = new TH1D("bestfit", "bestfit", nBins, startTime, 650.0644);
     TTree* fitresults = new TTree("fitresults", "fitresults");
 
@@ -365,7 +367,7 @@ int main(int argc, char* argv[]){
     fprintf(stderr, "Done Reading data\n");
 
     // Now do a chisq fit
-    int noParams = 22; 
+    int noParams = 17; 
     double par[noParams];
     double errorplus[noParams];
     double errorminus[noParams];
@@ -542,28 +544,13 @@ int main(int argc, char* argv[]){
 
     chisq  = fmin;
     rchisq = fmin/(fitrangehigh-fitrangelow-noFreeParams);
+
+    // set 5-param variables and their errors
     N0 = par[0];
     tau = par[1];
     A0 = par[2];
     phi = par[3];
     R = par[4];
-
-    alpha_CBO = par[5];
-    w_CBO = par[6];
-    beta_CBO = par[7];
-
-    alpha_2CBO = par[8];
-    beta_2CBO = par[9];
-
-    alpha_y = par[10];
-    w_y = par[11];
-    beta_y = par[12];
-
-    alpha_vw = par[13];
-    w_vw = par[14];
-    beta_vw = par[15];
-
-    LM = par[16];
 
     N0err = sqrt(-errorplus[0]*errorminus[0]);
     tauerr = sqrt(-errorplus[1]*errorminus[1]);
@@ -571,21 +558,58 @@ int main(int argc, char* argv[]){
     phierr = sqrt(-errorplus[3]*errorminus[3]);
     Rerr = sqrt(-errorplus[4]*errorminus[4]);
 
+    // set 1-CBO variables and their errors
+    alpha_CBO = par[5];
+    w_CBO = par[6];
+    beta_CBO = par[7];
+    A_CBO = sqrt(alpha_CBO*alpha_CBO + beta_CBO*beta_CBO);
+    phi_CBO = invert(alpha_CBO, beta_CBO);
+
     alpha_CBOerr = sqrt(-errorplus[5]*errorminus[5]);
     w_CBOerr = sqrt(-errorplus[6]*errorminus[6]);
     beta_CBOerr = sqrt(-errorplus[7]*errorminus[7]);
+    A_CBOerr = 0.0;
+    phi_CBOerr = 0.0;
+
+    // set 2-CBO variables and their errors
+    alpha_2CBO = par[8];
+    beta_2CBO = par[9];
+    A_2CBO = sqrt(alpha_2CBO*alpha_2CBO + beta_2CBO*beta_2CBO);
+    phi_2CBO - invert(alpha_2CBO, beta_2CBO);
 
     alpha_2CBOerr = sqrt(-errorplus[8]*errorminus[8]);
     beta_2CBOerr = sqrt(-errorplus[9]*errorminus[9]);
+    A_2CBOerr = 0.0;
+    phi_2CBOerr = 0.0;
+
+    // set 1-Y variables and their errors
+    alpha_y = par[10];
+    w_y = par[11];
+    beta_y = par[12];
+    A_y = sqrt(alpha_y*alpha_y + beta_y*beta_y);
+    phi_y = invert(alpha_y, beta_y);
 
     alpha_yerr = sqrt(-errorplus[10]*errorminus[10]);
     w_yerr  = sqrt(-errorplus[11]*errorminus[11]);
     beta_yerr = sqrt(-errorplus[12]*errorminus[12]);
+    A_yerr = 0.0;
+    phi_yerr = 0.0;
+
+    // set 2-Y variables and their errors
+    alpha_vw = par[13];
+    w_vw = par[14];
+    beta_vw = par[15];
+    A_vw = sqrt(alpha_vw*alpha_vw + beta_vw*beta_vw);
+    phi_vw = invert(alpha_vw, beta_vw);
 
     alpha_vwerr = sqrt(-errorplus[13]*errorminus[13]);
     w_vwerr = sqrt(-errorplus[14]*errorminus[14]);
     beta_vwerr = sqrt(-errorplus[15]*errorminus[15]);
+    A_vwerr = 0.0;
+    phi_vwerr = 0.0;
 
+    // set LM term
+    LM = par[16];
     LMerr = sqrt(-errorplus[16]*errorminus[16]);
 
     fitresults->Fill();
@@ -596,10 +620,10 @@ int main(int argc, char* argv[]){
         double pucorr = calcnu(par, i)*calcnu(par, i)/(calcnu(par, i-0.5)*calcnu(par, i+0.5));
         sum += pucorr;
     }
+
     fprintf(stderr, "Mean corr %f\n", sum/nBins);
     //}; // end loop over seeds
 
-    TFile* output = new TFile(outputFilename, "RECREATE");
     output->cd();
     TH1D* residua = new TH1D("residua", "residua", nBins, startTime, 650.0644);
     TTree* pulls = new TTree("pulls", "pulls");
@@ -612,6 +636,7 @@ int main(int argc, char* argv[]){
         pulls->Fill();
     }
 
+    output->cd();
     residua->Write();
     pulls->Write();
     fitresults->Write();  
@@ -619,4 +644,5 @@ int main(int argc, char* argv[]){
     bestfit->Write();
     wiggle->Write();
     output->Close();
+
 }
