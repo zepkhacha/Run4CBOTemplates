@@ -4,4 +4,5 @@
 #  done
 #done
 
-hadd -f ${run}_windowFits.root ${run}/${run}_calo{1..24}_window{0000..2600..40}.root 
+run=noRF
+hadd -f ${run}_windowFits.root ${run}/${run}_calo{1..24}_window{0000..2600..70}.root 
