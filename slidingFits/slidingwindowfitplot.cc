@@ -168,6 +168,10 @@ int main(int argc, char* argv[]){
 
     double LM, LMerr;
 
+    double fullFit_Ky;
+    double fullFit_A_ct;
+    double fullFit_w_vw;
+
     double fitStart = fitrangelow  * 0.1492;
     double fitStop  = fitrangehigh * 0.1492;
 
@@ -189,6 +193,9 @@ int main(int argc, char* argv[]){
     cboFullFitResults->SetBranchAddress("ANx1" , &fullFit_Ax1);
     cboFullFitResults->SetBranchAddress("pNx1" , &fullFit_phix1);
     cboFullFitResults->SetBranchAddress("LM"   , &LM     );
+
+    cboFullFitResults->SetBranchAddress("Ky"   , &fullFit_Ky);
+    cboFullFitResults->SetBranchAddress("A_ct" , &fullFit_A_ct);
 
     cboFullFitResults->GetEntry(0);
     cboFullFit->Close();
@@ -228,7 +235,7 @@ int main(int argc, char* argv[]){
     fitresults->Branch("w_CBO", &w_CBO);
     fitresults->Branch("alpha_CBO", &alpha_CBO);
     fitresults->Branch("beta_CBO", &beta_CBO);
-    fitresults->Branch("A_CBO", A_CBO);
+    fitresults->Branch("A_CBO", &A_CBO);
     fitresults->Branch("phi_CBO", &phi_CBO);
 
     fitresults->Branch("w_CBOerr", &w_CBOerr);
@@ -239,7 +246,7 @@ int main(int argc, char* argv[]){
     // 2-CBO parameters
     fitresults->Branch("alpha_2CBO", &alpha_2CBO);
     fitresults->Branch("beta_2CBO", &beta_2CBO);
-    fitresults->Branch("A_2CBO", A_2CBO);
+    fitresults->Branch("A_2CBO", &A_2CBO);
     fitresults->Branch("phi_2CBO", &phi_2CBO);
 
     fitresults->Branch("alpha_2CBOerr", &alpha_2CBOerr);
@@ -250,7 +257,7 @@ int main(int argc, char* argv[]){
     fitresults->Branch("w_y", &w_y);
     fitresults->Branch("alpha_y", &alpha_y);
     fitresults->Branch("beta_y", &beta_y);
-    fitresults->Branch("A_y", A_y);
+    fitresults->Branch("A_y", &A_y);
     fitresults->Branch("phi_y", &phi_y);
 
     fitresults->Branch("w_yerr", &w_yerr);
@@ -262,7 +269,7 @@ int main(int argc, char* argv[]){
     fitresults->Branch("w_vw", &w_vw);
     fitresults->Branch("alpha_vw", &alpha_vw);
     fitresults->Branch("beta_vw", &beta_vw);
-    fitresults->Branch("A_vw", A_vw);
+    fitresults->Branch("A_vw", &A_vw);
     fitresults->Branch("phi_vw", &phi_vw);
 
     fitresults->Branch("w_vwerr", &w_vwerr);
@@ -387,7 +394,7 @@ int main(int argc, char* argv[]){
 
     // 1-CBO terms
     minimizer.DefineParameter(5, "alpha_CBO", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(6, "w_CBO", fullFit_wx1, 0.001, 0, 0);
+    minimizer.DefineParameter(6, "w_CBO", fullFit_wx1, 0, 0, 0);
     minimizer.DefineParameter(7, "beta_CBO", 0.0, 0.001, 0, 0);
 
     // 2-CBO terms
@@ -396,12 +403,12 @@ int main(int argc, char* argv[]){
 
     // 1-Y terms
     minimizer.DefineParameter(10, "alpha_y", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(11, "w_y", 0.0, 0.001, 0, 0);
+    minimizer.DefineParameter(11, "w_y", 14.45, 0.0, 0, 0);
     minimizer.DefineParameter(12, "beta_y", 0.0, 0.001, 0, 0);
 
     // 2-Y terms
     minimizer.DefineParameter(13, "alpha_vw", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(14, "w_vw", 0.0, 0.001, 0, 0);
+    minimizer.DefineParameter(14, "w_vw", 12.9, 0.0, 0, 0);
     minimizer.DefineParameter(15, "beta_vw", 0.0, 0.001, 0, 0);
  
     // LM term

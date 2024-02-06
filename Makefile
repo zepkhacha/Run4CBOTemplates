@@ -60,24 +60,12 @@ windowFFT: windowFFT.o
 windowFFT.o: windowFFT.cc 
 	g++ -c -Wall -Wextra windowFFT.cc $(shell root-config --libs --cflags) -I /cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/include -ffast-math -O2
 
-compareCalo: compareCalo.o
-	g++ -o compareCalo compareCalo.o $(shell root-config --libs) -L/cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/slf7.x86_64.e15.prof/lib -lgm2util_blinders -lMinuit
-
-compareCalo.o: compareCalo.cc
-	g++ -c -Wall -Wextra compareCalo.cc $(shell root-config --libs --cflags) -I /cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/include -ffast-math -O2
-
-makeTemplate: makeTemplate.o
-	g++ -o makeTemplate makeTemplate.o $(shell root-config --libs) -L/cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/slf7.x86_64.e15.prof/lib -lgm2util_blinders -lMinuit
-
-makeTemplate.o: makeTemplate.cc
-	g++ -c -Wall -Wextra makeTemplate.cc $(shell root-config --libs --cflags) -I /cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/include -ffast-math -O2
-
 clean:
-	rm cboAmplitudeBinned.o cboAmplitudeBinned cboResidual.o cboResidual dataDivFcn_noCBO.o dataDivFcn_noCBO windowFFT.o windowFFT compareCalo.o compareCalo plots.o plots
+	rm cboAmplitudeBinned.o cboAmplitudeBinned cboResidual.o cboResidual dataDivFcn_noCBO.o dataDivFcn_noCBO windowFFT.o windowFFT compareCalo.o compareCalo plotParam.o plotParam plots.o plots
 
-cboAmplitudeBinned: cboAmplitudeBinned.o
-	g++ -o cboAmplitudeBinned cboAmplitudeBinned.o $(shell root-config --libs) -L/cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/slf7.x86_64.e15.prof/lib -lgm2util_blinders -lMinuit
+plotParam: plotParam.o
+	g++ -o plotParam plotParam.o $(shell root-config --libs) -L/cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/slf7.x86_64.e15.prof/lib -lgm2util_blinders -lMinuit
 
-cboAmplitudeBinned.o: cboAmplitudeBinned.cc 
-	g++ -c -Wall -Wextra cboAmplitudeBinned.cc $(shell root-config --libs --cflags) -I /cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/include -ffast-math -O2
+plotParam.o: plotParam.cc 
+	g++ -c -Wall -Wextra plotParam.cc $(shell root-config --libs --cflags) -I /cvmfs/gm2.opensciencegrid.org/prod9/g-2/gm2util/v9_52_00/include -ffast-math -O2
 
