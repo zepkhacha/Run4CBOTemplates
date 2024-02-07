@@ -111,10 +111,11 @@ void makeTemplate(
         // create a template with exp+c model
         TF1* expModel = new TF1(Form("calo%i_%s", i+1, paramName.c_str()), 
                            "[0]*exp(-x/[1])+[2]", 
-                           30.0, 200.0);
+                           30.0, 400.0);
         expModel->SetParameter(0, (gSlidingParam[i].GetPointY(0)>0 ? 0.001 : -0.001));
-        expModel->SetParameter(1, 200.0);
-        gSlidingParam[i].Fit(expModel, "ME", "", 30.0, 250.0);
+        expModel->SetParameter(1, 400.0);
+        gSlidingParam[i].Fit(expModel, "ME", "", 30.0, 400.0);
+        fitFunction.push_back(*expModel);
     }
 
     // draw overlay
@@ -134,6 +135,7 @@ void makeTemplate(
         gSlidingParam[i].SetMaximum(maxY);
         gSlidingParam[i].SetMinimum(minY);
         gSlidingParam[i].Draw(drawOption.c_str());
+        fitFunction[i].Draw("SAME");
         c.Print(outputFilename.c_str());
     }
 
