@@ -73,7 +73,7 @@ void makeTemplate(
     for (int entry=0; entry<slidingResults->GetEntries(); entry++){
         slidingResults->GetEntry(entry);
 
-        printf("calo %i entry %i param %f err %f\n", caloNum-1, entry ,param,err);
+        //printf("calo %i entry %i param %f err %f\n", caloNum-1, entry ,param,err);
         //// skip if err=0
         //if (err==0.0){
         //    continue;
@@ -93,7 +93,7 @@ void makeTemplate(
     }// end for loop over window fits
 
     TCanvas c;
-    std::string outputFilename = Form("plot_%s.pdf", paramName.c_str());
+    std::string outputFilename = Form("templates_%s.pdf", paramName.c_str());
     c.Print(Form("%s[", outputFilename.c_str()));
 
     TMultiGraph mgSlidingParam;
@@ -109,10 +109,10 @@ void makeTemplate(
         mgSlidingParam.Add(&gSlidingParam[i]);
         lSlidingParam->AddEntry(&gSlidingParam[i], Form("calo%i", i+1));
         // create a template with exp+c model
-        TF1* fit = new TF1(Form("calo%i_%s", i+1, paramName.c_str()), 
+        TF1* expModel = new TF1(Form("calo%i_%s", i+1, paramName.c_str()), 
                            "[0]*exp(-x/[1])+[2]", 
-                           30.0, 700.9);
-        gSlidingParam[i].Fit(fit, "M", "", 30.0, 650.0);
+                           0.0, 700.0);
+        gSlidingParam[i].Fit(expModel, "", "", 30.0, 250.0);
     }
 
     // draw overlay
