@@ -583,7 +583,7 @@ int main(int argc, char* argv[]){
     alpha_2CBO = par[8];
     beta_2CBO = par[9];
     A_2CBO = sqrt(alpha_2CBO*alpha_2CBO + beta_2CBO*beta_2CBO);
-    phi_2CBO - invert(alpha_2CBO, beta_2CBO);
+    phi_2CBO = invert(alpha_2CBO, beta_2CBO);
 
     alpha_2CBOerr = sqrt(-errorplus[8]*errorminus[8]);
     beta_2CBOerr = sqrt(-errorplus[9]*errorminus[9]);
