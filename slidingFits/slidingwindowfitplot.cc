@@ -152,21 +152,24 @@ int main(int argc, char* argv[]){
     double chisq, rchisq;
 
     double N0, tau, A0, phi, R;
-    double N0err, tauerr, A0err, phierr, Rerr;
+    double N0_err, tau_err, A0_err, phi_err, R_err;
 
     double alpha_CBO, beta_CBO, w_CBO, A_CBO, phi_CBO;
-    double alpha_CBOerr, beta_CBOerr, w_CBOerr, A_CBOerr, phi_CBOerr;
+    double alpha_CBO_err, beta_CBO_err, w_CBO_err, A_CBO_err, phi_CBO_err;
 
     double alpha_2CBO, beta_2CBO, A_2CBO, phi_2CBO;
-    double alpha_2CBOerr, beta_2CBOerr, A_2CBOerr, phi_2CBOerr;
+    double alpha_2CBO_err, beta_2CBO_err, A_2CBO_err, phi_2CBO_err;
 
     double alpha_y, beta_y, w_y, A_y, phi_y;
-    double alpha_yerr, beta_yerr, w_yerr, A_yerr, phi_yerr;
+    double alpha_y_err, beta_y_err, w_y_err, A_y_err, phi_y_err;
 
     double alpha_vw, beta_vw, w_vw, A_vw, phi_vw;
-    double alpha_vwerr, beta_vwerr, w_vwerr, A_vwerr, phi_vwerr;
+    double alpha_vw_err, beta_vw_err, w_vw_err, A_vw_err, phi_vw_err;
 
-    double LM, LMerr;
+    double LM, LM_err;
+
+    double zeta_y, zeta_vw;
+    double zeta_y_err, zeta_vw_err;
 
     double fullFit_Ky;
     double fullFit_A_ct;
@@ -201,10 +204,10 @@ int main(int argc, char* argv[]){
     cboFullFit->Close();
 
     // declare tree to hold new fit results
-    fitresults->Branch("fitStart", &fitStart);
-    fitresults->Branch("fitStop",  &fitStop );
+    fitresults->Branch("start", &fitStart);
+    fitresults->Branch("stop",  &fitStop );
     fitresults->Branch("windowBins", &windowBins);
-    fitresults->Branch("caloNum", &desiredCalo);
+    fitresults->Branch("calo", &desiredCalo);
 
     fitresults->Branch("pBinTau", &pBinTau);
     fitresults->Branch("pBinPhi", &pBinPhi);
@@ -225,11 +228,11 @@ int main(int argc, char* argv[]){
     fitresults->Branch("R", &R);
     fitresults->Branch("phi", &phi);
 
-    fitresults->Branch("N0err", &N0err);
-    fitresults->Branch("A0err", &A0err);
-    fitresults->Branch("tauerr", &tauerr);
-    fitresults->Branch("Rerr", &Rerr);
-    fitresults->Branch("phierr", &phierr);
+    fitresults->Branch("N0_err", &N0_err);
+    fitresults->Branch("A0_err", &A0_err);
+    fitresults->Branch("tau_err", &tau_err);
+    fitresults->Branch("R_err", &R_err);
+    fitresults->Branch("phi_err", &phi_err);
 
     // 1-CBO parameters
     fitresults->Branch("w_CBO", &w_CBO);
@@ -238,10 +241,10 @@ int main(int argc, char* argv[]){
     fitresults->Branch("A_CBO", &A_CBO);
     fitresults->Branch("phi_CBO", &phi_CBO);
 
-    fitresults->Branch("w_CBOerr", &w_CBOerr);
-    fitresults->Branch("alpha_CBOerr", &alpha_CBOerr);
-    fitresults->Branch("beta_CBOerr", &beta_CBOerr);
-    fitresults->Branch("phi_CBOerr", &phi_CBOerr);
+    fitresults->Branch("w_CBO_err", &w_CBO_err);
+    fitresults->Branch("alpha_CBO_err", &alpha_CBO_err);
+    fitresults->Branch("beta_CBO_err", &beta_CBO_err);
+    fitresults->Branch("phi_CBO_err", &phi_CBO_err);
 
     // 2-CBO parameters
     fitresults->Branch("alpha_2CBO", &alpha_2CBO);
@@ -249,9 +252,9 @@ int main(int argc, char* argv[]){
     fitresults->Branch("A_2CBO", &A_2CBO);
     fitresults->Branch("phi_2CBO", &phi_2CBO);
 
-    fitresults->Branch("alpha_2CBOerr", &alpha_2CBOerr);
-    fitresults->Branch("beta_2CBOerr", &beta_2CBOerr);
-    fitresults->Branch("phi_2CBOerr", &phi_2CBOerr);
+    fitresults->Branch("alpha_2CBO_err", &alpha_2CBO_err);
+    fitresults->Branch("beta_2CBO_err", &beta_2CBO_err);
+    fitresults->Branch("phi_2CBO_err", &phi_2CBO_err);
 
     // 1-Y parameters
     fitresults->Branch("w_y", &w_y);
@@ -259,11 +262,13 @@ int main(int argc, char* argv[]){
     fitresults->Branch("beta_y", &beta_y);
     fitresults->Branch("A_y", &A_y);
     fitresults->Branch("phi_y", &phi_y);
+    fitresults->Branch("zeta_y", &zeta_y);
 
-    fitresults->Branch("w_yerr", &w_yerr);
-    fitresults->Branch("alpha_yerr", &alpha_yerr);
-    fitresults->Branch("beta_yerr", &beta_yerr);
-    fitresults->Branch("phi_yerr", &phi_yerr);
+    fitresults->Branch("w_y_err", &w_y_err);
+    fitresults->Branch("alpha_y_err", &alpha_y_err);
+    fitresults->Branch("beta_y_err", &beta_y_err);
+    fitresults->Branch("phi_y_err", &phi_y_err);
+    fitresults->Branch("zeta_y_err", &zeta_y);
 
     // 2-Y parameters
     fitresults->Branch("w_vw", &w_vw);
@@ -271,15 +276,17 @@ int main(int argc, char* argv[]){
     fitresults->Branch("beta_vw", &beta_vw);
     fitresults->Branch("A_vw", &A_vw);
     fitresults->Branch("phi_vw", &phi_vw);
+    fitresults->Branch("zeta_vw", &zeta_vw);
 
-    fitresults->Branch("w_vwerr", &w_vwerr);
-    fitresults->Branch("alpha_vwerr", &alpha_vwerr);
-    fitresults->Branch("beta_vwerr", &beta_vwerr);
-    fitresults->Branch("phi_vwerr", &phi_vwerr);
+    fitresults->Branch("w_vw_err", &w_vw_err);
+    fitresults->Branch("alpha_vw_err", &alpha_vw_err);
+    fitresults->Branch("beta_vw_err", &beta_vw_err);
+    fitresults->Branch("phi_vw_err", &phi_vw_err);
+    fitresults->Branch("zeta_vw", &zeta_vw);
 
     // LM parameters
     fitresults->Branch("LM", &LM);
-    fitresults->Branch("LMerr", &LMerr);
+    fitresults->Branch("LM_err", &LM_err);
 
     // assign number of bins to this window
     // use longer windows at later times
@@ -375,7 +382,7 @@ int main(int argc, char* argv[]){
     fprintf(stderr, "Done Reading data\n");
 
     // Now do a chisq fit
-    int noParams = 17; 
+    int noParams = 19; 
     double par[noParams];
     double errorplus[noParams];
     double errorminus[noParams];
@@ -414,6 +421,10 @@ int main(int argc, char* argv[]){
  
     // LM term
     minimizer.DefineParameter(16, "LM", LM, 0.0, -0.1, 0.1); // FIX
+
+    // later adding in a linear-t term to allow vertical frequencies to change within first window
+    minimizer.DefineParameter(17,  "zeta_y", 0.0, 0.001, 0, 0);
+    minimizer.DefineParameter(18, "zeta_vw", 0.0, 0.001, 0, 0);
 
     // now go through various stages of fitting 
     printf("MINUIT - FIT ONLY WIGGLE\n");
@@ -560,11 +571,11 @@ int main(int argc, char* argv[]){
     phi = par[3];
     R = par[4];
 
-    N0err = sqrt(-errorplus[0]*errorminus[0]);
-    tauerr = sqrt(-errorplus[1]*errorminus[1]);
-    A0err = sqrt(-errorplus[2]*errorminus[2]);
-    phierr = sqrt(-errorplus[3]*errorminus[3]);
-    Rerr = sqrt(-errorplus[4]*errorminus[4]);
+    N0_err = sqrt(errorplus[0]*errorminus[0]);
+    tau_err = sqrt(-errorplus[1]*errorminus[1]);
+    A0_err = sqrt(-errorplus[2]*errorminus[2]);
+    phi_err = sqrt(-errorplus[3]*errorminus[3]);
+    R_err = sqrt(-errorplus[4]*errorminus[4]);
 
     // set 1-CBO variables and their errors
     alpha_CBO = par[5];
@@ -573,11 +584,11 @@ int main(int argc, char* argv[]){
     A_CBO = sqrt(alpha_CBO*alpha_CBO + beta_CBO*beta_CBO);
     phi_CBO = invert(alpha_CBO, beta_CBO);
 
-    alpha_CBOerr = sqrt(-errorplus[5]*errorminus[5]);
-    w_CBOerr = sqrt(-errorplus[6]*errorminus[6]);
-    beta_CBOerr = sqrt(-errorplus[7]*errorminus[7]);
-    A_CBOerr = 0.0;
-    phi_CBOerr = 0.0;
+    alpha_CBO_err = sqrt(-errorplus[5]*errorminus[5]);
+    w_CBO_err = sqrt(-errorplus[6]*errorminus[6]);
+    beta_CBO_err = sqrt(-errorplus[7]*errorminus[7]);
+    A_CBO_err = 0.0;
+    phi_CBO_err = 0.0;
 
     // set 2-CBO variables and their errors
     alpha_2CBO = par[8];
@@ -585,10 +596,10 @@ int main(int argc, char* argv[]){
     A_2CBO = sqrt(alpha_2CBO*alpha_2CBO + beta_2CBO*beta_2CBO);
     phi_2CBO = invert(alpha_2CBO, beta_2CBO);
 
-    alpha_2CBOerr = sqrt(-errorplus[8]*errorminus[8]);
-    beta_2CBOerr = sqrt(-errorplus[9]*errorminus[9]);
-    A_2CBOerr = 0.0;
-    phi_2CBOerr = 0.0;
+    alpha_2CBO_err = sqrt(-errorplus[8]*errorminus[8]);
+    beta_2CBO_err = sqrt(-errorplus[9]*errorminus[9]);
+    A_2CBO_err = 0.0;
+    phi_2CBO_err = 0.0;
 
     // set 1-Y variables and their errors
     alpha_y = par[10];
@@ -597,11 +608,11 @@ int main(int argc, char* argv[]){
     A_y = sqrt(alpha_y*alpha_y + beta_y*beta_y);
     phi_y = invert(alpha_y, beta_y);
 
-    alpha_yerr = sqrt(-errorplus[10]*errorminus[10]);
-    w_yerr  = sqrt(-errorplus[11]*errorminus[11]);
-    beta_yerr = sqrt(-errorplus[12]*errorminus[12]);
-    A_yerr = 0.0;
-    phi_yerr = 0.0;
+    alpha_y_err = sqrt(-errorplus[10]*errorminus[10]);
+    w_y_err  = sqrt(-errorplus[11]*errorminus[11]);
+    beta_y_err = sqrt(-errorplus[12]*errorminus[12]);
+    A_y_err = 0.0;
+    phi_y_err = 0.0;
 
     // set 2-Y variables and their errors
     alpha_vw = par[13];
@@ -610,15 +621,19 @@ int main(int argc, char* argv[]){
     A_vw = sqrt(alpha_vw*alpha_vw + beta_vw*beta_vw);
     phi_vw = invert(alpha_vw, beta_vw);
 
-    alpha_vwerr = sqrt(-errorplus[13]*errorminus[13]);
-    w_vwerr = sqrt(-errorplus[14]*errorminus[14]);
-    beta_vwerr = sqrt(-errorplus[15]*errorminus[15]);
-    A_vwerr = 0.0;
-    phi_vwerr = 0.0;
+    alpha_vw_err = sqrt(-errorplus[13]*errorminus[13]);
+    w_vw_err = sqrt(-errorplus[14]*errorminus[14]);
+    beta_vw_err = sqrt(-errorplus[15]*errorminus[15]);
+    A_vw_err = 0.0;
+    phi_vw_err = 0.0;
 
     // set LM term
     LM = par[16];
-    LMerr = sqrt(-errorplus[16]*errorminus[16]);
+    LM_err = sqrt(-errorplus[16]*errorminus[16]);
+
+    // zeta to allow y-freq to adjust
+    zeta_y = par[17];
+    zeta_vw= par[18];
 
     fitresults->Fill();
 

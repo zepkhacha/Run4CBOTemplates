@@ -121,8 +121,8 @@ double calcnu(double par[], double i){
               + (par[8]*cos(2*w_CBO*time) + par[9]*sin(2*w_CBO*time)) );
 
     // now add y-terms
-    nu *= (1.0 + (par[10]*cos(par[11]*time) + par[12]*sin(par[11]*time))
-               + (par[13]*cos(par[14]*time) + par[15]*sin(par[14]*time)) );
+    nu *= (1.0 + (1.0+par[17]*time)*(par[10]*cos(par[11]*time) + par[12]*sin(par[11]*time))
+               + (1.0+par[18]*time)*(par[13]*cos(par[14]*time) + par[15]*sin(par[14]*time)) );
 
     // now add LM 
     nu *= (1.0 - par[16]*lambda->GetBinContent(i));
