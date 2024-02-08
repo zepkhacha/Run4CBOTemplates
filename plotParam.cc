@@ -46,9 +46,9 @@ void plotParam(
     //gStyle->SetLineColor(kBlack);
     //gStyle->SetMarkerColor(kBlack);
 
-    double fitStart;
+    double start;
     int windowNo;
-    int caloNum;
+    int calo;
     double param;
     double err;
 
@@ -56,11 +56,11 @@ void plotParam(
     // add to plots for each requested run and calo
     TTree* slidingResults = (TTree*) slidingFile.Get("fitresults");
 
-    slidingResults->SetBranchAddress("caloNum", &caloNum);
+    slidingResults->SetBranchAddress("calo", &calo);
     slidingResults->SetBranchAddress("windowNo", &windowNo);
     slidingResults->SetBranchAddress(Form("%s",paramName.c_str()), &param);
-    slidingResults->SetBranchAddress(Form("%serr",paramName.c_str()), &err);
-    slidingResults->SetBranchAddress("fitStart", &fitStart);
+    slidingResults->SetBranchAddress(Form("%s_err",paramName.c_str()), &err);
+    slidingResults->SetBranchAddress("start", &start);
 
     std::vector<TGraphErrors> gSlidingParam    ;
 
@@ -75,7 +75,7 @@ void plotParam(
     for (int entry=0; entry<slidingResults->GetEntries(); entry++){
         slidingResults->GetEntry(entry);
 
-        printf("calo %i entry %i param %f err %f\n", caloNum-1, entry ,param,err);
+        printf("calo %i entry %i param %f err %f\n", calo-1, entry ,param,err);
         //// skip if err=0
         //if (err==0.0){
         //    continue;
@@ -86,10 +86,10 @@ void plotParam(
         //    continue;
         //}
 
-        double time = fitStart ;
+        double time = start ;
 
-        gSlidingParam[caloNum-1].SetPoint(gSlidingParam[caloNum-1].GetN(), time, param );
-        gSlidingParam[caloNum-1].SetPointError(gSlidingParam[caloNum-1].GetN()-1, 0, err );
+        gSlidingParam[calo-1].SetPoint(gSlidingParam[calo-1].GetN(), time, param );
+        gSlidingParam[calo-1].SetPointError(gSlidingParam[calo-1].GetN()-1, 0, err );
 
         graphEntry++;
     }// end for loop over window fits
