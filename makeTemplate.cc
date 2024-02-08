@@ -94,7 +94,11 @@ void makeTemplate(
 
     TCanvas c;
     std::string outputFilename = Form("templates_%s.pdf", paramName.c_str());
+    std::string rootFilename = Form("templates_%s.root", paramName.c_str());
     c.Print(Form("%s[", outputFilename.c_str()));
+
+    TFile *fOut = TFile::Open(rootFilename.c_str(),"RECREATE");
+    
 
     TMultiGraph mgSlidingParam;
     mgSlidingParam.SetTitle(
@@ -106,17 +110,23 @@ void makeTemplate(
 
     std::vector<TF1> fitFunction;
     for (unsigned int i=0; i<gSlidingParam.size(); i++){
-        mgSlidingParam.Add(&gSlidingParam[i]);
-        lSlidingParam->AddEntry(&gSlidingParam[i], Form("calo%i", i+1));
+        int color = gSlidingParam[i].GetLineColor();
         // create a template with exp+c model
         TF1* expModel = new TF1(Form("calo%i_%s", i+1, paramName.c_str()), 
                            "[0]*exp(-x/[1])+[2]", 
                            30.0, 400.0);
+        expModel->SetLineColor(color);
         expModel->SetParameter(0, (gSlidingParam[i].GetPointY(0)>0 ? 0.001 : -0.001));
         expModel->SetParameter(1, 400.0);
         gSlidingParam[i].Fit(expModel, "ME", "", 30.0, 400.0);
         fitFunction.push_back(*expModel);
+        // add to multigraph to view them overlaid
+        mgSlidingParam.Add(&gSlidingParam[i]);
+        lSlidingParam->AddEntry(&gSlidingParam[i], Form("calo%i", i+1));
+        // write function to file
+        expModel->Write();
     }
+    fOut->Close();
 
     // draw overlay
     c.Clear();
