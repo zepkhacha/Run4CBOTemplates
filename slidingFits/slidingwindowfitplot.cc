@@ -423,8 +423,8 @@ int main(int argc, char* argv[]){
     minimizer.DefineParameter(16, "LM", LM, 0.0, -0.1, 0.1); // FIX
 
     // later adding in a linear-t term to allow vertical frequencies to change within first window
-    minimizer.DefineParameter(17,  "zeta_y", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(18, "zeta_vw", 0.0, 0.001, 0, 0);
+    minimizer.DefineParameter(17,  "zeta_y", 0.0, 0.0, 0, 0);
+    minimizer.DefineParameter(18, "zeta_vw", 0.0, 0.0, 0, 0);
 
     // now go through various stages of fitting 
     printf("MINUIT - FIT ONLY WIGGLE\n");

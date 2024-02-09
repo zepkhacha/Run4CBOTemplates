@@ -34,6 +34,7 @@ double invert(double c, double s){
 
 void makeTemplate(
         std::string inputFilename, 
+        std::string weightRefFilename,
         std::string paramName, 
         std::string units, 
         double minY, 
@@ -43,6 +44,37 @@ void makeTemplate(
     gStyle->SetPadTickX(1);
     gStyle->SetPadTickY(1);
     gStyle->SetPalette(kDarkRainBow, 0, 0.5);
+
+    // declare a ttree to hold weights per calo
+    TTree *caloWeights;
+    double calo, calo_N0, calo_N0_err, weight;
+
+    caloWeights->Branch("calo", &calo);
+    caloWeights->Branch("N0", &calo_N0);
+    caloWeights->Branch("N0_err", &calo_N0_err);
+    caloWeights->Branch("weight", &weight);
+
+    // we also need N0 from calo sum result to calculate weight
+    TFile* calo0_weightRefFilename = TFile::Open(Form(weightRefFilename.c_str(), 0), "RECREATE");
+    TTree* calo0_treeRef = (TTree*) calo0_weightRefFilename->Get("fitresults");
+    double calo0_N0, calo0_N0_err;
+
+    calo0_treeRef->SetBranchAddress("N0", &calo0_N0);
+    calo0_treeRef->SetBranchAddress("N0_err", &calo0_N0_err);
+    calo0_treeRef->GetEntry(0);
+
+    // pull the weight from the full-window fit per calo
+    for (int i=1; i<25; i++){
+        TFile* calo_weightRefFilename = TFile::Open(Form(weightRefFilename.c_str(), i), "RECREATE");
+        TTree* treeRef = (TTree*) calo_weightRefFilename->Get("fitresults");
+
+        treeRef->SetBranchAddress("calo", &calo);
+        treeRef->SetBranchAddress("N0", &calo_N0);
+        treeRef->SetBranchAddress("N0_err", &calo_N0_err);
+        treeRef->GetEntry(0);
+        weight = calo_N0 / calo0_N0;
+        caloWeights->Fill();
+    }
 
     double fitStart;
     int windowNo;
@@ -54,11 +86,11 @@ void makeTemplate(
     // add to plots for each requested run and calo
     TTree* slidingResults = (TTree*) slidingFile.Get("fitresults");
 
-    slidingResults->SetBranchAddress("caloNum", &caloNum);
+    slidingResults->SetBranchAddress("calo", &caloNum);
     slidingResults->SetBranchAddress("windowNo", &windowNo);
     slidingResults->SetBranchAddress(Form("%s",paramName.c_str()), &param);
-    slidingResults->SetBranchAddress(Form("%serr",paramName.c_str()), &err);
-    slidingResults->SetBranchAddress("fitStart", &fitStart);
+    slidingResults->SetBranchAddress(Form("%s_err",paramName.c_str()), &err);
+    slidingResults->SetBranchAddress("start", &fitStart);
 
     std::vector<TGraphErrors> gSlidingParam    ;
 
@@ -98,11 +130,11 @@ void makeTemplate(
     c.Print(Form("%s[", outputFilename.c_str()));
 
     TFile *fOut = TFile::Open(rootFilename.c_str(),"RECREATE");
-    
+    caloWeights->Write();
 
     TMultiGraph mgSlidingParam;
     mgSlidingParam.SetTitle(
-        Form("%s v time;Window Start [#mus]; %s", paramName.c_str(), units.c_str()));
+            Form("%s v time;Window Start [#mus]; %s", paramName.c_str(), units.c_str()));
 
     TLegend *lSlidingParam = new TLegend(0.7,0.6,0.9,0.9);
 
@@ -113,8 +145,8 @@ void makeTemplate(
         int color = gSlidingParam[i].GetLineColor();
         // create a template with exp+c model
         TF1* expModel = new TF1(Form("calo%i_%s", i+1, paramName.c_str()), 
-                           "[0]*exp(-x/[1])+[2]", 
-                           30.0, 400.0);
+                "[0]*exp(-x/[1])+[2]", 
+                30.0, 400.0);
         expModel->SetLineColor(color);
         expModel->SetParameter(0, (gSlidingParam[i].GetPointY(0)>0 ? 0.001 : -0.001));
         expModel->SetParameter(1, 400.0);
@@ -126,6 +158,7 @@ void makeTemplate(
         // write function to file
         expModel->Write();
     }
+
     fOut->Close();
 
     // draw overlay

@@ -1,6 +1,6 @@
-for calo in {1..24}; do
+for calo in {0..24}; do
   for run in noRF ; do
-    hadd -f -O ${run}_calo${calo}_windowFits.root ${run}/${run}_calo${calo}_window{0000..2600..40}.root 
+    hadd -f -O ${run}_calo${calo}_windowFits.root ${run}/${run}_calo${calo}_window{0000..2600..70}.root 
   done
 done
 

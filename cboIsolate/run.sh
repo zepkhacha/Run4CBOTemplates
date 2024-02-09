@@ -7,7 +7,7 @@ noRF
 for run in ${runlist};
 do
 
-  for calo in {1..24}
+  for calo in 0; 
   do
       echo "run $run calo $calo" 
       ./dataDivFcn_noCBO \

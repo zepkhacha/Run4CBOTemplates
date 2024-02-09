@@ -4,6 +4,7 @@ void plotAll(){
     plotParam("slidingFits/noRF_windowFits.root", "beta_CBO", "dimensionless", -0.01, 0.01, "ALE PFC PLC");
     plotParam("slidingFits/noRF_windowFits.root", "A_CBO", "dimensionless", 0.0, 0.012, "ALE PFC PLC");
     plotParam("slidingFits/noRF_windowFits.root", "phi_CBO", "[rad]", -3.2, 3.2, "ALE PFC PLC");
+    plotParam("slidingFits/noRF_windowFits.root", "w_CBO", "[rad/s]", 2.32, 2.34, "ALE PFC PLC");
 
     plotParam("slidingFits/noRF_windowFits.root", "alpha_2CBO", "dimensionless", -0.002, 0.002, "ALE PFC PLC");
     plotParam("slidingFits/noRF_windowFits.root", "beta_2CBO", "dimensionless", -0.002, 0.002, "ALE PFC PLC");

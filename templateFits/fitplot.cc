@@ -166,12 +166,16 @@ int main(int argc, char* argv[]){
         includeMopTerm = bool(atoi(line.substr(datIndex,100).c_str()));
       }else if 	(line.find("constrainMop") != std::string::npos) {
         constrainMop = bool(atoi(line.substr(datIndex,100).c_str()));
+      }else if  (line.find("templatePath") != std::string::npos) {
+        templatePath = str(line.substr(datIndex,100).c_str());
       }else{}
     }
   } 
   format.close();
 
+  printf("templatePath = %s\n", templatePath.c_str());
   printf("Parameters after format file: pBinTau %d pBinPhi %d pBinCBO %d constraintau %d includeMopTerm %d constrainMop %d c_e_scale %f \n", pBinTau, pBinPhi, pBinCBO, constraintau, includeMopTerm, constrainMop, c_e_scale);
+
   printf("Opening file %s.\n", boostFilename);
   TFile* boostdata  = new TFile(boostFilename, "READ");
   TH1D*  boostgamma = (TH1D*) boostdata->Get("transform_gamma");

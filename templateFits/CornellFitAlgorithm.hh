@@ -21,6 +21,9 @@ bool pBinCBO        = false;
 bool includeMopTerm = false; 
 bool constrainMop   = false; // mop constraint via chisq penalty
 
+//path to full CBO templates
+std::string templatePath;
+
 //bin-dependent variables
 std::pair <double, double> magicTauConstraints (0.0,0.0);
 std::pair <int,int> binRange (0,0); 

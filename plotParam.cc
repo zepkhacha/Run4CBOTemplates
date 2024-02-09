@@ -64,7 +64,7 @@ void plotParam(
 
     std::vector<TGraphErrors> gSlidingParam    ;
 
-    for (int i=0; i<24; i++){
+    for (int i=0; i<25; i++){
         TGraphErrors temp;
         gSlidingParam.push_back(temp);
         gSlidingParam[i].SetMarkerStyle(7);
@@ -88,8 +88,8 @@ void plotParam(
 
         double time = start ;
 
-        gSlidingParam[calo-1].SetPoint(gSlidingParam[calo-1].GetN(), time, param );
-        gSlidingParam[calo-1].SetPointError(gSlidingParam[calo-1].GetN()-1, 0, err );
+        gSlidingParam[calo].SetPoint(gSlidingParam[calo].GetN(), time, param );
+        gSlidingParam[calo].SetPointError(gSlidingParam[calo].GetN()-1, 0, err );
 
         graphEntry++;
     }// end for loop over window fits
