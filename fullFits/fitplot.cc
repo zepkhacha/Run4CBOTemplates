@@ -322,6 +322,7 @@ int main(int argc, char* argv[]){
   fitresults->Branch("includeMopTerm", &includeMopTerm);
   fitresults->Branch("constrainMop", &constrainMop);
   fitresults->Branch("constrainTau", &constraintau);
+  fitresults->Branch("calo", &desiredCalo);
   fitresults->Branch("seed", &sidx);
   fitresults->Branch("chisq", &chisq);
   fitresults->Branch("rchisq", &rchisq);

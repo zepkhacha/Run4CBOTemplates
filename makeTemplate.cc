@@ -34,20 +34,23 @@ double invert(double c, double s){
 
 void makeTemplate(
         std::string inputFilename, 
-        std::string weightRefFilename,
+        std::string weightRefFilename, // expects everything up to [calonum].root
         std::string paramName, 
         std::string units, 
         double minY, 
         double maxY,
         std::string drawOption){
+    printf("weightRefFilename : %s\n", weightRefFilename.c_str());
 
+    printf("Setting up style...\n");
     gStyle->SetPadTickX(1);
     gStyle->SetPadTickY(1);
     gStyle->SetPalette(kDarkRainBow, 0, 0.5);
 
     // declare a ttree to hold weights per calo
-    TTree *caloWeights;
-    double calo, calo_N0, calo_N0_err, weight;
+    TTree *caloWeights = new TTree("caloWeights", "caloWeights");
+    int calo;
+    double calo_N0, calo_N0_err, weight;
 
     caloWeights->Branch("calo", &calo);
     caloWeights->Branch("N0", &calo_N0);
@@ -55,25 +58,30 @@ void makeTemplate(
     caloWeights->Branch("weight", &weight);
 
     // we also need N0 from calo sum result to calculate weight
-    TFile* calo0_weightRefFilename = TFile::Open(Form(weightRefFilename.c_str(), 0), "RECREATE");
+    printf("Reading in N0 from calo0 nominal fit result...\n");
+    TFile* calo0_weightRefFilename = TFile::Open(Form("%s%i.root", weightRefFilename.c_str(), 0), "READ");
     TTree* calo0_treeRef = (TTree*) calo0_weightRefFilename->Get("fitresults");
     double calo0_N0, calo0_N0_err;
 
     calo0_treeRef->SetBranchAddress("N0", &calo0_N0);
-    calo0_treeRef->SetBranchAddress("N0_err", &calo0_N0_err);
+    calo0_treeRef->SetBranchAddress("N0err", &calo0_N0_err);
     calo0_treeRef->GetEntry(0);
+    calo0_weightRefFilename->Close();
 
+    printf("Saving weights for each calo based on N0...\n");
     // pull the weight from the full-window fit per calo
-    for (int i=1; i<25; i++){
-        TFile* calo_weightRefFilename = TFile::Open(Form(weightRefFilename.c_str(), i), "RECREATE");
+    for (int i=0; i<25; i++){
+        TFile* calo_weightRefFilename = TFile::Open(Form("%s%i.root", weightRefFilename.c_str(), i), "READ");
         TTree* treeRef = (TTree*) calo_weightRefFilename->Get("fitresults");
 
         treeRef->SetBranchAddress("calo", &calo);
         treeRef->SetBranchAddress("N0", &calo_N0);
-        treeRef->SetBranchAddress("N0_err", &calo_N0_err);
+        treeRef->SetBranchAddress("N0err", &calo_N0_err);
         treeRef->GetEntry(0);
+        printf("i = %i calo = %i\n", i, calo);
         weight = calo_N0 / calo0_N0;
         caloWeights->Fill();
+        calo_weightRefFilename->Close();
     }
 
     double fitStart;
@@ -100,6 +108,7 @@ void makeTemplate(
         gSlidingParam[i].SetMarkerStyle(7);
     }
 
+    printf("Reading in sliding window values...\n");
     // get sliding window results
     int graphEntry = 0;
     for (int entry=0; entry<slidingResults->GetEntries(); entry++){
@@ -124,6 +133,7 @@ void makeTemplate(
         graphEntry++;
     }// end for loop over window fits
 
+    printf("Producing root and pdf output files...\n");
     TCanvas c;
     std::string outputFilename = Form("templates_%s.pdf", paramName.c_str());
     std::string rootFilename = Form("templates_%s.root", paramName.c_str());
