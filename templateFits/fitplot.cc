@@ -34,10 +34,6 @@ int    fitrangelow  = startBin; // TO DO: change back to startBin;
 int    fitrangehigh = nBins; // TO DO: change back to nBins // 1340 for 200us
 double frlifetime   = 0;
 
-int desiredSeed = 0; // set via command-line argument
-int desiredCalo = 0; // set via command-line argument
-
-
 void printhelp(){
     printf(
             "Analysis Program\n"
@@ -500,9 +496,8 @@ int main(int argc, char* argv[]){
         minimizer.Command("SET PRINTOUT 3"); // change to level 1
         minimizer.Command("SET NOWARNINGS");
         minimizer.SetFCN(minuitFunction);
-        readMinuitCommands("minimizer.txt", &minimizer);
-        std::cout<<"title is: "<<minimizer.GetTitle()<<std::endl;
-        exit(0);
+        //readMinuitCommands("minimizer.txt", &minimizer);
+        //std::cout<<"title is: "<<minimizer.GetTitle()<<std::endl;
         minimizer.fGraphicsMode = false;
         minimizer.DefineParameter(0, "N0", 1.6*wiggle->GetBinContent(fitrangelow), 100000000, 0, 1000000000); // mistakenly put the adjustment here
         // fix tau when you have mop term unconstrained
@@ -568,8 +563,8 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(28, "C_CBO", 0.0, 0.0, 0, 0); // SET TO 0 TO REMOVE ENVELOPE
 
         printf("FITTING PHASE: 5-PARAM ONLY\n");
-        minimizer.Command("SET PAR 8 0");
-        minimizer.Command("SET PAR 9 0");
+        //minimizer.Command("SET PAR 8 0");
+        //minimizer.Command("SET PAR 9 0");
         minimizer.Command("SET PAR 10 0");
         minimizer.Command("SET PAR 11 0");
         minimizer.Command("SET PAR 12 0");

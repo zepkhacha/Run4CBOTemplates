@@ -2,6 +2,9 @@
 #include <iostream>
 #include "gm2util/blinders/Blinders.hh"
 
+int desiredSeed = 0; // set via command-line argument
+int desiredCalo = 0; // set via command-line argument
+
 //histogram binning
 int          startBin =   203;
 const int    nBins    =  4357;
@@ -134,20 +137,30 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
                         + par[19]*sin(wvw(par[16], par[6]*(wcbo_i(b_dp)/wcbo_i(0.0)), time, par[24])*time));
 
         } else{
-            // for non-momentum-binned fits, sum over calos for X-only
             x = 1.0;
+            // for non-momentum-binned fits, sum over calos for X-only
+            if (desiredCalo==0){
 
-            for (int caloNum=0; caloNum<24; caloNum++){
-                double alpha = (alpha_CBO_TF1[caloNum]).Eval(time);
-                double beta  = (beta_CBO_TF1 [caloNum]).Eval(time);
+                for (int caloNum=0; caloNum<24; caloNum++){
+                    double alpha = (alpha_CBO_TF1[caloNum]).Eval(time);
+                    double beta  = (beta_CBO_TF1 [caloNum]).Eval(time);
 
-                x += ( (par[7]*alpha*cos(  par[6]*cbo(time, par[24])*time) 
-                            + par[8]*beta *sin(  par[6]*cbo(time, par[24])*time))*caloWeights[caloNum]);
-            } // end loop over caloNum
+                    x += ( (par[7]*alpha*cos(  par[6]*cbo(time, par[24])*time) 
+                                + par[8]*beta *sin(  par[6]*cbo(time, par[24])*time))*caloWeights[caloNum]);
+                } // end loop over caloNum
 
-            x += exp(-2.*time/par[5]         )*(par[10]*cos(2*par[6]*cbo(time, par[24])*time) 
-                    + par[11]*sin(2*par[6]*cbo(time, par[24])*time));
+                x += exp(-2.*time/par[5]         )*(par[10]*cos(2*par[6]*cbo(time, par[24])*time) 
+                        + par[11]*sin(2*par[6]*cbo(time, par[24])*time));
+            }else{
+                    double alpha = (alpha_CBO_TF1[desiredCalo-1]).Eval(time);
+                    double beta  = (beta_CBO_TF1 [desiredCalo-1]).Eval(time);
 
+                    x += ( (par[7]*alpha*cos(  par[6]*cbo(time, par[24])*time) 
+                                + par[8]*beta *sin(  par[6]*cbo(time, par[24])*time))*caloWeights[desiredCalo-1]);
+
+                x += exp(-2.*time/par[5]         )*(par[10]*cos(2*par[6]*cbo(time, par[24])*time) 
+                        + par[11]*sin(2*par[6]*cbo(time, par[24])*time));
+            }
 
             y = 1.0 + exp(-1.*time/par[17])*(par[14]*cos(wy (par[16], par[6], time, par[24])*time) 
                     + par[15]*sin(wy (par[16], par[6], time, par[24])*time))
