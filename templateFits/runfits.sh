@@ -16,7 +16,7 @@ for dat in noRF ;  do # dat = run number
     # full-fit on calo sum, kevin-style 
     cE=0.0;
     seedNo=0;
-    for caloNum in {1..24}; do
+    for caloNum in {1..1}; do
       ./fitplot \
       -i /gm2data/cornell/histograms/aMethod/histogram_a_${dat}.root \
       -o sBin_constraintOn_cE${cE}_seed${seedNo}_${dat}_calo${caloNum}.root \
@@ -25,7 +25,7 @@ for dat in noRF ;  do # dat = run number
       -s ${seedNo} \
       -a 1 \
       -b $transform \
-      -f $formatB | tee sBin_constraintOn_cE${cE}_seed${seedNo}_${dat}_calo${caloNum}.log &
+      -f $formatB | tee sBin_constraintOn_cE${cE}_seed${seedNo}_${dat}_calo${caloNum}.log 
     done
     wait
 

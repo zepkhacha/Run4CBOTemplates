@@ -1,13 +1,8 @@
-// gm2 includes
-#include "gm2util/blinders/Blinders.hh"
-#include "CornellHistograms.hh"
-#include "CornellFitAlgorithm.hh"
-#include "tbb/parallel_for.h"
-
 // ROOT includes
 #include "TTree.h"
 #include "TFile.h"
 #include "TH1.h"
+#include "TF1.h"
 #include "TString.h"
 #include "TMinuit.h"
 #include "TCanvas.h"
@@ -15,11 +10,19 @@
 #include "TPaveText.h"
 #include "TGraphErrors.h"
 
+// gm2 includes
+#include "gm2util/blinders/Blinders.hh"
+#include "CornellHistograms.hh"
+#include "CornellFitAlgorithm.hh"
+#include "tbb/parallel_for.h"
+#include "readMinuitCommands.hh"
+
 // cpp includes
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <limits>
 
 // fitting configuration
 static double expcorr[nBins];		// no longer used
@@ -176,17 +179,16 @@ int main(int argc, char* argv[]){
     //TO DO: stop making duplicates of caloWeights in each template file...or just make one file for both alpha/beta
     printf("loading CBO templates from templatePath = %s\n", templatePath.c_str());
 
-    TFile *f_alpha = TFile::Open(Form("%s/templatess_alpha_CBO.root", templatePath.c_str()), "READ");
-    TFile *f_beta  = TFile::Open(Form("%s/templatess_beta_CBO.root" , templatePath.c_str()), "READ");
+    TFile *f_alpha = TFile::Open(Form("%s/templates_alpha_CBO.root", templatePath.c_str()), "READ");
+    TFile *f_beta  = TFile::Open(Form("%s/templates_beta_CBO.root" , templatePath.c_str()), "READ");
 
     int caloNum;
     double caloWeight;
 
     TTree* treeOfcaloWeights = (TTree*)f_alpha->Get("caloWeights");
     treeOfcaloWeights->SetBranchAddress("calo", &caloNum);
-    treeOfcaloWeights->SetBranchAddress("caloWeight", &caloWeight);
+    treeOfcaloWeights->SetBranchAddress("weight", &caloWeight);
 
-    std::vector<double> caloWeights(24, 0.0); // vector of weights, 0-based!!
     // if desiredCalo = 0 (i.e. calo sum) load weights as usual
     // otherwise set weight of desiredCalo==1.0 and ignore the rest
     if (desiredCalo==0){
@@ -198,17 +200,14 @@ int main(int argc, char* argv[]){
         caloWeights[desiredCalo-1] = 1.0;
     }
 
-    // load alpha and beta TF1 templates
-    std::vector<TF1*> alpha_CBO_TF1;
-    std::vector<TF1*> beta_CBO_TF1;
-
     for (int i=1; i<25; i++){
         TF1* temp_alpha = (TF1*)f_alpha->Get(Form("calo%i_alpha_CBO", desiredCalo));
         TF1* temp_beta  = (TF1*)f_beta ->Get(Form("calo%i_beta_CBO" , desiredCalo));
+        alpha_CBO_TF1.push_back(*temp_alpha);
+        beta_CBO_TF1 .push_back(*temp_beta); 
     }
 
     printf("Parameters after format file: pBinTau %d pBinPhi %d pBinCBO %d constraintau %d includeMopTerm %d constrainMop %d c_e_scale %f \n", pBinTau, pBinPhi, pBinCBO, constraintau, includeMopTerm, constrainMop, c_e_scale);
-
     printf("Opening file %s.\n", boostFilename);
     TFile* boostdata  = new TFile(boostFilename, "READ");
     TH1D*  boostgamma = (TH1D*) boostdata->Get("transform_gamma");
@@ -269,7 +268,7 @@ int main(int argc, char* argv[]){
     beta_0 = sqrt(1.0 - (1.0 / pow(29.3,2.0))); // this uses design gamma
     R_0    = 7112; // design R_0 in mm
     // now go through bins and store values for dp_p0, dPhi, gammas, tau, x
-    for (int i=0; i<pBins; i++){
+    for (int i=1; i<=pBins; i++){
         dp_p0 .push_back(transform_dp_p0       ->GetBinLowEdge(i));
         gammas.push_back(transform_gamma       ->GetBinLowEdge(i));
         dPhi  .push_back(-1.351 * transform_dp_p0 ->GetBinLowEdge(i)); // negative if fitting cos(wt - phi), pos if wt + phi // run6 13.51, run1 10.0
@@ -277,7 +276,7 @@ int main(int argc, char* argv[]){
         c_e   .push_back( c_e_scale * (2.0 * ((beta_0*beta_0)/R_0) * n 
                     * transform_x->GetBinLowEdge(i) 
                     * transform_dp_p0->GetBinLowEdge(i)) );
-        printf("bin %i c_e %f\n", i, c_e.at(i));
+        printf("bin %i c_e %f\n", i, c_e.at(i-1));
     }
 
     printf("Physical range of dp/p0 is (%f,%f) from bins (%i,%i).\n",
@@ -290,13 +289,13 @@ int main(int argc, char* argv[]){
     // now find weights in only the physical range
     totalContent = transform_dp_p0->Integral(binRange.first, binRange.second);
     double sumWeights = 0.0;
-    for (int i=1; i<pBins; i++){
+    for (int i=1; i<=pBins; i++){
         // find magicBin 
         double lowEdge = transform_dp_p0->GetBinLowEdge(i);
         double uppEdge = transform_dp_p0->GetBinLowEdge(i+1);
 
         if ( lowEdge <= 0.0  and 0.0 < uppEdge){
-            magicBin = i;
+            magicBin = i; // assumes 1-based indexing
             // update wc_0 in magic bin which we use in p-dependent wCBO; includes conversion from ns to us 
             wc_0 = (1.0 / ((transform_gamma->GetBinLowEdge(magicBin)*2.1969811) / 1000.)); 
             printf("magic bin is %i with tau %f and wc_0 %f \n", magicBin, 2.1969811*gammas[magicBin], wc_0);
@@ -317,6 +316,8 @@ int main(int argc, char* argv[]){
         weightedAvgTau += binWeights[i]*transform_gamma->GetBinLowEdge(i)*2.1969811;
         printf("bin %i content %f momentum %f isPhysical? %d weight %f\n",i,transform_dp_p0->GetBinContent(i),dp_p0[i],isPhysical,binWeights.at(binWeights.size()-1));
     }
+
+    printf("size of dp_p0 %lu size of binWeights %lu\n", dp_p0.size(), binWeights.size());
 
     boostdata->Close();
     //*************
@@ -359,6 +360,7 @@ int main(int argc, char* argv[]){
     fitresults->Branch("includeMopTerm", &includeMopTerm);
     fitresults->Branch("constrainMop", &constrainMop);
     fitresults->Branch("constrainTau", &constraintau);
+    fitresults->Branch("calo", &desiredCalo);
     fitresults->Branch("seed", &sidx);
     fitresults->Branch("chisq", &chisq);
     fitresults->Branch("rchisq", &rchisq);
@@ -498,6 +500,9 @@ int main(int argc, char* argv[]){
         minimizer.Command("SET PRINTOUT 3"); // change to level 1
         minimizer.Command("SET NOWARNINGS");
         minimizer.SetFCN(minuitFunction);
+        readMinuitCommands("minimizer.txt", &minimizer);
+        std::cout<<"title is: "<<minimizer.GetTitle()<<std::endl;
+        exit(0);
         minimizer.fGraphicsMode = false;
         minimizer.DefineParameter(0, "N0", 1.6*wiggle->GetBinContent(fitrangelow), 100000000, 0, 1000000000); // mistakenly put the adjustment here
         // fix tau when you have mop term unconstrained
@@ -510,16 +515,22 @@ int main(int argc, char* argv[]){
         }
         minimizer.DefineParameter(2, "A0", 0.37, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(3, "phi", 4.208, 0.01, 2.0, 5.0);
-        minimizer.DefineParameter(4, "R", 0, 10, -1000, 1000);
-        minimizer.DefineParameter(5, "T_CBO", 200, 10, 1, 10000);
+        minimizer.DefineParameter(4, "R", -60.0, 1.0, -1000, 1000);
+
+        minimizer.DefineParameter(5, "T_CBO", 100.0, 1.0, 1, 10000); 
         minimizer.DefineParameter(6, "w_CBO", 2.3, 0.1, 2.0, 3.0);
+
         minimizer.DefineParameter(9, "LM", 0.001, 0.001, -0.1, 0.1);
+
         minimizer.DefineParameter(12,"A_CAx1", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(13,"A_SAx1", -0.3, 0.1, -1.0, 1.0);
+
         minimizer.DefineParameter(16,"Ky", 1.013, 0.01, 0.9, 2.9);
         minimizer.DefineParameter(17,"Ty", 30, 10, 1.0, 10000.);
+
         minimizer.DefineParameter(20,"A_Cp", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(21,"A_Sp", -0.3, 0.1, -1.0, 1.0);
+
         minimizer.DefineParameter(22,"A_CNxy", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(23,"A_SNxy", -0.3, 0.1, -1.0, 1.0);
         if (pBinCBO){
@@ -533,15 +544,15 @@ int main(int argc, char* argv[]){
             minimizer.DefineParameter(19,"A_SNy2", -0.0, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(24,"A_ct", 0.0, 0.00, -0.1, 0.5);
         } else{
-            minimizer.DefineParameter(7, "A_CNx1", -0.2, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(8, "A_SNx1", -0.3, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(7, "A_CNx1",  1.0, 0.0, -1.0, 1.0); // SUB WITH TF1
+            minimizer.DefineParameter(8, "A_SNx1",  1.0, 0.0, -1.0, 1.0); // SUB WITH TF1
             minimizer.DefineParameter(10,"A_CNx2", -0.2, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(11,"A_SNx2", -0.3, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(14,"A_CNy1", -0.2, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(15,"A_SNy1", -0.3, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(18,"A_CNy2", -0.2, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(19,"A_SNy2", -0.3, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(24,"A_ct", 0.1, 0.01, -0.1, 0.5);
+            minimizer.DefineParameter(24,"A_ct", 0.0, 0.0, -0.1, 0.5); // SET TO 0; SHOULD BE ABSORBED INTO ALPHA BETA
         }
         minimizer.DefineParameter(25,"T_xy", 60, 10, 1, 1000);
         minimizer.DefineParameter(26,"w_xy", 11.9, 0.1, 11.5, 12.5);
@@ -554,8 +565,9 @@ int main(int argc, char* argv[]){
         }else{
             minimizer.DefineParameter(27,"Gamma_mop"    , 0., 0., -   1.0,    1.0);
         }
-        minimizer.DefineParameter(28, "C_CBO", 0.0, 0.01, 0, 0);
+        minimizer.DefineParameter(28, "C_CBO", 0.0, 0.0, 0, 0); // SET TO 0 TO REMOVE ENVELOPE
 
+        printf("FITTING PHASE: 5-PARAM ONLY\n");
         minimizer.Command("SET PAR 8 0");
         minimizer.Command("SET PAR 9 0");
         minimizer.Command("SET PAR 10 0");
@@ -565,6 +577,8 @@ int main(int argc, char* argv[]){
         minimizer.Command("SET PAR 14 0");
         minimizer.Command("SET PAR 15 0");
         minimizer.Command("SET PAR 16 0");
+        minimizer.Command("SET PAR 17 0");
+        minimizer.Command("SET PAR 18 0");
         minimizer.Command("SET PAR 19 0");
         minimizer.Command("SET PAR 20 0");
         minimizer.Command("SET PAR 21 0");
@@ -572,6 +586,10 @@ int main(int argc, char* argv[]){
         minimizer.Command("SET PAR 23 0");
         minimizer.Command("SET PAR 24 0");
         minimizer.Command("SET PAR 25 0");
+        minimizer.Command("SET PAR 26 0");
+        minimizer.Command("SET PAR 27 0");
+        minimizer.Command("SET PAR 28 0");
+        minimizer.Command("SET PAR 29 0");
         minimizer.Command("FIX 6");
         minimizer.Command("FIX 7");
         minimizer.Command("FIX 8");
@@ -595,18 +613,19 @@ int main(int argc, char* argv[]){
         minimizer.Command("FIX 26");
         minimizer.Command("FIX 27");
         minimizer.Command("FIX 28");
-        minimizer.Command("SET INTeractive"); // interactive mode
+        minimizer.Command("FIX 29");
         minimizer.Migrad();
 
+        printf("FITTING PHASE: CBO ONLY\n");
         minimizer.Command("RES");
+        minimizer.DefineParameter(7, "A_CNx1",  1.0, 0.0, -1.0, 1.0); // SUB WITH TF1
+        minimizer.DefineParameter(8, "A_SNx1",  1.0, 0.0, -1.0, 1.0); // SUB WITH TF1
         minimizer.Command("FIX 1");
         minimizer.Command("FIX 2");
         minimizer.Command("FIX 3");
         minimizer.Command("FIX 4");
         minimizer.Command("FIX 5");
         minimizer.Command("FIX 10");
-        minimizer.Command("FIX 11");
-        minimizer.Command("FIX 12");
         minimizer.Command("FIX 13");
         minimizer.Command("FIX 14");
         minimizer.Command("FIX 15");
