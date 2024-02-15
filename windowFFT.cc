@@ -44,16 +44,18 @@ int main(int argc, char* argv[]){
     char* fullFitFilename;
     parse_cmdline(argc,argv,inputFilename, fullFitFilename, outputFilename);
 
-    printf("input: %s\n", inputFilename);
-    printf("input: %s\n", fullFitFilename);
+    printf("sliding input: %s\n", inputFilename);
+    printf("full window input: %s\n", fullFitFilename);
 
-    // run5_calo1_windowFits.root
+    // noRF_calo1_windowFits.root
     std::string inputString = inputFilename;
-    // find runXX
-    int index = inputString.find("run");
+    inputString = inputString.substr(inputString.find_last_of("/\\") + 1);
+    // find run X
+    int index = inputString.find("_");
+    std::string run = inputString.substr(0,index); 
+    printf("run: %s\n", run.c_str());
     inputString = inputString.substr(index,inputString.length()-index);
     index = inputString.find("_");
-    std::string run = inputString.substr(0,index); 
     // find caloXX
     inputString = inputString.substr(index+1, inputString.length() - index);
     index = inputString.find("_");
@@ -79,8 +81,8 @@ int main(int argc, char* argv[]){
     double w_CBO, Ky;
     double R;
 
-    t->SetBranchAddress("fitStart", &fitStart);
-    t->SetBranchAddress("fitStop", &fitStop);
+    t->SetBranchAddress("start", &fitStart);
+    t->SetBranchAddress("stop", &fitStop);
     t->SetBranchAddress("windowNo", &windowNo);
     t->SetBranchAddress("windowBins", &windowBins);
     //t->SetBranchAddress("w_CBO", &w_CBO);
