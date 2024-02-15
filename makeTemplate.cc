@@ -70,6 +70,7 @@ void makeTemplate(
 
     printf("Saving weights for each calo based on N0...\n");
     // pull the weight from the full-window fit per calo
+    double sumN0= 0.0;
     for (int i=0; i<25; i++){
         TFile* calo_weightRefFilename = TFile::Open(Form("%s%i.root", weightRefFilename.c_str(), i), "READ");
         TTree* treeRef = (TTree*) calo_weightRefFilename->Get("fitresults");
@@ -78,11 +79,25 @@ void makeTemplate(
         treeRef->SetBranchAddress("N0", &calo_N0);
         treeRef->SetBranchAddress("N0err", &calo_N0_err);
         treeRef->GetEntry(0);
-        printf("i = %i calo = %i\n", i, calo);
-        weight = calo_N0 / calo0_N0;
+        sumN0 += calo_N0 ;
+        calo_weightRefFilename->Close();
+    }
+    double sumWeight = 0.0;
+    for (int i=0; i<25; i++){
+        TFile* calo_weightRefFilename = TFile::Open(Form("%s%i.root", weightRefFilename.c_str(), i), "READ");
+        TTree* treeRef = (TTree*) calo_weightRefFilename->Get("fitresults");
+
+        treeRef->SetBranchAddress("calo", &calo);
+        treeRef->SetBranchAddress("N0", &calo_N0);
+        treeRef->SetBranchAddress("N0err", &calo_N0_err);
+        treeRef->GetEntry(0);
+        weight = calo_N0 / sumN0;
+        sumWeight += weight;
+        printf("i = %i calo = %i weight %f\n", i, calo, weight);
         caloWeights->Fill();
         calo_weightRefFilename->Close();
     }
+    printf("sumWeight: %f\n", sumWeight);
 
     double fitStart;
     int windowNo;
