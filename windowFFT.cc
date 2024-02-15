@@ -117,7 +117,7 @@ int main(int argc, char* argv[]){
 
             prevStart=fitStart;
             prevStop=fitStop;
-            TFile *windowFile = TFile::Open(Form("slidingFits/%s/%s_%s_window%04d.root",
+            TFile *windowFile = TFile::Open(Form("slidingFits0/%s/%s_%s_window%04d.root",
                         run.c_str(), run.c_str(), calo.c_str(), windowNo));
 
             TH1D  *r = (TH1D*)windowFile->Get("residua");

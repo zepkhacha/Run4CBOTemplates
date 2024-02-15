@@ -507,7 +507,7 @@ int main(int argc, char* argv[]){
             minimizer.DefineParameter(15,"A_SNy1", -0.3, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(18,"A_CNy2", -0.2, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(19,"A_SNy2", -0.3, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(24,"A_ct", 0.1, 0.01, -0.1, 0.5);
+            minimizer.DefineParameter(24,"A_ct", 0.0, 0.00, -0.1, 0.5); // fix to remove w_CBO(t) dependence
         }
         minimizer.DefineParameter(25,"T_xy", 60, 10, 1, 1000);
         minimizer.DefineParameter(26,"w_xy", 11.9, 0.1, 11.5, 12.5);
