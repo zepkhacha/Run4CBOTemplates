@@ -170,11 +170,12 @@ void makeTemplate(
         int color = gSlidingParam[i].GetLineColor();
         // create a template with exp+c model
         TF1* expModel = new TF1(Form("calo%i_%s", i+1, paramName.c_str()), 
-                "[0]*exp(-x/[1])+[2]", 
+                "[0]*exp(-x/[1])+[2] + [3]*exp(-x/[4])+[5]", 
                 30.0, 400.0);
         expModel->SetLineColor(color);
         expModel->SetParameter(0, (gSlidingParam[i].GetPointY(0)>0 ? 0.001 : -0.001));
         expModel->SetParameter(1, 400.0);
+        expModel->SetParameter(4, 400.0);
         gSlidingParam[i].Fit(expModel, "ME", "", 30.0, 400.0);
         fitFunction.push_back(*expModel);
         // add to multigraph to view them overlaid
