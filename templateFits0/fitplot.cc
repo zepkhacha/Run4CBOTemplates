@@ -174,6 +174,20 @@ int main(int argc, char* argv[]){
     } 
     format.close();
 
+    // open refFile (previous template iteration, or fullFits if doing templateFits0
+    // save w_CBO per calo to be fixed in the template fit
+    TFile *f_refFile = TFile::Open(refFile.c_str(), "READ");
+    std::vector<double> ref_wCBOs(24, 0.0);
+    TTree *t_refFile = (TTree*)f_refFile->Get("fitresults");
+    double ref_wCBO;
+    int ref_calo;
+    t_refFile->SetBranchAddress("w_CBO", &ref_wCBO);
+    t_refFile->SetBranchAddress("calo", &ref_calo);
+    for (int refEntry=0; refEntry<t_refFile->GetEntries(); refEntry++){
+        t_refFile->GetEntry(refEntry);
+        ref_wCBOs[ref_calo-1] = ref_wCBO;
+    }
+
     //TO DO: stop making duplicates of caloWeights in each template file...or just make one file for both alpha/beta
     printf("loading CBO templates from templatePath = %s\n", templatePath.c_str());
 
@@ -515,7 +529,11 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(4, "R", -60.0, 1.0, -1000, 1000);
 
         minimizer.DefineParameter(5, "T_CBO", 100.0, 1.0, 1, 10000); 
+        if (desiredCalo!=0){
+        minimizer.DefineParameter(6, "w_CBO", ref_wCBOs[desiredCalo-1], 0.0, 2.0, 3.0);
+        }else{
         minimizer.DefineParameter(6, "w_CBO", 2.3, 0.1, 2.0, 3.0);
+        }
 
         minimizer.DefineParameter(9, "LM", 0.001, 0.001, -0.1, 0.1);
 
