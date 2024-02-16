@@ -559,7 +559,7 @@ int main(int argc, char* argv[]){
             minimizer.DefineParameter(19,"A_SNy2", -0.0, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(24,"A_ct", 0.0, 0.00, -0.1, 0.5);
         } else{
-            minimizer.DefineParameter(7, "A_CNx1",  0.0, 0.01, -1.0, 1.0); // USE TO SCALE ALPHA/BETA
+            minimizer.DefineParameter(7, "A_CNx1",  0.0, 0.01, -2.0, 2.0); // USE TO SCALE ALPHA/BETA
             minimizer.DefineParameter(8, "A_SNx1",  1.0, 0.0, -1.0, 1.0); // SUB WITH TF1
             minimizer.DefineParameter(10,"A_CNx2", -0.2, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(11,"A_SNx2", -0.3, 0.1, -1.0, 1.0);
@@ -633,7 +633,7 @@ int main(int argc, char* argv[]){
 
         printf("FITTING PHASE: CBO ONLY\n");
         minimizer.Command("RES");
-        minimizer.DefineParameter(7, "A_CNx1",  1.0, 0.0, -1.0, 1.0); // SUB WITH TF1
+        minimizer.DefineParameter(7, "A_CNx1",  1.0, 0.01, -2.0, 2.0); // SUB WITH TF1
         minimizer.DefineParameter(8, "A_SNx1",  1.0, 0.0, -1.0, 1.0); // SUB WITH TF1
         minimizer.Command("FIX 1");
         minimizer.Command("FIX 2");
