@@ -105,7 +105,7 @@ int main(int argc, char* argv[]){
     prevStop = 0.0;
     for (int entry=0; entry<t->GetEntries(); entry++){
         t->GetEntry(entry);
-        //printf("doing entry %i (%f, %f)\n", entry, fitStart, fitStop);
+        printf("doing entry %i (%f, %f)\n", entry, fitStart, fitStop);
         //int fitrangelow = int(fitStart / 0.1492);
 
         if (fitStart < prevStop){

@@ -177,7 +177,7 @@ int main(int argc, char* argv[]){
     double fullFit_A_ct;
     double fullFit_w_vw;
 
-    double fitStart = fitrangelow  * 0.1492;
+    double fitStart = (fitrangelow-1)  * 0.1492;
     double fitStop  = fitrangehigh * 0.1492;
 
 
@@ -323,13 +323,17 @@ int main(int argc, char* argv[]){
     //    }
 
     //}
-    
-    windowBins = 70; // hard-coding 10us bins for now
+
+    if (fitStart < 35.3604){
+        windowBins = 35;
+    }else{
+        windowBins = 70; // hard-coding 10us bins for now
+    }
 
     printf("windowBins = %i\n", windowBins);
 
     fitrangehigh = fitrangelow+windowBins;
-    fitStart     = startTime + fitrangelow*0.1492;
+    fitStart     = startTime + (fitrangelow-1)*0.1492;
     fitStop      = startTime + fitrangehigh*0.1492;
 
     // if we are extending too far out, stop fitting
@@ -421,7 +425,7 @@ int main(int argc, char* argv[]){
     minimizer.DefineParameter(13, "alpha_vw", 0.0, 0.001, 0, 0);
     minimizer.DefineParameter(14, "w_vw", 12.9, 0.0, 0, 0);
     minimizer.DefineParameter(15, "beta_vw", 0.0, 0.001, 0, 0);
- 
+
     // LM term
     minimizer.DefineParameter(16, "LM", LM, 0.0, -0.1, 0.1); // FIX
 
@@ -662,13 +666,13 @@ int main(int argc, char* argv[]){
         pulls->Fill();
     }
 
-    output->cd();
-    residua->Write();
-    pulls->Write();
-    fitresults->Write();  
-    lambda->Write();
-    bestfit->Write();
-    wiggle->Write();
-    output->Close();
+output->cd();
+residua->Write();
+pulls->Write();
+fitresults->Write();  
+lambda->Write();
+bestfit->Write();
+wiggle->Write();
+output->Close();
 
 }
