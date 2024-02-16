@@ -26,7 +26,7 @@ echo "done performing window 0"
 
 step=35
 start=${step}
-end=70
+end=140
 
 for window in $(seq ${start} ${step} ${end}); do
    
