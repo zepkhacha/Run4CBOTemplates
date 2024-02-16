@@ -26,6 +26,7 @@ bool constrainMop   = false; // mop constraint via chisq penalty
 
 //path to full CBO templates
 std::string templatePath;
+std::string refFile; // to fix w_CBO ? not implemented yet
 // to store alpha and beta TF1 templates
 std::vector<TF1> alpha_CBO_TF1;
 std::vector<TF1> beta_CBO_TF1;
@@ -145,7 +146,7 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
                     double alpha = (alpha_CBO_TF1[caloNum]).Eval(time);
                     double beta  = (beta_CBO_TF1 [caloNum]).Eval(time);
 
-                    x += ( (par[7]*alpha*cos(  par[6]*cbo(time, par[24])*time) 
+                    x += par[7]*( (alpha*cos(  par[6]*cbo(time, par[24])*time) 
                                 + par[8]*beta *sin(  par[6]*cbo(time, par[24])*time))*caloWeights[caloNum]);
                 } // end loop over caloNum
 
@@ -155,7 +156,7 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
                     double alpha = (alpha_CBO_TF1[desiredCalo-1]).Eval(time);
                     double beta  = (beta_CBO_TF1 [desiredCalo-1]).Eval(time);
 
-                    x += ( (par[7]*alpha*cos(  par[6]*cbo(time, par[24])*time) 
+                    x += par[7]*( (alpha*cos(  par[6]*cbo(time, par[24])*time) 
                                 + par[8]*beta *sin(  par[6]*cbo(time, par[24])*time))*caloWeights[desiredCalo-1]);
 
                 x += exp(-2.*time/par[5]         )*(par[10]*cos(2*par[6]*cbo(time, par[24])*time) 
