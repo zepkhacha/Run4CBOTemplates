@@ -1,4 +1,4 @@
-#include "/gm2data/zkhechad/cboTemplates/aMethod/slidingFits/slidingFitFunc.hh"
+#include "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/slidingFits1/slidingFitFunc.hh"
 #include "gm2util/blinders/Blinders.hh"
 #include <TH1.h>
 #include <TTree.h>
@@ -117,7 +117,7 @@ int main(int argc, char* argv[]){
 
             prevStart=fitStart;
             prevStop=fitStop;
-            TFile *windowFile = TFile::Open(Form("slidingFits0/%s/%s_%s_window%04d.root",
+            TFile *windowFile = TFile::Open(Form("slidingFits1/%s/%s_%s_window%04d.root",
                         run.c_str(), run.c_str(), calo.c_str(), windowNo));
 
             TH1D  *r = (TH1D*)windowFile->Get("residua");
