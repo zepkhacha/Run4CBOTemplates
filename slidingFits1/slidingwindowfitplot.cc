@@ -296,45 +296,16 @@ int main(int argc, char* argv[]){
     // maintain equal statistics in each window
 
     fitrangelow  = startBin + (windowNo);
-
-    //if (windowNo == 0){
-    //    windowBins = 240;
-    //}else{
-    //    double c = 0.55;
-    //    double insideLog = 1.0 - c*c*exp(-((startBin-fitrangelow)*0.1492)/tau) 
-    //        + c*c*exp(-((startBin+117-fitrangelow)*0.1492)/tau);
-    //    // if insideLog term is below threshold, set deltaT to some max window size
-    //    double deltaT;
-    //    if (insideLog<0.08){
-    //        deltaT = 1100*0.1492;
-    //    }else{
-    //        deltaT = -tau*log( 1.0 
-    //                - c*c*exp(-((startBin-fitrangelow)*0.1492)/tau) 
-    //                + c*c*exp(-((startBin+117-fitrangelow)*0.1492)/tau) );
-    //    }
-
-    //    printf("deltaT %f\n", deltaT);
-    //    windowBins = int(deltaT/0.1492);
-    //    // now round to nearest 10.0
-    //    windowBins = int (windowBins/10.0) * 10;
-    //    // if deltaT < 17us, set it back to 17us
-    //    if (windowBins < 240){
-    //        windowBins = 240;
-    //    }
-
-    //}
+    fitStart     = startTime + (fitrangelow-1)*0.1492;
 
     if (fitStart < 35.3604){
-        windowBins = 35;
-    }else{
-        windowBins = 70; // hard-coding 10us bins for now
+        windowBins = 34;
     }
 
-    printf("windowBins = %i\n", windowBins);
-
     fitrangehigh = fitrangelow+windowBins;
-    fitStart     = startTime + (fitrangelow-1)*0.1492;
     fitStop      = startTime + fitrangehigh*0.1492;
+
+    printf("windowBins = %i\n", windowBins);
 
     // if we are extending too far out, stop fitting
     if (fitrangehigh >= nBins){

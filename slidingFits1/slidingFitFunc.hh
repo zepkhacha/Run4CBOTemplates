@@ -37,7 +37,7 @@ bool   correcttau   = false;
 bool   asymmetry    = false;
 int    fitrangelow   = startBin;
 int    fitrangehigh  = nBins;
-int windowBins;
+int windowBins = 69;
 double frlifetime = 0;
 // zep-style switches
 int desiredSeed = 0;
