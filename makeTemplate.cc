@@ -174,8 +174,8 @@ void makeTemplate(
                 30.0, 400.0);
         expModel->SetLineColor(color);
         expModel->SetParameter(0, (gSlidingParam[i].GetPointY(0)>0 ? 0.001 : -0.001));
-        expModel->SetParameter(1, 400.0);
-        expModel->SetParameter(4, 400.0);
+        expModel->SetParameter(1, 100.0);
+        expModel->SetParameter(4, 10.0);
         gSlidingParam[i].Fit(expModel, "ME", "", 30.0, 400.0);
         fitFunction.push_back(*expModel);
         // add to multigraph to view them overlaid
