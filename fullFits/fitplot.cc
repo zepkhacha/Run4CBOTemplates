@@ -297,7 +297,7 @@ int main(int argc, char* argv[]){
     double T_CBO, w_CBO, A_CNx1, A_SNx1, C_CBO;
     double LM, A_CNx2, A_SNx2;
     double A_CAx1, A_SAx1, A_CNy1, A_SNy1;
-    double Ky, Ty, A_CNy2, A_SNy2;
+    double w_y, Ty, A_CNy2, A_SNy2;
     double A_Cp, A_Sp;
     double A_SNxy, A_CNxy;
     double A_ct, T_xy, w_xy;
@@ -305,7 +305,7 @@ int main(int argc, char* argv[]){
     double T_CBOerr, w_CBOerr, A_CNx1err, A_SNx1err, C_CBOerr;
     double LMerr, A_CNx2err, A_SNx2err;
     double A_CAx1err, A_SAx1err, A_CNy1err, A_SNy1err;
-    double Kyerr, Tyerr, A_CNy2err, A_SNy2err;
+    double w_yerr, Tyerr, A_CNy2err, A_SNy2err;
     double A_Cperr, A_Sperr;
     double A_SNxyerr, A_CNxyerr;
     double A_cterr, T_xyerr, w_xyerr;
@@ -347,7 +347,7 @@ int main(int argc, char* argv[]){
     fitresults->Branch("A_SNy1", &A_SNy1);
     fitresults->Branch("A_SNxy", &A_SNxy);
     fitresults->Branch("A_CNxy", &A_CNxy);
-    fitresults->Branch("Ky", &Ky);
+    fitresults->Branch("w_y", &w_y);
     fitresults->Branch("Ty", &Ty);
     fitresults->Branch("A_CNy2", &A_CNy2);
     fitresults->Branch("A_SNy2", &A_SNy2);
@@ -374,7 +374,7 @@ int main(int argc, char* argv[]){
     fitresults->Branch("A_SAx1err", &A_SAx1err);
     fitresults->Branch("A_CNy1err", &A_CNy1err);
     fitresults->Branch("A_SNy1err", &A_SNy1err);
-    fitresults->Branch("Kyerr", &Kyerr);
+    fitresults->Branch("w_yerr", &w_yerr);
     fitresults->Branch("Tyerr", &Tyerr);
     fitresults->Branch("A_CNy2err", &A_CNy2err);
     fitresults->Branch("A_SNy2err", &A_SNy2err);
@@ -482,8 +482,8 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(9, "LM", 0.001, 0.001, -0.1, 0.1);
         minimizer.DefineParameter(12,"A_CAx1", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(13,"A_SAx1", -0.3, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(16,"Ky", 1.013, 0.01, 0.9, 2.9);
-        minimizer.DefineParameter(17,"Ty", 30, 10, 1.0, 10000.);
+        minimizer.DefineParameter(16,"w_y", 2.3, 0.1, 1.0, 4.0);
+        minimizer.DefineParameter(17,"Ty", 30, 0, 1.0, 10000.); // FIX
         minimizer.DefineParameter(20,"A_Cp", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(21,"A_Sp", -0.3, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(22,"A_CNxy", -0.2, 0.1, -1.0, 1.0);
@@ -660,7 +660,7 @@ int main(int argc, char* argv[]){
         A_SAx1 = par[13];
         A_CNy1 = par[14];
         A_SNy1 = par[15];
-        Ky = par[16];
+        w_y = par[16];
         Ty = par[17];
         A_CNy2 = par[18];
         A_SNy2 = par[19];
@@ -682,7 +682,7 @@ int main(int argc, char* argv[]){
         T_CBOerr = sqrt(-errorplus[5]*errorminus[5]);
         w_CBOerr = sqrt(-errorplus[6]*errorminus[6]);
         LMerr = sqrt(-errorplus[9]*errorminus[9]);
-        Kyerr = sqrt(-errorplus[16]*errorminus[16]);
+        w_yerr = sqrt(-errorplus[16]*errorminus[16]);
         Tyerr = sqrt(-errorplus[17]*errorminus[17]);
         A_cterr = (errorplus[24]-errorminus[24])/2.;
         T_xyerr = (errorplus[25]-errorminus[25])/2.;

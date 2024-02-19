@@ -58,12 +58,14 @@ double cbo(double time, double amp){
 }
 
 double wy(double kappa, double wcbo, double time, double amp){
-    double x = (4*3.141592)/(0.1492*kappa*wcbo*cbo(time, amp)) - 1.0;
-    return kappa*wcbo*cbo(time, amp)*sqrt(x);
+    //double x = (4*3.141592)/(0.1492*kappa*wcbo*cbo(time, amp)) - 1.0;
+    //return kappa*wcbo*cbo(time, amp)*sqrt(x);
+    return kappa
 }
 
 double wvw(double kappa, double wcbo, double time, double amp){
-    return (2*3.141592)/0.1492 - 2.*wy(kappa, wcbo, time, amp);
+    //return (2*3.141592)/0.1492 - 2.*wy(kappa, wcbo, time, amp);
+    return (2*M_PI/0.1492) - 2*kappa;
 }
 
 double calcnu(double *dim, double *par){ // dim[0] = bin number
