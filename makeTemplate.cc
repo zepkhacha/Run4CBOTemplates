@@ -57,16 +57,16 @@ void makeTemplate(
     caloWeights->Branch("N0_err", &calo_N0_err);
     caloWeights->Branch("weight", &weight);
 
-//    // we also need N0 from calo sum result to calculate weight
-//    printf("Reading in N0 from calo0 nominal fit result...\n");
-//    TFile* calo0_weightRefFilename = TFile::Open(Form("%s%i.root", weightRefFilename.c_str(), 0), "READ");
-//    TTree* calo0_treeRef = (TTree*) calo0_weightRefFilename->Get("fitresults");
-//    double calo0_N0, calo0_N0_err;
-//
-//    calo0_treeRef->SetBranchAddress("N0", &calo0_N0);
-//    calo0_treeRef->SetBranchAddress("N0err", &calo0_N0_err);
-//    calo0_treeRef->GetEntry(0);
-//    calo0_weightRefFilename->Close();
+    //    // we also need N0 from calo sum result to calculate weight
+    //    printf("Reading in N0 from calo0 nominal fit result...\n");
+    //    TFile* calo0_weightRefFilename = TFile::Open(Form("%s%i.root", weightRefFilename.c_str(), 0), "READ");
+    //    TTree* calo0_treeRef = (TTree*) calo0_weightRefFilename->Get("fitresults");
+    //    double calo0_N0, calo0_N0_err;
+    //
+    //    calo0_treeRef->SetBranchAddress("N0", &calo0_N0);
+    //    calo0_treeRef->SetBranchAddress("N0err", &calo0_N0_err);
+    //    calo0_treeRef->GetEntry(0);
+    //    calo0_weightRefFilename->Close();
 
     printf("Saving weights for each calo based on N0...\n");
     // pull the weight from the full-window fit per calo
@@ -168,14 +168,28 @@ void makeTemplate(
     std::vector<TF1> fitFunction;
     for (unsigned int i=0; i<gSlidingParam.size(); i++){
         int color = gSlidingParam[i].GetLineColor();
-        // create a template with exp+c model
-        TF1* expModel = new TF1(Form("calo%i_%s", i+1, paramName.c_str()), 
-                "[0]*exp(-x/[1])+[2] + [3]*exp(-x/[4])+[5]", 
-                30.0, 400.0);
-        expModel->SetLineColor(color);
-        expModel->SetParameter(0, (gSlidingParam[i].GetPointY(0)>0 ? 0.001 : -0.001));
-        expModel->SetParameter(1, 100.0);
-        expModel->SetParameter(4, 10.0);
+
+        TF1* expModel;
+        // if the parameter is CBO, then we can use double exp+c model
+        if (paramName=="alpha_CBO" or paramName=="beta_CBO"){
+            expModel = new TF1(Form("calo%i_%s", i+1, paramName.c_str()), 
+                    "[0]*exp(-x/[1])+[2] + [3]*exp(-x/[4])+[5]", 
+                    30.0, 400.0);
+            expModel->SetLineColor(color);
+            expModel->SetParameter(0, (gSlidingParam[i].GetPointY(0)>0 ? 0.001 : -0.001));
+            expModel->SetParameter(1, 100.0);
+            expModel->SetParameter(4, 10.0);
+        }else{
+            // create a template with exp+c model for y, vw, 2CBO
+            expModel = new TF1(Form("calo%i_%s", i+1, paramName.c_str()), 
+                    "[0]*exp(-x/[1])+[2]", 
+                    30.0, 400.0);
+            expModel->SetLineColor(color);
+            expModel->SetParameter(0, (gSlidingParam[i].GetPointY(0)>0 ? 0.001 : -0.001));
+            expModel->SetParameter(1, 100.0);
+        }
+
+        // now we can do a fit
         gSlidingParam[i].Fit(expModel, "ME", "", 30.0, 400.0);
         fitFunction.push_back(*expModel);
         // add to multigraph to view them overlaid
