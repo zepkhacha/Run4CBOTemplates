@@ -280,8 +280,7 @@ int main(int argc, char* argv[]){
         weightedAvgTau += binWeights[i]*transform_gamma->GetBinLowEdge(i)*2.1969811;
         printf("bin %i content %f momentum %f isPhysical? %d weight %f\n",i,transform_dp_p0->GetBinContent(i),dp_p0[i],isPhysical,binWeights.at(binWeights.size()-1));
     }
-
-    printf("size of dp_p0 %i size of binWeights %i\n", dp_p0.size(), binWeights.size());
+    //printf("size of dp_p0 %i size of binWeights %i\n", dp_p0.size(), binWeights.size());
 
     boostdata->Close();
     //*************
