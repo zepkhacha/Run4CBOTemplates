@@ -26,7 +26,7 @@ echo "done performing window 0"
 
 step=35
 start=${step}
-end=140
+end=105
 
 for window in $(seq ${start} ${step} ${end}); do
    
@@ -47,7 +47,7 @@ step=70
 start=${step}
 end=2600
 
-for window in $(seq ${start} ${step} ${end}); do
+for window in $(seq 140 ${step} ${end}); do
    
    printf -v windowLabel "%04d" ${window}
    printf -v prevWindowLabel "%04d" $((window - step))

@@ -298,7 +298,7 @@ int main(int argc, char* argv[]){
     fitrangelow  = startBin + (windowNo);
     fitStart     = startTime + (fitrangelow-1)*0.1492;
 
-    if (fitStart <= 50.8772){
+    if (fitrangelow <= 241){
         windowBins = 34;
     }
 
