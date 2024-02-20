@@ -481,7 +481,7 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(9, "LM", 0.001, 0.001, -0.1, 0.1);
         minimizer.DefineParameter(12,"A_CAx1", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(13,"A_SAx1", -0.3, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(16,"w_y", 14.4, 0.0, 1.0, 20.0);
+        minimizer.DefineParameter(16,"w_y", 14.4, 0.1, 1.0, 20.0);
         minimizer.DefineParameter(17,"Ty", 30, 0, 1.0, 10000.); // FIX
         minimizer.DefineParameter(20,"A_Cp", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(21,"A_Sp", -0.3, 0.1, -1.0, 1.0);

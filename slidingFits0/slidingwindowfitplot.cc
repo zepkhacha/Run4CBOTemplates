@@ -173,7 +173,7 @@ int main(int argc, char* argv[]){
     double zeta_y, zeta_vw;
     double zeta_y_err, zeta_vw_err;
 
-    double fullFit_Ky;
+    double fullFit_w_y;
     double fullFit_A_ct;
     double fullFit_w_vw;
 
@@ -199,7 +199,7 @@ int main(int argc, char* argv[]){
     cboFullFitResults->SetBranchAddress("pNx1" , &fullFit_phix1);
     cboFullFitResults->SetBranchAddress("LM"   , &LM     );
 
-    cboFullFitResults->SetBranchAddress("Ky"   , &fullFit_Ky);
+    cboFullFitResults->SetBranchAddress("w_y"   , &fullFit_w_y);
     cboFullFitResults->SetBranchAddress("A_ct" , &fullFit_A_ct);
 
     cboFullFitResults->GetEntry(0);
@@ -414,12 +414,12 @@ int main(int argc, char* argv[]){
 
     // 1-Y terms
     minimizer.DefineParameter(10, "alpha_y", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(11, "w_y", 14.45, 0.0, 0, 0);
+    minimizer.DefineParameter(11, "w_y", fullFit_w_y, 0.0, 0, 0);
     minimizer.DefineParameter(12, "beta_y", 0.0, 0.001, 0, 0);
 
     // 2-Y terms
     minimizer.DefineParameter(13, "alpha_vw", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(14, "w_vw", 12.9, 0.0, 0, 0);
+    minimizer.DefineParameter(14, "w_vw", (2*M_PI/0.1492)-2*fullFit_w_y, 0.0, 0, 0);
     minimizer.DefineParameter(15, "beta_vw", 0.0, 0.001, 0, 0);
  
     // LM term

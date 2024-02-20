@@ -136,7 +136,6 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
                     + par[15]*sin(wy (par[16], par[6], time, par[24])*time))
                 + exp(-2.*time/par[17])*(par[18]*cos(wvw(par[16], par[6], time, par[24])*time)
                         + par[19]*sin(wvw(par[16], par[6], time, par[24])*time));
-                
         }                                            
         double p = exp(-1.*time/par[25])*(par[22]*cos(time*par[26])+par[23]*sin(time*par[26]));
         binNu *= x*y + p;
