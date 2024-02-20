@@ -477,11 +477,11 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(3, "phi", 4.208, 0.01, 2.0, 5.0);
         minimizer.DefineParameter(4, "R", 0, 10, -1000, 1000);
         minimizer.DefineParameter(5, "T_CBO", 200, 10, 1, 10000);
-        minimizer.DefineParameter(6, "w_CBO", 2.3, 0.1, 2.0, 3.0);
+        minimizer.DefineParameter(6, "w_CBO", 2.3, 0.1, 0.0, 3.0);
         minimizer.DefineParameter(9, "LM", 0.001, 0.001, -0.1, 0.1);
         minimizer.DefineParameter(12,"A_CAx1", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(13,"A_SAx1", -0.3, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(16,"w_y", 2.3, 0.1, 1.0, 4.0);
+        minimizer.DefineParameter(16,"w_y", 14.4, 0.0, 1.0, 20.0);
         minimizer.DefineParameter(17,"Ty", 30, 0, 1.0, 10000.); // FIX
         minimizer.DefineParameter(20,"A_Cp", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(21,"A_Sp", -0.3, 0.1, -1.0, 1.0);
@@ -521,6 +521,8 @@ int main(int argc, char* argv[]){
         }
         minimizer.DefineParameter(28, "C_CBO", 0.0, 0.01, 0, 0);
 
+        minimizer.Command("SET PAR 6 0");
+        minimizer.Command("SET PAR 7 0");
         minimizer.Command("SET PAR 8 0");
         minimizer.Command("SET PAR 9 0");
         minimizer.Command("SET PAR 10 0");
@@ -606,7 +608,7 @@ int main(int argc, char* argv[]){
         minimizer.Command("FIX 28");
         minimizer.Migrad();
         minimizer.Command("RES");
-        minimizer.Migrad();
+        //minimizer.Migrad();
 
         minimizer.Command("MIG 25000 0.01");
         minimizer.Command("MINO 25000");
