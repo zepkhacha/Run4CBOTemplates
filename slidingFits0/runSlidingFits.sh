@@ -16,8 +16,8 @@ formatC="/gm2data/zkhechad/run45/envelope/formats/formatC_mBin_constraintOff.txt
 formatD="/gm2data/zkhechad/run45/envelope/formats/formatD_mBin_constraintOn.txt"
 
 mainDirectory="/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/"
-mkdir -p ${mainDirectory}/slidingFits/${run}
-outputDirectory="${mainDirectory}/slidingFits/${run}/"
+mkdir -p ${mainDirectory}/slidingFits0/${run}
+outputDirectory="${mainDirectory}/slidingFits0/${run}/"
 
 #-p ${mainDirectory}/cboIsolate/${run}_calo${calo}.root \
 echo "performing window 0"
@@ -43,4 +43,4 @@ for window in $(seq ${start} ${step} ${end}); do
 
 done 
 
-#hadd -f ${mainDirectory}/slidingFits/${run}_calo${calo}_windowFits.root ${outputDirectory}/${run}_calo${calo}_window{0000..2600..40}.root
+#hadd -f ${mainDirectory}/slidingFits0/${run}_calo${calo}_windowFits.root ${outputDirectory}/${run}_calo${calo}_window{0000..2600..40}.root

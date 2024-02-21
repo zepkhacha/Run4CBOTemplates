@@ -54,12 +54,14 @@ double cbo(double time, double amp){
     // For the endgame
     //return 1.0 + 2.927*exp(-time/79.05)/time + 2.239*exp(-time/6.94)/time;
     // For Run 2/3
-    return 1.0 + amp*exp(-time/24.4)/time;
+    //return 1.0 + amp*exp(-time/24.4)/time;
+    return 1.0;
 }
 
 double wy(double kappa, double wcbo, double time, double amp){
-    double x = (4*3.141592)/(0.1492*kappa*wcbo*cbo(time, amp)) - 1.0;
-    return kappa*wcbo*cbo(time, amp)*sqrt(x);
+    //double x = (4*3.141592)/(0.1492*kappa*wcbo*cbo(time, amp)) - 1.0;
+    //return kappa*wcbo*cbo(time, amp)*sqrt(x);
+    return kappa*wcbo;
 }
 
 double wvw(double kappa, double wcbo, double time, double amp){
@@ -81,7 +83,6 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
     }
 
     // start iterating bin-by-bin
-    //
     for (int b=calcnuRangeLower; b<=calcnuRangeUpper; b++){
 
         double b_dp = dp_p0[b];

@@ -5,3 +5,5 @@ fitplot: fitplot.o
 fitplot.o: fitplot.cc Makefile
 	g++ -c -Wall -Wextra fitplot.cc $(shell root-config --libs --cflags) -I /cvmfs/gm2.opensciencegrid.org/prod/g-2/gm2util/v10_16_00/include -ffast-math -O2 \
 	-I ${TBB_INC}
+clean: 
+	rm fitplot fitplot.o

@@ -117,7 +117,7 @@ void makeTemplate(
 
     std::vector<TGraphErrors> gSlidingParam    ;
 
-    for (int i=0; i<24; i++){
+    for (int i=0; i<25; i++){
         TGraphErrors temp;
         gSlidingParam.push_back(temp);
         gSlidingParam[i].SetMarkerStyle(7);
@@ -142,8 +142,8 @@ void makeTemplate(
 
         double time = fitStart ;
 
-        gSlidingParam[caloNum-1].SetPoint(gSlidingParam[caloNum-1].GetN(), time, param );
-        gSlidingParam[caloNum-1].SetPointError(gSlidingParam[caloNum-1].GetN()-1, 0, err );
+        gSlidingParam[caloNum].SetPoint(gSlidingParam[caloNum].GetN(), time, param );
+        gSlidingParam[caloNum].SetPointError(gSlidingParam[caloNum].GetN()-1, 0, err );
 
         graphEntry++;
     }// end for loop over window fits
