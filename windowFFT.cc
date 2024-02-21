@@ -105,7 +105,7 @@ int main(int argc, char* argv[]){
     prevStop = 0.0;
     for (int entry=0; entry<t->GetEntries(); entry++){
         t->GetEntry(entry);
-        printf("doing entry %i (%f, %f)\n", entry, fitStart, fitStop);
+        //printf("doing entry %i (%f, %f)\n", entry, fitStart, fitStop);
         //int fitrangelow = int(fitStart / 0.1492);
 
         if (fitStart < prevStop){
@@ -162,6 +162,7 @@ int main(int argc, char* argv[]){
             fft->GetYaxis()->SetTitle("Power (arb. units)");
 
             for (int x=1;x<=rTrimmedFFTraw->GetNbinsX();x++){
+                //printf("x %i content %f\n", x, rTrimmedFFTraw->GetBinContent(x));
                 //double freq_i = rTrimmedFFTraw->GetBinCenter(x) ; 
                 //double freq_f = rTrimmedFFTraw->GetBinCenter(x) * binWidth ; 
                 //int bin = ( x ) * ( 1.0 / 0.1492 ); 

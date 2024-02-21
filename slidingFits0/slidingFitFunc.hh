@@ -17,7 +17,7 @@
 static blinding::Blinders myblinders(blinding::Blinders::kOmega_a, "reunificationisblind");
 
 //histogram binning
-int          startBin = 203;
+int          startBin = 203-70;
 double       startTime = 0.0;
 const int    nBins  = 4357 ;
 double 	     n	    = 0.108;
