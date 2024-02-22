@@ -30,6 +30,12 @@ std::string refFile; // to fix w_CBO ? not implemented yet
 // to store alpha and beta TF1 templates
 std::vector<TF1> alpha_CBO_TF1;
 std::vector<TF1> beta_CBO_TF1;
+std::vector<TF1> alpha_2CBO_TF1;
+std::vector<TF1> beta_2CBO_TF1;
+std::vector<TF1> alpha_y_TF1;
+std::vector<TF1> beta_y_TF1;
+std::vector<TF1> alpha_vw_TF1;
+std::vector<TF1> beta_vw_TF1;
 
 //bin-dependent variables
 std::pair <double, double> magicTauConstraints (0.0,0.0);
@@ -138,30 +144,33 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
                         + par[19]*sin(wvw(par[16], par[6]*(wcbo_i(b_dp)/wcbo_i(0.0)), time, par[24])*time));
 
         } else{
+
             x = 1.0;
+            y = 1.0;
+
             // for non-momentum-binned fits, sum over calos for X-only
-            if (desiredCalo==0){
 
                 for (int caloNum=0; caloNum<24; caloNum++){
-                    double alpha = (alpha_CBO_TF1[caloNum]).Eval(time);
-                    double beta  = (beta_CBO_TF1 [caloNum]).Eval(time);
 
-                    x += par[7]*( (alpha*cos(  par[6]*cbo(time, par[24])*time) 
-                                + par[8]*beta *sin(  par[6]*cbo(time, par[24])*time))*caloWeights[caloNum]);
+                    if (desiredCalo!=0 and caloNum!=desiredCalo){
+                        continue;
+                    }
+
+                    double alpha_CBO = (alpha_CBO_TF1[caloNum]).Eval(time);
+                    double beta_CBO  = (beta_CBO_TF1 [caloNum]).Eval(time);
+                    double alpha_2CBO = (alpha_2CBO_TF1[caloNum]).Eval(time);
+                    double beta_2CBO  = (beta_2CBO_TF1 [caloNum]).Eval(time);
+                    double alpha_y = (alpha_y_TF1[caloNum]).Eval(time);
+                    double beta_y  = (beta_y_TF1 [caloNum]).Eval(time);
+                    double alpha_vw = (alpha_vw_TF1[caloNum]).Eval(time);
+                    double beta_vw  = (beta_vw_TF1 [caloNum]).Eval(time);
+
+                    x += par[7]*( (alpha_CBO*cos(  par[6]*cbo(time, par[24])*time) 
+                                + par[8]*beta_CBO*sin(  par[6]*cbo(time, par[24])*time))*caloWeights[caloNum]);
+
+                    x += par[10]*( (alpha_2CBO)*cos(2*par[6]*cbo(time, par[24])*time) 
+                            + par[11]*beta_2CBO*sin(2*par[6]*cbo(time, par[24])*time))*caloWeights[caloNum];
                 } // end loop over caloNum
-
-                x += exp(-2.*time/par[5]         )*(par[10]*cos(2*par[6]*cbo(time, par[24])*time) 
-                        + par[11]*sin(2*par[6]*cbo(time, par[24])*time));
-            }else{
-                    double alpha = (alpha_CBO_TF1[desiredCalo-1]).Eval(time);
-                    double beta  = (beta_CBO_TF1 [desiredCalo-1]).Eval(time);
-
-                    x += par[7]*( (alpha*cos(  par[6]*cbo(time, par[24])*time) 
-                                + par[8]*beta *sin(  par[6]*cbo(time, par[24])*time))*caloWeights[desiredCalo-1]);
-
-                x += exp(-2.*time/par[5]         )*(par[10]*cos(2*par[6]*cbo(time, par[24])*time) 
-                        + par[11]*sin(2*par[6]*cbo(time, par[24])*time));
-            }
 
             y = 1.0 + exp(-1.*time/par[17])*(par[14]*cos(wy (par[16], par[6], time, par[24])*time) 
                     + par[15]*sin(wy (par[16], par[6], time, par[24])*time))
