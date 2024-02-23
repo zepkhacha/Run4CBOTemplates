@@ -34,7 +34,8 @@ double invert(double c, double s){
 
 void checkCaloCombination(
         std::string directoryName,
-        std::string frequency){
+        std::string frequency,
+        std::string calo0_windowFitsFilename){
 
     gStyle->SetPadTickX(1);
     gStyle->SetPadTickY(1);
@@ -52,6 +53,30 @@ void checkCaloCombination(
     std::vector<double> weights(25,1.0);
     double weight;
 
+    printf("Reading in calo0 windowFits.root...\n");
+    TFile *calo0windowFits = TFile::Open(calo0_windowFitsFilename.c_str(),"READ");
+    TTree *calo0fitresults = (TTree*)calo0windowFits->Get("fitresults");
+    double calo0alpha, calo0beta;
+    double calo0alphaerr, calo0betaerr;
+    double calo0time;
+    calo0fitresults->SetBranchAddress(Form("alpha_%s",frequency.c_str()),&calo0alpha);
+    calo0fitresults->SetBranchAddress(Form("alpha_%s_err",frequency.c_str()),&calo0alphaerr);
+    calo0fitresults->SetBranchAddress(Form("beta_%s" ,frequency.c_str()),&calo0beta );
+    calo0fitresults->SetBranchAddress(Form("beta_%s_err" ,frequency.c_str()),&calo0betaerr );
+    calo0fitresults->SetBranchAddress("start", &calo0time);
+    TGraphErrors *g0alphaDat = new TGraphErrors();
+    TGraphErrors *g0betaDat  = new TGraphErrors();
+
+    g0alphaDat->SetLineColor(kBlue);
+    g0betaDat ->SetLineColor(kBlue);
+
+    for (int i=0; i<calo0fitresults->GetEntries(); i++){
+        calo0fitresults->GetEntry(i);
+        g0alphaDat->SetPoint(i, calo0time, calo0alpha);
+        g0betaDat ->SetPoint(i, calo0time, calo0beta );
+        g0alphaDat->SetPointError(i, 0.0, calo0alphaerr);
+        g0betaDat ->SetPointError(i, 0.0, calo0betaerr );
+    }
 
     printf("Reading in template files...\n");
     TFile *alphaFile = TFile::Open(Form("%s/templates_alpha_%s.root", directoryName.c_str(), frequency.c_str()), "READ");
@@ -87,8 +112,8 @@ void checkCaloCombination(
     TGraphErrors *g_phi_Combo = new TGraphErrors();
 
     printf("...iterating through time to produce graphs\n");
-    for (int i=0; i<4000; i++){
-        double time = (150+i)*0.1492;
+    for (int i=0; i<3800; i++){
+        double time = (190+i)*0.1492;
         // get comparison curves from the calo-sum result
         g_alpha_0->SetPoint( i, time, alpha[0].Eval(time));
         g_beta_0 ->SetPoint( i, time, beta [0].Eval(time));
@@ -140,22 +165,24 @@ void checkCaloCombination(
     mg_phi  ->SetTitle("phi_calo0; time [#mus]; [rad]");
     
     mg_alpha->Add(g_alpha_0);
+    mg_alpha->Add(g_alpha_Combo);
+    mg_alpha->Add(g0alphaDat);
     mg_beta->Add(g_beta_Combo);
     mg_beta->Add(g_beta_0);
-    mg_A->Add(g_A_Combo);
+    mg_beta->Add(g0betaDat);
     mg_A->Add(g_A_0);
-    mg_phi->Add(g_phi_Combo);
+    mg_A->Add(g_A_Combo);
     mg_phi->Add(g_phi_0);
-    mg_alpha->Add(g_alpha_Combo);
+    mg_phi->Add(g_phi_Combo);
 
     mg_alpha->Draw("ACE");
     c->Print(Form("comparison_%s.pdf", frequency.c_str()));
     mg_beta->Draw("ACE");
     c->Print(Form("comparison_%s.pdf", frequency.c_str()));
-    mg_A->Draw("ACE");
-    c->Print(Form("comparison_%s.pdf", frequency.c_str()));
-    mg_phi->Draw("ACE");
-    c->Print(Form("comparison_%s.pdf", frequency.c_str()));
+    //mg_A->Draw("ACE");
+    //c->Print(Form("comparison_%s.pdf", frequency.c_str()));
+    //mg_phi->Draw("ACE");
+    //c->Print(Form("comparison_%s.pdf", frequency.c_str()));
 
     c->Print(Form("comparison_%s.pdf]", frequency.c_str()));
 

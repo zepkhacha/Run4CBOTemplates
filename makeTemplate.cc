@@ -57,16 +57,16 @@ void makeTemplate(
     caloWeights->Branch("N0_err", &calo_N0_err);
     caloWeights->Branch("weight", &weight);
 
-//    // we also need N0 from calo sum result to calculate weight
-//    printf("Reading in N0 from calo0 nominal fit result...\n");
-//    TFile* calo0_weightRefFilename = TFile::Open(Form("%s%i.root", weightRefFilename.c_str(), 0), "READ");
-//    TTree* calo0_treeRef = (TTree*) calo0_weightRefFilename->Get("fitresults");
-//    double calo0_N0, calo0_N0_err;
-//
-//    calo0_treeRef->SetBranchAddress("N0", &calo0_N0);
-//    calo0_treeRef->SetBranchAddress("N0err", &calo0_N0_err);
-//    calo0_treeRef->GetEntry(0);
-//    calo0_weightRefFilename->Close();
+    //    // we also need N0 from calo sum result to calculate weight
+    //    printf("Reading in N0 from calo0 nominal fit result...\n");
+    //    TFile* calo0_weightRefFilename = TFile::Open(Form("%s%i.root", weightRefFilename.c_str(), 0), "READ");
+    //    TTree* calo0_treeRef = (TTree*) calo0_weightRefFilename->Get("fitresults");
+    //    double calo0_N0, calo0_N0_err;
+    //
+    //    calo0_treeRef->SetBranchAddress("N0", &calo0_N0);
+    //    calo0_treeRef->SetBranchAddress("N0err", &calo0_N0_err);
+    //    calo0_treeRef->GetEntry(0);
+    //    calo0_weightRefFilename->Close();
 
     printf("Saving weights for each calo based on N0...\n");
     // pull the weight from the full-window fit per calo
@@ -166,29 +166,48 @@ void makeTemplate(
     lSlidingParam->SetTextSize(0.01);
 
     std::vector<TF1> fitFunction;
+
     for (unsigned int i=0; i<gSlidingParam.size(); i++){
         int color = gSlidingParam[i].GetLineColor();
-        // create a template with exp+c model
-        TF1* expModel = new TF1(Form("calo%i_%s", i, paramName.c_str()), 
-                "[0]*exp(-x/[1])+[2] + [3]*exp(-x/[4])+[5]", 
-                30.0, 400.0);
-        expModel->SetLineColor(color);
+
+        TF1* expModel = new TF1(Form("calo%i_%s", i, paramName.c_str()),
+                "[0]*exp(-x/[1])+[2]",
+                30.0,400.0);
+        expModel->SetLineColor(kBlack);
         expModel->SetParameter(0, (gSlidingParam[i].GetPointY(0)>0 ? 0.001 : -0.001));
-        expModel->SetParameter(1, 100.0);
-        expModel->SetParameter(4, 10.0);
+        expModel->SetParameter(1,100.0);
+        expModel->SetParLimits(1,50.0,1000.0);
         gSlidingParam[i].Fit(expModel, "ME", "", 30.0, 400.0);
+        double chisq_expModel = expModel->GetChisquare();
+        printf("reduced chisq exp %f\n", chisq_expModel/(gSlidingParam[i].GetN()-3));
+
+        // finally try the double exp model
+        //TF1* exp2Model = new TF1(Form("calo%i_%s", i, paramName.c_str()), 
+        //        "[0]*exp(-x/[1])+[2] + [3]*exp(-x/[4])+[5] + [6]*x+[7]", 
+        //        30.0, 400.0);
+        //exp2Model->SetLineColor(color);
+        //exp2Model->SetParameter(0, (gSlidingParam[i].GetPointY(0)>0 ? 0.001 : -0.001));
+        //exp2Model->SetParameter(1, 100.0);
+        //exp2Model->SetParameter(4, 10.0);
+        //expModel->SetParameter(6, 0.0);
+        //expModel->SetParLimits(6,0.0,0.0);
+        //gSlidingParam[i].Fit(exp2Model, "ME", "", 30.0, 400.0);
+        //double chisq_exp2Model = exp2Model->GetChisquare();
+        //printf("chisq exp2 %f\n", chisq_exp2Model);
+
         fitFunction.push_back(*expModel);
+        expModel->Write();
         // add to multigraph to view them overlaid
         mgSlidingParam.Add(&gSlidingParam[i]);
         lSlidingParam->AddEntry(&gSlidingParam[i], Form("calo%i", i+1));
-        // write function to file
-        expModel->Write();
+
     }
 
     fOut->Close();
 
     // draw overlay
     c.Clear();
+    mgSlidingParam.SetTitle(Form("%s; time [#mus]; [arb]", paramName.c_str()));
     mgSlidingParam.SetMaximum(maxY);
     mgSlidingParam.SetMinimum(minY);
     mgSlidingParam.Draw(drawOption.c_str());
@@ -200,7 +219,7 @@ void makeTemplate(
         //gSlidingParam[i].SetLineColor(kBlack);
         //gSlidingParam[i].SetMarkerColor(kBlack);
         //gSlidingParam[i].SetFillColor(kGray);
-        gSlidingParam[i].SetTitle(Form("calo%i",i+1));
+        gSlidingParam[i].SetTitle(Form("calo%i; time [#mus]; [arb]",i));
         gSlidingParam[i].SetMaximum(maxY);
         gSlidingParam[i].SetMinimum(minY);
         gSlidingParam[i].Draw(drawOption.c_str());
