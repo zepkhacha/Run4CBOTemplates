@@ -150,6 +150,7 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
 
             // for non-momentum-binned fits, sum over calos for X-only
 
+<<<<<<< HEAD
             for (int caloNum=0; caloNum<24; caloNum++){
                 double alpha_CBO = (alpha_CBO_TF1[caloNum]).Eval(time);
                 double beta_CBO  = (beta_CBO_TF1 [caloNum]).Eval(time);
@@ -171,6 +172,29 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
 
                 y += par[18]*( (alpha_vw*cos(wvw(par[16], par[6], time, par[24])*time)
                        + par[19]*beta_vw*sin(wvw(par[16], par[6], time, par[24])*time))*caloWeights[caloNum]);
+=======
+                for (int caloNum=0; caloNum<24; caloNum++){
+
+                    if (desiredCalo!=0 and caloNum!=desiredCalo){
+                        continue;
+                    }
+
+                    double alpha_CBO = (alpha_CBO_TF1[caloNum]).Eval(time);
+                    double beta_CBO  = (beta_CBO_TF1 [caloNum]).Eval(time);
+                    double alpha_2CBO = (alpha_2CBO_TF1[caloNum]).Eval(time);
+                    double beta_2CBO  = (beta_2CBO_TF1 [caloNum]).Eval(time);
+                    double alpha_y = (alpha_y_TF1[caloNum]).Eval(time);
+                    double beta_y  = (beta_y_TF1 [caloNum]).Eval(time);
+                    double alpha_vw = (alpha_vw_TF1[caloNum]).Eval(time);
+                    double beta_vw  = (beta_vw_TF1 [caloNum]).Eval(time);
+
+                    x += par[7]*( (alpha_CBO*cos(  par[6]*cbo(time, par[24])*time) 
+                                + par[8]*beta_CBO*sin(  par[6]*cbo(time, par[24])*time))*caloWeights[caloNum]);
+
+                    x += par[10]*( (alpha_2CBO)*cos(2*par[6]*cbo(time, par[24])*time) 
+                            + par[11]*beta_2CBO*sin(2*par[6]*cbo(time, par[24])*time))*caloWeights[caloNum];
+                } // end loop over caloNum
+>>>>>>> 23a8a7a22b4faf4ae764d3c6db7c1d8f6061088b
 
             } // end loop over caloNum
 
