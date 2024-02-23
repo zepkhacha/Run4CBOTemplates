@@ -169,7 +169,7 @@ void makeTemplate(
     for (unsigned int i=0; i<gSlidingParam.size(); i++){
         int color = gSlidingParam[i].GetLineColor();
         // create a template with exp+c model
-        TF1* expModel = new TF1(Form("calo%i_%s", i+1, paramName.c_str()), 
+        TF1* expModel = new TF1(Form("calo%i_%s", i, paramName.c_str()), 
                 "[0]*exp(-x/[1])+[2] + [3]*exp(-x/[4])+[5]", 
                 30.0, 400.0);
         expModel->SetLineColor(color);

@@ -75,7 +75,7 @@ void plotParam(
     for (int entry=0; entry<slidingResults->GetEntries(); entry++){
         slidingResults->GetEntry(entry);
 
-        printf("calo %i entry %i param %f err %f\n", calo-1, entry ,param,err);
+        printf("calo %i entry %i param %f err %f\n", calo, entry ,param,err);
         //// skip if err=0
         //if (err==0.0){
         //    continue;
@@ -137,7 +137,7 @@ void plotParam(
         //gSlidingParam[i].SetMarkerColor(i+1);
         //gSlidingParam[i].SetFillColor(i+1);
         mgSlidingParam.Add(&gSlidingParam[i]);
-        lSlidingParam->AddEntry(&gSlidingParam[i], Form("calo%i", i+1));
+        lSlidingParam->AddEntry(&gSlidingParam[i], Form("calo%i", i));
     }
 
     // draw overlay
@@ -153,7 +153,7 @@ void plotParam(
         //gSlidingParam[i].SetLineColor(kBlack);
         //gSlidingParam[i].SetMarkerColor(kBlack);
         //gSlidingParam[i].SetFillColor(kGray);
-        gSlidingParam[i].SetTitle(Form("calo%i",i+1));
+        gSlidingParam[i].SetTitle(Form("calo%i",i));
         gSlidingParam[i].SetMaximum(maxY);
         gSlidingParam[i].SetMinimum(minY);
         gSlidingParam[i].Draw(drawOption.c_str());
