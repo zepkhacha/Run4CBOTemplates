@@ -170,13 +170,27 @@ void makeTemplate(
     for (unsigned int i=0; i<gSlidingParam.size(); i++){
         int color = gSlidingParam[i].GetLineColor();
 
-        TF1* expModel = new TF1(Form("calo%i_%s", i, paramName.c_str()),
+        TF1* expShort = new TF1(Form("calo%i_%s", i, paramName.c_str()),
                 "[0]*exp(-x/[1])+[2]",
+                20.0,40.0);
+        gSlidingParam[i].Fit(expShort, "MEN0", "", 20.0, 40.0);
+        TF1* expLong = new TF1(Form("calo%i_%s", i, paramName.c_str()),
+                "[0]*exp(-x/[1])+[2]",
+                30.0,300.0);
+        gSlidingParam[i].Fit(expLong, "MEN0", "", 30.0, 300.0);
+
+        TF1* expModel = new TF1(Form("calo%i_%s", i, paramName.c_str()),
+                "[0]*exp(-x/[1])+[2]+[3]*exp(-x/[4])",
                 30.0,400.0);
         expModel->SetLineColor(kBlack);
-        expModel->SetParameter(0, (gSlidingParam[i].GetPointY(0)>0 ? 0.001 : -0.001));
-        expModel->SetParameter(1,100.0);
+        //expModel->SetParameter(0, (gSlidingParam[i].GetPointY(0)>0 ? 0.001 : -0.001));
+        expModel->SetParameter(0, expLong ->GetParameter(0));
+        expModel->SetParameter(1, expLong ->GetParameter(1));
+        expModel->SetParameter(3, expShort->GetParameter(0));
+        expModel->SetParameter(4, expShort->GetParameter(1));
+        //expModel->SetParameter(1,100.0);
         expModel->SetParLimits(1,50.0,1000.0);
+        expModel->SetParLimits(4,0.0,10.0);
         gSlidingParam[i].Fit(expModel, "ME", "", 30.0, 400.0);
         double chisq_expModel = expModel->GetChisquare();
         printf("reduced chisq exp %f\n", chisq_expModel/(gSlidingParam[i].GetN()-3));
@@ -224,6 +238,21 @@ void makeTemplate(
         gSlidingParam[i].SetMinimum(minY);
         gSlidingParam[i].Draw(drawOption.c_str());
         fitFunction[i].Draw("SAME");
+
+        TLatex latex;
+        latex.SetTextSize(0.03);
+        double rchisq = fitFunction[i].GetChisquare()/(fitFunction[i].GetNDF());
+        latex.DrawLatex(320, minY+0.35*(maxY-minY),Form("rchisq: %f", rchisq));
+        latex.DrawLatex(320, minY+0.30*(maxY-minY),    ("p0*exp(-x/p1)+p2+p3*exp(-x/p4)"));
+        latex.DrawLatex(320, minY+0.25*(maxY-minY),Form("p0: %f",fitFunction[i].GetParameter(0)));
+        latex.DrawLatex(320, minY+0.20*(maxY-minY),Form("p1: %f",fitFunction[i].GetParameter(1)));
+        latex.DrawLatex(320, minY+0.15*(maxY-minY),Form("p2: %f",fitFunction[i].GetParameter(2)));
+        latex.DrawLatex(320, minY+0.10*(maxY-minY),Form("p3: %f",fitFunction[i].GetParameter(3)));
+        latex.DrawLatex(320, minY+0.05*(maxY-minY),Form("p4: %f",fitFunction[i].GetParameter(4)));
+
+        //printf("calo %i chisq %f rchisq %f\n", i, 
+        //        fitFunction[i].GetChisquare(), 
+        //        fitFunction[i].GetChisquare()/(fitFunction[i].GetNDF()));
         c.Print(outputFilename.c_str());
     }
 
