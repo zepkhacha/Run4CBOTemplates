@@ -19,9 +19,8 @@ mainDirectory="/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/"
 mkdir -p ${mainDirectory}/slidingFits1/${run}
 outputDirectory="${mainDirectory}/slidingFits1/${run}/"
 
-#-p ${mainDirectory}/cboIsolate/${run}_calo${calo}.root \
 echo "performing window 0"
-./slidingwindowfitplot -a 1 -w 0 -n ${calo} -q ${mainDirectory}templateFits0/${run}/sBin_constraintOn_cE0.0_seed0_${run}_calo${calo}.root -i /gm2data/cornell/histograms/aMethod/histogram_a_${run}.root -o ${outputDirectory}/${run}_calo${calo}_window0000.root -c 0 -s 0 -b ${frFile} -f ${formatB} 2>&1 > ${outputDirectory}/${run}_calo${calo}_window0000.log 
+./slidingwindowfitplot -a 1 -w 0 -n ${calo} -q ${mainDirectory}templateFits0_v2.0/${run}/sBin_constraintOn_cE0.0_seed0_${run}_calo${calo}.root -i /gm2data/cornell/histograms/aMethod/histogram_a_${run}.root -o ${outputDirectory}/${run}_calo${calo}_window0000.root -c 0 -s 0 -b ${frFile} -f ${formatB} 2>&1 > ${outputDirectory}/${run}_calo${calo}_window0000.log 
 echo "done performing window 0" 
 
 step=35
@@ -34,12 +33,7 @@ for window in $(seq ${start} ${step} ${end}); do
    printf -v prevWindowLabel "%04d" $((window - step))
    echo "windowNo ${window}"
 
-#-p ${mainDirectory}/cboIsolate/run${run}.root \
-#-q ${mainDirectory}templateFits0/run${run}/sBin_constraintOn_cE0.0_seed0_run${run}_calo${calo}.root \
-#-W ${outputDirectory}/run${run}_calo${calo}_window1300.root \
-#-p ${mainDirectory}/cboIsolate/${run}_calo${calo}.root \
-
-./slidingwindowfitplot -w ${window} -n ${calo} -a 1 -q ${mainDirectory}templateFits0/${run}/sBin_constraintOn_cE0.0_seed0_${run}_calo${calo}.root -i /gm2data/cornell/histograms/aMethod/histogram_a_${run}.root -o ${outputDirectory}/${run}_calo${calo}_window${windowLabel}.root -c 0 -s 0 -b ${frFile} -f ${formatB} 2>&1 > ${outputDirectory}/${run}_calo${calo}_window${windowLabel}.log 
+./slidingwindowfitplot -w ${window} -n ${calo} -a 1 -q ${mainDirectory}templateFits0_v2.0/${run}/sBin_constraintOn_cE0.0_seed0_${run}_calo${calo}.root -i /gm2data/cornell/histograms/aMethod/histogram_a_${run}.root -o ${outputDirectory}/${run}_calo${calo}_window${windowLabel}.root -c 0 -s 0 -b ${frFile} -f ${formatB} 2>&1 > ${outputDirectory}/${run}_calo${calo}_window${windowLabel}.log 
 
 done 
 
@@ -53,12 +47,7 @@ for window in $(seq 140 ${step} ${end}); do
    printf -v prevWindowLabel "%04d" $((window - step))
    echo "windowNo ${window}"
 
-#-p ${mainDirectory}/cboIsolate/run${run}.root \
-#-q ${mainDirectory}templateFits0/run${run}/sBin_constraintOn_cE0.0_seed0_run${run}_calo${calo}.root \
-#-W ${outputDirectory}/run${run}_calo${calo}_window1300.root \
-#-p ${mainDirectory}/cboIsolate/${run}_calo${calo}.root \
-
-./slidingwindowfitplot -w ${window} -n ${calo} -a 1 -q ${mainDirectory}templateFits0/${run}/sBin_constraintOn_cE0.0_seed0_${run}_calo${calo}.root -i /gm2data/cornell/histograms/aMethod/histogram_a_${run}.root -o ${outputDirectory}/${run}_calo${calo}_window${windowLabel}.root -c 0 -s 0 -b ${frFile} -f ${formatB} 2>&1 > ${outputDirectory}/${run}_calo${calo}_window${windowLabel}.log 
+./slidingwindowfitplot -w ${window} -n ${calo} -a 1 -q ${mainDirectory}templateFits0_v2.0/${run}/sBin_constraintOn_cE0.0_seed0_${run}_calo${calo}.root -i /gm2data/cornell/histograms/aMethod/histogram_a_${run}.root -o ${outputDirectory}/${run}_calo${calo}_window${windowLabel}.root -c 0 -s 0 -b ${frFile} -f ${formatB} 2>&1 > ${outputDirectory}/${run}_calo${calo}_window${windowLabel}.log 
 
 done 
 
