@@ -23,9 +23,9 @@ echo "performing window 0"
 ./slidingwindowfitplot -a 1 -w 0 -n ${calo} -q ${mainDirectory}templateFits0_v2.0/${run}/sBin_constraintOn_cE0.0_seed0_${run}_calo${calo}.root -i /gm2data/cornell/histograms/aMethod/histogram_a_${run}.root -o ${outputDirectory}/${run}_calo${calo}_window0000.root -c 0 -s 0 -b ${frFile} -f ${formatB} 2>&1 > ${outputDirectory}/${run}_calo${calo}_window0000.log 
 echo "done performing window 0" 
 
-step=35
+step=18
 start=${step}
-end=105
+end=648
 
 for window in $(seq ${start} ${step} ${end}); do
    
@@ -41,7 +41,7 @@ step=70
 start=${step}
 end=2600
 
-for window in $(seq 140 ${step} ${end}); do
+for window in $(seq 648 ${step} ${end}); do
    
    printf -v windowLabel "%04d" ${window}
    printf -v prevWindowLabel "%04d" $((window - step))
