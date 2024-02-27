@@ -568,7 +568,7 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(12,"A_CAx1", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(13,"A_SAx1", -0.3, 0.1, -1.0, 1.0);
 
-        minimizer.DefineParameter(16,"Ky", ref_Kys[desiredCalo], 0.01, 0.0, 1.2);
+        minimizer.DefineParameter(16,"Ky", ref_Kys[desiredCalo], 0.00, 0.0, 1.2);
         minimizer.DefineParameter(17,"Ty", 30, 10, 1.0, 10000.);
 
         minimizer.DefineParameter(20,"A_Cp", -0.2, 0.1, -1.0, 1.0);
