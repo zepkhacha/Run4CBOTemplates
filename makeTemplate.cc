@@ -172,24 +172,32 @@ void makeTemplate(
 
         TF1* expShort = new TF1(Form("calo%i_%s", i, paramName.c_str()),
                 "[0]*exp(-x/[1])+[2]",
-                20.0,40.0);
+                20.0,50.0);
+        expShort->SetParameter(0,00.0);
+        expShort->SetParameter(1,10.0);
+        expShort->SetParameter(2,00.0);
         gSlidingParam[i].Fit(expShort, "MEN0", "", 20.0, 40.0);
+
         TF1* expLong = new TF1(Form("calo%i_%s", i, paramName.c_str()),
                 "[0]*exp(-x/[1])+[2]",
-                30.0,300.0);
+                50.0,300.0);
+        expLong->SetParameter(0,00.0);
+        expLong->SetParameter(1,100.0);
+        expLong->SetParameter(2,00.0);
         gSlidingParam[i].Fit(expLong, "MEN0", "", 30.0, 300.0);
 
         TF1* expModel = new TF1(Form("calo%i_%s", i, paramName.c_str()),
                 "[0]*exp(-x/[1])+[2]+[3]*exp(-x/[4])",
-                30.0,400.0);
+                20.0,400.0);
         expModel->SetLineColor(kBlack);
         //expModel->SetParameter(0, (gSlidingParam[i].GetPointY(0)>0 ? 0.001 : -0.001));
         expModel->SetParameter(0, expLong ->GetParameter(0));
         expModel->SetParameter(1, expLong ->GetParameter(1));
         expModel->SetParameter(3, expShort->GetParameter(0));
         expModel->SetParameter(4, expShort->GetParameter(1));
-        //expModel->SetParameter(1,100.0);
-        expModel->SetParLimits(1,50.0,1000.0);
+        expModel->SetParLimits(0,-1.0,1.0);
+        expModel->SetParLimits(3,-1.0,1.0);
+        expModel->SetParLimits(1,5.0,1000.0);
         expModel->SetParLimits(4,0.0,10.0);
         gSlidingParam[i].Fit(expModel, "ME", "", 30.0, 400.0);
         double chisq_expModel = expModel->GetChisquare();
