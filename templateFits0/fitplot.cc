@@ -177,15 +177,19 @@ int main(int argc, char* argv[]){
     // open refFile (previous template iteration, or fullFits if doing templateFits0
     // save w_CBO per calo to be fixed in the template fit
     TFile *f_refFile = TFile::Open(refFile.c_str(), "READ");
-    std::vector<double> ref_wCBOs(24, 0.0);
+    std::vector<double> ref_wCBOs(25, 0.0);
+    std::vector<double> ref_Kys(25, 0.0);
     TTree *t_refFile = (TTree*)f_refFile->Get("fitresults");
     double ref_wCBO;
+    double ref_Ky;
     int ref_calo;
     t_refFile->SetBranchAddress("w_CBO", &ref_wCBO);
+    t_refFile->SetBranchAddress("Ky", &ref_Ky);
     t_refFile->SetBranchAddress("calo", &ref_calo);
     for (int refEntry=0; refEntry<t_refFile->GetEntries(); refEntry++){
         t_refFile->GetEntry(refEntry);
-        ref_wCBOs[ref_calo-1] = ref_wCBO;
+        ref_wCBOs[ref_calo] = ref_wCBO;
+        ref_Kys[ref_calo] = ref_Ky;
     }
 
     //TO DO: stop making duplicates of caloWeights in each template file...or just make one file for both alpha/beta
@@ -237,6 +241,15 @@ int main(int argc, char* argv[]){
         alpha_vw_TF1.push_back(*temp_alpha_vw);
         beta_vw_TF1 .push_back(*temp_beta_vw); 
     }
+
+    f_alpha_CBO->Close();
+    f_beta_CBO->Close();  
+    f_alpha_2CBO->Close();
+    f_beta_2CBO->Close(); 
+    f_alpha_y->Close();  
+    f_beta_y->Close();   
+    f_alpha_vw->Close();
+    f_beta_vw->Close(); 
 
     printf("Parameters after format file: pBinTau %d pBinPhi %d pBinCBO %d constraintau %d includeMopTerm %d constrainMop %d c_e_scale %f \n", pBinTau, pBinPhi, pBinCBO, constraintau, includeMopTerm, constrainMop, c_e_scale);
     printf("Opening file %s.\n", boostFilename);
@@ -547,19 +560,15 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(3, "phi", 4.208, 0.01, 2.0, 5.0);
         minimizer.DefineParameter(4, "R", -60.0, 1.0, -1000, 1000);
 
-        minimizer.DefineParameter(5, "T_CBO", 100.0, 1.0, 1, 10000); 
-        if (desiredCalo!=0){
-        minimizer.DefineParameter(6, "w_CBO", ref_wCBOs[desiredCalo-1], 0.0, 2.0, 3.0);
-        }else{
-        minimizer.DefineParameter(6, "w_CBO", 2.3, 0.1, 2.0, 3.0);
-        }
+        minimizer.DefineParameter(5, "T_CBO", 100.0, 10.0, 1, 10000); 
+        minimizer.DefineParameter(6, "w_CBO", ref_wCBOs[desiredCalo], 0.0, 2.0, 3.0);
 
         minimizer.DefineParameter(9, "LM", 0.001, 0.001, -0.1, 0.1);
 
         minimizer.DefineParameter(12,"A_CAx1", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(13,"A_SAx1", -0.3, 0.1, -1.0, 1.0);
 
-        minimizer.DefineParameter(16,"Ky", 1.013, 0.01, 0.9, 2.9);
+        minimizer.DefineParameter(16,"Ky", ref_Kys[desiredCalo], 0.01, 0.0, 1.2);
         minimizer.DefineParameter(17,"Ty", 30, 10, 1.0, 10000.);
 
         minimizer.DefineParameter(20,"A_Cp", -0.2, 0.1, -1.0, 1.0);
@@ -567,27 +576,6 @@ int main(int argc, char* argv[]){
 
         minimizer.DefineParameter(22,"A_CNxy", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(23,"A_SNxy", -0.3, 0.1, -1.0, 1.0);
-        if (pBinCBO){
-            minimizer.DefineParameter(7, "A_CNx1", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(8, "A_SNx1", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(10,"A_CNx2", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(11,"A_SNx2", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(14,"A_CNy1", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(15,"A_SNy1", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(18,"A_CNy2", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(19,"A_SNy2", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(24,"A_ct", 0.0, 0.00, -0.1, 0.5);
-        } else{
-            minimizer.DefineParameter(7, "A_CNx1",  1.0, 0.01, -2.0, 2.0); // USE TO SCALE ALPHA/BETA
-            minimizer.DefineParameter(8, "A_SNx1",  1.0, 0.0, -1.0, 1.0); // SUB WITH TF1
-            minimizer.DefineParameter(10,"A_CNx2",  1.0, 0.01, -1.0, 1.0);
-            minimizer.DefineParameter(11,"A_SNx2",  1.0, 0.0, -1.0, 1.0);
-            minimizer.DefineParameter(14,"A_CNy1",  1.0, 0.01, -1.0, 1.0);
-            minimizer.DefineParameter(15,"A_SNy1",  1.0, 0.0, -1.0, 1.0);
-            minimizer.DefineParameter(18,"A_CNy2",  1.0, 0.01, -1.0, 1.0);
-            minimizer.DefineParameter(19,"A_SNy2",  1.0, 0.0, -1.0, 1.0);
-            minimizer.DefineParameter(24,"A_ct", 0.0, 0.0, -0.1, 0.5); // SET TO 0; SHOULD BE ABSORBED INTO ALPHA BETA
-        }
         minimizer.DefineParameter(25,"T_xy", 60, 10, 1, 1000);
         minimizer.DefineParameter(26,"w_xy", 11.9, 0.1, 11.5, 12.5);
         if (includeMopTerm){
@@ -602,8 +590,8 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(28, "C_CBO", 0.0, 0.0, 0, 0); // SET TO 0 TO REMOVE ENVELOPE
 
         printf("FITTING PHASE: 5-PARAM ONLY\n");
-        //minimizer.Command("SET PAR 8 0");
-        //minimizer.Command("SET PAR 9 0");
+        minimizer.Command("SET PAR 8 0");
+        minimizer.Command("SET PAR 9 0");
         minimizer.Command("SET PAR 10 0");
         minimizer.Command("SET PAR 11 0");
         minimizer.Command("SET PAR 12 0");
@@ -649,6 +637,30 @@ int main(int argc, char* argv[]){
         minimizer.Command("FIX 28");
         minimizer.Command("FIX 29");
         minimizer.Migrad();
+
+        if (pBinCBO){
+            minimizer.DefineParameter(7, "A_CNx1", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(8, "A_SNx1", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(10,"A_CNx2", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(11,"A_SNx2", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(14,"A_CNy1", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(15,"A_SNy1", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(18,"A_CNy2", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(19,"A_SNy2", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(24,"A_ct", 0.0, 0.00, -0.1, 0.5);
+        } else{
+            minimizer.DefineParameter(7, "A_CNx1",  1.0, 0.01, -2.0, 2.0); // USE TO SCALE ALPHA/BETA
+            minimizer.DefineParameter(8, "A_SNx1",  1.0, 0.0, -1.0, 1.0); // SUB WITH TF1
+            minimizer.DefineParameter(10,"A_CNx2",  1.0, 0.01, -1.0, 1.0);
+            minimizer.DefineParameter(11,"A_SNx2",  1.0, 0.0, -1.0, 1.0);
+            minimizer.DefineParameter(14,"A_CNy1",  1.0, 0.01, -1.0, 1.0);
+            minimizer.DefineParameter(15,"A_SNy1",  1.0, 0.0, -1.0, 1.0);
+            minimizer.DefineParameter(18,"A_CNy2",  1.0, 0.01, -1.0, 1.0);
+            minimizer.DefineParameter(19,"A_SNy2",  1.0, 0.0, -1.0, 1.0);
+            minimizer.DefineParameter(24,"A_ct", 0.0, 0.0, -0.1, 0.5); // SET TO 0; SHOULD BE ABSORBED INTO ALPHA BETA
+        }
+
+        minimizer.DefineParameter(16,"Ky", ref_Kys[desiredCalo], 0.01, 0.9, 1.2);
 
         printf("FITTING PHASE: CBO ONLY\n");
         minimizer.Command("RES");
@@ -891,6 +903,7 @@ int main(int argc, char* argv[]){
     TTree* pulls = new TTree("pulls", "pulls");
     double pull;
     pulls->Branch("pull", &pull);
+    fprintf(stderr, "Creating pulls tree..\n");
     for(int i=fitrangelow; i<=fitrangehigh; i++){
         double residual = wiggle->GetBinContent(i) - bestfit->GetBinContent(i);
         residua->SetBinContent(i, residual);
@@ -898,11 +911,13 @@ int main(int argc, char* argv[]){
         pulls->Fill();
     }
 
+    fprintf(stderr, "Writing data to file..\n");
     residua->Write();
     pulls->Write();
     fitresults->Write();  
     lambda->Write();
     bestfit->Write();
     wiggle->Write();
+    fprintf(stderr, "Closing file..\n");
     output->Close();
 }

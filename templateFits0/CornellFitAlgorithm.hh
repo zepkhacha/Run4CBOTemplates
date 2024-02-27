@@ -73,12 +73,14 @@ double cbo(double time, double amp){
     // For the endgame
     //return 1.0 + 2.927*exp(-time/79.05)/time + 2.239*exp(-time/6.94)/time;
     // For Run 2/3
-    return 1.0 + amp*exp(-time/24.4)/time;
+    //return 1.0 + amp*exp(-time/24.4)/time;
+    return 1.0;
 }
 
 double wy(double kappa, double wcbo, double time, double amp){
-    double x = (4*3.141592)/(0.1492*kappa*wcbo*cbo(time, amp)) - 1.0;
-    return kappa*wcbo*cbo(time, amp)*sqrt(x);
+    //double x = (4*3.141592)/(0.1492*kappa*wcbo*cbo(time, amp)) - 1.0;
+    //return kappa*wcbo*cbo(time, amp)*sqrt(x);
+    return kappa*wcbo;
 }
 
 double wvw(double kappa, double wcbo, double time, double amp){
@@ -150,7 +152,6 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
 
             // for non-momentum-binned fits, sum over calos for X-only
 
-<<<<<<< HEAD
             for (int caloNum=0; caloNum<24; caloNum++){
                 double alpha_CBO = (alpha_CBO_TF1[caloNum]).Eval(time);
                 double beta_CBO  = (beta_CBO_TF1 [caloNum]).Eval(time);
@@ -172,7 +173,7 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
 
                 y += par[18]*( (alpha_vw*cos(wvw(par[16], par[6], time, par[24])*time)
                        + par[19]*beta_vw*sin(wvw(par[16], par[6], time, par[24])*time))*caloWeights[caloNum]);
-=======
+
                 for (int caloNum=0; caloNum<24; caloNum++){
 
                     if (desiredCalo!=0 and caloNum!=desiredCalo){
@@ -194,7 +195,6 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
                     x += par[10]*( (alpha_2CBO)*cos(2*par[6]*cbo(time, par[24])*time) 
                             + par[11]*beta_2CBO*sin(2*par[6]*cbo(time, par[24])*time))*caloWeights[caloNum];
                 } // end loop over caloNum
->>>>>>> 23a8a7a22b4faf4ae764d3c6db7c1d8f6061088b
 
             } // end loop over caloNum
 
