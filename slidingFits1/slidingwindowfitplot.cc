@@ -296,14 +296,14 @@ int main(int argc, char* argv[]){
     // maintain equal statistics in each window
 
     fitrangelow  = startBin + (windowNo);
-    fitStart     = startTime + (fitrangelow-1)*0.1492;
+    fitStart     = (fitrangelow-1)*0.1492;
 
-    if (fitrangelow <= 671){
+    if (fitrangelow < 671){
         windowBins = 17;
     }
 
     fitrangehigh = fitrangelow+windowBins;
-    fitStop      = startTime + fitrangehigh*0.1492;
+    fitStop      = fitrangehigh*0.1492;
 
     printf("windowBins = %i\n", windowBins);
 

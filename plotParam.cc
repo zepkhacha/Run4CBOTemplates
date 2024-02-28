@@ -75,7 +75,7 @@ void plotParam(
     for (int entry=0; entry<slidingResults->GetEntries(); entry++){
         slidingResults->GetEntry(entry);
 
-        printf("calo %i entry %i param %f err %f\n", calo, entry ,param,err);
+        //printf("calo %i entry %i param %f err %f\n", calo, entry ,param,err);
         //// skip if err=0
         //if (err==0.0){
         //    continue;
