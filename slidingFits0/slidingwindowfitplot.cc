@@ -398,7 +398,7 @@ int main(int argc, char* argv[]){
     minimizer.DefineParameter(13, "alpha_vw", 0.0, 0.001, 0, 0);
     minimizer.DefineParameter(14, "w_vw", 12.9, 0.0, 0, 0);
     minimizer.DefineParameter(15, "beta_vw", 0.0, 0.001, 0, 0);
- 
+
     // LM term
     minimizer.DefineParameter(16, "LM", LM, 0.0, -0.1, 0.1); // FIX
 
@@ -639,13 +639,13 @@ int main(int argc, char* argv[]){
         pulls->Fill();
     }
 
-    output->cd();
-    residua->Write();
-    pulls->Write();
-    fitresults->Write();  
-    lambda->Write();
-    bestfit->Write();
-    wiggle->Write();
-    output->Close();
+output->cd();
+residua->Write();
+pulls->Write();
+fitresults->Write();  
+lambda->Write();
+bestfit->Write();
+wiggle->Write();
+output->Close();
 
 }
