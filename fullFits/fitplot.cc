@@ -317,6 +317,7 @@ int main(int argc, char* argv[]){
     double Ap, Aperr, pp, pperr;
     double ANxy, ANxyerr, pNxy, pNxyerr;
     double Gamma_mop, Gamma_moperr;
+    double w_y, w_vw;
 
     fitresults->Branch("pBinTau", &pBinTau);
     fitresults->Branch("pBinPhi", &pBinPhi);
@@ -349,8 +350,10 @@ int main(int argc, char* argv[]){
     fitresults->Branch("A_CNxy", &A_CNxy);
     fitresults->Branch("Ky", &Ky);
     fitresults->Branch("Ty", &Ty);
+    fitresults->Branch("w_y", &w_y);
     fitresults->Branch("A_CNy2", &A_CNy2);
     fitresults->Branch("A_SNy2", &A_SNy2);
+    fitresults->Branch("w_vw", &w_vw);
     fitresults->Branch("A_Cp", &A_Cp);
     fitresults->Branch("A_Sp", &A_Sp);
     fitresults->Branch("A_ct", &A_ct);
@@ -779,6 +782,9 @@ int main(int argc, char* argv[]){
         A_SNy2err = sqrt(-errorplus[19]*errorminus[19]);
         A_Cperr = sqrt(-errorplus[20]*errorminus[20]);
         A_Sperr = sqrt(-errorplus[21]*errorminus[21]);
+
+        w_y  = wy (Ky, w_CBO, 0.0, A_ct);
+        w_vw = wvw(Ky, w_CBO, 0.0, A_ct);
         fitresults->Fill();
 
 
