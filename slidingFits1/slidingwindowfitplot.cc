@@ -182,6 +182,7 @@ int main(int argc, char* argv[]){
     double fullFit_Ky;
     double fullFit_A_ct;
     double fullFit_w_vw;
+    double fullFit_w_y;
 
     double fitStart = (fitrangelow-1)  * 0.1492;
     double fitStop  = fitrangehigh * 0.1492;
@@ -207,6 +208,8 @@ int main(int argc, char* argv[]){
 
     cboFullFitResults->SetBranchAddress("Ky"   , &fullFit_Ky);
     cboFullFitResults->SetBranchAddress("A_ct" , &fullFit_A_ct);
+    cboFullFitResults->SetBranchAddress("w_y"  , &fullFit_w_y);
+    cboFullFitResults->SetBranchAddress("w_vw" , &fullFit_w_vw);
 
     cboFullFitResults->GetEntry(0);
     cboFullFit->Close();
@@ -312,8 +315,10 @@ int main(int argc, char* argv[]){
     fitrangelow  = startBin + (windowNo);
     fitStart     = (fitrangelow-1)*0.1492;
 
-    if (fitrangelow < 671){
-        windowBins = 17;
+    if (fitrangelow < 271){
+        windowBins = 34;
+    }else{
+        windowBins = 69;
     }
 
     fitrangehigh = fitrangelow+windowBins;
@@ -403,12 +408,12 @@ int main(int argc, char* argv[]){
 
     // 1-Y terms
     minimizer.DefineParameter(10, "alpha_y", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(11, "w_y", 14.45, 0.0, 0, 0);
+    minimizer.DefineParameter(11, "w_y", fullFit_w_y, 0.0, 0, 0);
     minimizer.DefineParameter(12, "beta_y", 0.0, 0.001, 0, 0);
 
     // 2-Y terms
     minimizer.DefineParameter(13, "alpha_vw", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(14, "w_vw", 12.9, 0.0, 0, 0);
+    minimizer.DefineParameter(14, "w_vw", fullFit_w_vw, 0.0, 0, 0);
     minimizer.DefineParameter(15, "beta_vw", 0.0, 0.001, 0, 0);
 
     // LM term

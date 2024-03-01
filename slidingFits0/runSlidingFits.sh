@@ -19,7 +19,6 @@ mainDirectory="/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/"
 mkdir -p ${mainDirectory}/slidingFits0/${run}
 outputDirectory="${mainDirectory}/slidingFits0/${run}/"
 
-#-p ${mainDirectory}/cboIsolate/${run}_calo${calo}.root \
 echo "performing window 0"
 ./slidingwindowfitplot -a 1 -w 0 -n ${calo} -q ${mainDirectory}fullFits/${run}/sBin_constraintOn_cE0.0_seed0_${run}_calo${calo}.root -i /gm2data/cornell/histograms/aMethod/histogram_a_${run}.root -o ${outputDirectory}/${run}_calo${calo}_window0000.root -c 0 -s 0 -b ${frFile} -f ${formatB} 2>&1 > ${outputDirectory}/${run}_calo${calo}_window0000.log 
 echo "done performing window 0" 
@@ -32,7 +31,6 @@ echo "windowNo ${window}"
 
 ./slidingwindowfitplot -w ${window} -n ${calo} -a 1 -q ${mainDirectory}fullFits/${run}/sBin_constraintOn_cE0.0_seed0_${run}_calo${calo}.root -i /gm2data/cornell/histograms/aMethod/histogram_a_${run}.root -o ${outputDirectory}/${run}_calo${calo}_window${windowLabel}.root -c 0 -s 0 -b ${frFile} -f ${formatB} 2>&1 > ${outputDirectory}/${run}_calo${calo}_window${windowLabel}.log 
 done 
-
 
 step=70
 start=140
