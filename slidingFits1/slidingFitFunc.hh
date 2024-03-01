@@ -111,19 +111,21 @@ double calcnu(double par[], double i){
     double phi = par[3];
 
     double nu = 0.0;
-
     double w_CBO = par[6];
 
+    double phi_mod = exp(-1.*(time)/par[19])*(par[20]*cos(w_CBO*time) + par[21]*sin(w_CBO*time));
+    double A0_mod  = exp(-1.*(time)/par[19])*(par[22]*cos(w_CBO*time) + par[23]*sin(w_CBO*time));
+
     // 5-param fit
-    nu = par[0]*exp(-1.*time/par[1]) * (1 + par[2]*cos((blindr)*time - phi));
-    
+    nu = par[0]*exp(-1.*time/par[1]) * (1 + par[2]*(1+A0_mod)*cos((blindr)*time - phi - phi_mod));
+
     // now add x-terms ( 1 + alpha*cos(w_CBO) + beta*sin(w_CBO) )
     nu *= (1.0 + (par[5]*cos(w_CBO*time) + par[7]*sin(w_CBO*time)) 
-              + (par[8]*cos(2*w_CBO*time) + par[9]*sin(2*w_CBO*time)) );
+            + (par[8]*cos(2*w_CBO*time) + par[9]*sin(2*w_CBO*time)) );
 
     // now add y-terms
     nu *= (1.0 + (1.0+par[17]*time)*(par[10]*cos(par[11]*time) + par[12]*sin(par[11]*time))
-               + (1.0+par[18]*time)*(par[13]*cos(par[14]*time) + par[15]*sin(par[14]*time)) );
+            + (1.0+par[18]*time)*(par[13]*cos(par[14]*time) + par[15]*sin(par[14]*time)) );
 
     // now add LM 
     nu *= (1.0 - par[16]*lambda->GetBinContent(i));

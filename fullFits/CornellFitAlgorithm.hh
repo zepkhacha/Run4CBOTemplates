@@ -102,8 +102,8 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
         }   
 
         // 5-param term
-        binNu    += pBinPhi ?    par[2]*cos((blindr*(1-c_e[b]))*time - ((phi + dPhi[b]) *(1.0 + phi_mod)))
-            : par[2]*cos((blindr           )*time - ( phi            *(1.0 + phi_mod)));
+        binNu    += pBinPhi ?    par[2]*cos((blindr*(1-c_e[b]))*time - ((phi + dPhi[b]) - phi_mod ))
+            : par[2]*cos((blindr           )*time - ( phi            - phi_mod ));
         binNu    *= 1.0 + A0_mod;
         binNu    += 1.0;
         binNu    *= pBinTau ?    par[0]*exp(-1.*(time)/((gammas[b]/gammas[magicBin])*par[1]))

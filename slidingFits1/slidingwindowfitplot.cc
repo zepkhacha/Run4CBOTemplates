@@ -168,6 +168,12 @@ int main(int argc, char* argv[]){
     double alpha_vw, beta_vw, w_vw, A_vw, phi_vw;
     double alpha_vw_err, beta_vw_err, w_vw_err, A_vw_err, phi_vw_err;
 
+    double alpha_A0, beta_A0;
+    double alpha_A0_err, beta_A0_err;
+
+    double alpha_phi, beta_phi;
+    double alpha_phi_err, beta_phi_err;
+
     double LM, LM_err;
 
     double zeta_y, zeta_vw;
@@ -287,6 +293,14 @@ int main(int argc, char* argv[]){
     fitresults->Branch("phi_vw_err", &phi_vw_err);
     fitresults->Branch("zeta_vw", &zeta_vw);
 
+    // A0 modulation
+    fitresults->Branch("alpha_A0", &alpha_A0);
+    fitresults->Branch("beta_A0", &beta_A0);
+
+    // phi modulation
+    fitresults->Branch("alpha_phi", &alpha_phi);
+    fitresults->Branch("beta_phi", &beta_phi);
+
     // LM parameters
     fitresults->Branch("LM", &LM);
     fitresults->Branch("LM_err", &LM_err);
@@ -403,6 +417,13 @@ int main(int argc, char* argv[]){
     // later adding in a linear-t term to allow vertical frequencies to change within first window
     minimizer.DefineParameter(17,  "zeta_y", 0.0, 0.0, 0, 0);
     minimizer.DefineParameter(18, "zeta_vw", 0.0, 0.0, 0, 0);
+
+    // adding in terms for phi_mod and A0_mod
+    minimizer.DefineParameter(19, "T_CBO", 100.0, 1.0, 0.0, 1000.0);
+    minimizer.DefineParameter(20, "alpha_A0", 0.0, 0.001, 0, 0);
+    minimizer.DefineParameter(21, "beta_A0" , 0.0, 0.001, 0, 0);
+    minimizer.DefineParameter(22, "alpha_phi", 0.0, 0.001, 0, 0);
+    minimizer.DefineParameter(23, "beta_phi" , 0.0, 0.001, 0, 0);
 
     // now go through various stages of fitting 
     printf("MINUIT - FIT ONLY WIGGLE\n");
@@ -622,7 +643,7 @@ int main(int argc, char* argv[]){
         sum += pucorr;
     }
 
-    fprintf(stderr, "Mean corr %f\n", sum/nBins);
+    fprintf(stderr, "Mean corr %f = sum/nBins; sum %f; nBins %i\n", sum/nBins, sum, nBins);
     //}; // end loop over seeds
 
     output->cd();

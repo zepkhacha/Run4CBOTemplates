@@ -222,6 +222,10 @@ int main(int argc, char* argv[]){
         caloWeights[desiredCalo-1] = 1.0;
     }
 
+    for (unsigned int i=0; i<caloWeights.size(); i++){
+        printf("calo %i weight %f\n", i, caloWeights[i]);
+    }
+
     for (int i=0; i<25; i++){
         TF1* temp_alpha_CBO = (TF1*)f_alpha_CBO->Get(Form("calo%i_alpha_CBO", desiredCalo));
         TF1* temp_beta_CBO  = (TF1*)f_beta_CBO ->Get(Form("calo%i_beta_CBO" , desiredCalo));
@@ -397,6 +401,7 @@ int main(int argc, char* argv[]){
     double Ap, Aperr, pp, pperr;
     double ANxy, ANxyerr, pNxy, pNxyerr;
     double Gamma_mop, Gamma_moperr;
+    double w_y, w_vw;
 
     fitresults->Branch("pBinTau", &pBinTau);
     fitresults->Branch("pBinPhi", &pBinPhi);
@@ -429,8 +434,10 @@ int main(int argc, char* argv[]){
     fitresults->Branch("A_CNxy", &A_CNxy);
     fitresults->Branch("Ky", &Ky);
     fitresults->Branch("Ty", &Ty);
+    fitresults->Branch("w_y", &w_y);
     fitresults->Branch("A_CNy2", &A_CNy2);
     fitresults->Branch("A_SNy2", &A_SNy2);
+    fitresults->Branch("w_vw", &w_vw);
     fitresults->Branch("A_Cp", &A_Cp);
     fitresults->Branch("A_Sp", &A_Sp);
     fitresults->Branch("A_ct", &A_ct);
@@ -544,8 +551,6 @@ int main(int argc, char* argv[]){
         minimizer.Command("SET PRINTOUT 3"); // change to level 1
         minimizer.Command("SET NOWARNINGS");
         minimizer.SetFCN(minuitFunction);
-        //readMinuitCommands("minimizer.txt", &minimizer);
-        //std::cout<<"title is: "<<minimizer.GetTitle()<<std::endl;
         minimizer.fGraphicsMode = false;
         minimizer.DefineParameter(0, "N0", 1.6*wiggle->GetBinContent(fitrangelow), 100000000, 0, 1000000000); // mistakenly put the adjustment here
         // fix tau when you have mop term unconstrained
@@ -558,16 +563,36 @@ int main(int argc, char* argv[]){
         }
         minimizer.DefineParameter(2, "A0", 0.37, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(3, "phi", 4.208, 0.01, 2.0, 5.0);
-        minimizer.DefineParameter(4, "R", -60.0, 1.0, -1000, 1000);
+        minimizer.DefineParameter(4, "R", 0, 10, -1000, 1000);
 
         minimizer.DefineParameter(5, "T_CBO", 100.0, 10.0, 1, 10000); 
         minimizer.DefineParameter(6, "w_CBO", ref_wCBOs[desiredCalo], 0.0, 2.0, 3.0);
 
-        minimizer.DefineParameter(9, "LM", 0.001, 0.001, -0.1, 0.1);
+        if (pBinCBO){
+            minimizer.DefineParameter(7, "A_CNx1", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(8, "A_SNx1", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(10,"A_CNx2", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(11,"A_SNx2", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(14,"A_CNy1", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(15,"A_SNy1", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(18,"A_CNy2", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(19,"A_SNy2", -0.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(24,"A_ct", 0.0, 0.00, -0.1, 0.5);
+        } else{
+            minimizer.DefineParameter(7, "A_CNx1",  1.0, 0.01, -2.0, 2.0); // USE TO SCALE ALPHA/BETA
+            minimizer.DefineParameter(8, "A_SNx1",  1.0, 0.0, -1.0, 1.0); // SUB WITH TF1
+            minimizer.DefineParameter(10,"A_CNx2",  1.0, 0.01, -1.0, 1.0);
+            minimizer.DefineParameter(11,"A_SNx2",  1.0, 0.0, -1.0, 1.0);
+            minimizer.DefineParameter(14,"A_CNy1",  1.0, 0.01, -1.0, 1.0);
+            minimizer.DefineParameter(15,"A_SNy1",  1.0, 0.0, -1.0, 1.0);
+            minimizer.DefineParameter(18,"A_CNy2",  1.0, 0.01, -1.0, 1.0);
+            minimizer.DefineParameter(19,"A_SNy2",  1.0, 0.0, -1.0, 1.0);
+            minimizer.DefineParameter(24,"A_ct", 0.0, 0.0, -0.1, 0.5); // SET TO 0; SHOULD BE ABSORBED INTO ALPHA BETA
+        }
 
+        minimizer.DefineParameter(9, "LM", 0.001, 0.001, -0.1, 0.1);
         minimizer.DefineParameter(12,"A_CAx1", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(13,"A_SAx1", -0.3, 0.1, -1.0, 1.0);
-
         minimizer.DefineParameter(16,"Ky", ref_Kys[desiredCalo], 0.00, 0.0, 1.2);
         minimizer.DefineParameter(17,"Ty", 30, 10, 1.0, 10000.);
 
@@ -578,6 +603,7 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(23,"A_SNxy", -0.3, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(25,"T_xy", 60, 10, 1, 1000);
         minimizer.DefineParameter(26,"w_xy", 11.9, 0.1, 11.5, 12.5);
+
         if (includeMopTerm){
             if (constrainMop){
                 minimizer.DefineParameter(27,"Gamma_mop", 0.00002, 0.0000001, -0.001, 0.001);
@@ -590,28 +616,27 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(28, "C_CBO", 0.0, 0.0, 0, 0); // SET TO 0 TO REMOVE ENVELOPE
 
         printf("FITTING PHASE: 5-PARAM ONLY\n");
-        minimizer.Command("SET PAR 8 0");
-        minimizer.Command("SET PAR 9 0");
-        minimizer.Command("SET PAR 10 0");
-        minimizer.Command("SET PAR 11 0");
-        minimizer.Command("SET PAR 12 0");
-        minimizer.Command("SET PAR 13 0");
-        minimizer.Command("SET PAR 14 0");
-        minimizer.Command("SET PAR 15 0");
-        minimizer.Command("SET PAR 16 0");
-        minimizer.Command("SET PAR 17 0");
-        minimizer.Command("SET PAR 18 0");
-        minimizer.Command("SET PAR 19 0");
-        minimizer.Command("SET PAR 20 0");
-        minimizer.Command("SET PAR 21 0");
-        minimizer.Command("SET PAR 22 0");
-        minimizer.Command("SET PAR 23 0");
-        minimizer.Command("SET PAR 24 0");
-        minimizer.Command("SET PAR 25 0");
-        minimizer.Command("SET PAR 26 0");
-        minimizer.Command("SET PAR 27 0");
-        minimizer.Command("SET PAR 28 0");
-        minimizer.Command("SET PAR 29 0");
+        //minimizer.Command("SET PAR 8 0");
+        //minimizer.Command("SET PAR 9 0");
+        //minimizer.Command("SET PAR 11 0");
+        //minimizer.Command("SET PAR 12 0");
+        //minimizer.Command("SET PAR 13 0");
+        //minimizer.Command("SET PAR 14 0");
+        //minimizer.Command("SET PAR 15 0");
+        //minimizer.Command("SET PAR 16 0");
+        //minimizer.Command("SET PAR 17 0");
+        //minimizer.Command("SET PAR 18 0");
+        //minimizer.Command("SET PAR 19 0");
+        //minimizer.Command("SET PAR 20 0");
+        //minimizer.Command("SET PAR 21 0");
+        //minimizer.Command("SET PAR 22 0");
+        //minimizer.Command("SET PAR 23 0");
+        //minimizer.Command("SET PAR 24 0");
+        //minimizer.Command("SET PAR 25 0");
+        //minimizer.Command("SET PAR 26 0");
+        //minimizer.Command("SET PAR 27 0");
+        //minimizer.Command("SET PAR 28 0");
+        //minimizer.Command("SET PAR 29 0");
         minimizer.Command("FIX 6");
         minimizer.Command("FIX 7");
         minimizer.Command("FIX 8");
@@ -638,34 +663,9 @@ int main(int argc, char* argv[]){
         minimizer.Command("FIX 29");
         minimizer.Migrad();
 
-        if (pBinCBO){
-            minimizer.DefineParameter(7, "A_CNx1", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(8, "A_SNx1", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(10,"A_CNx2", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(11,"A_SNx2", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(14,"A_CNy1", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(15,"A_SNy1", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(18,"A_CNy2", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(19,"A_SNy2", -0.0, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(24,"A_ct", 0.0, 0.00, -0.1, 0.5);
-        } else{
-            minimizer.DefineParameter(7, "A_CNx1",  1.0, 0.01, -2.0, 2.0); // USE TO SCALE ALPHA/BETA
-            minimizer.DefineParameter(8, "A_SNx1",  1.0, 0.0, -1.0, 1.0); // SUB WITH TF1
-            minimizer.DefineParameter(10,"A_CNx2",  1.0, 0.01, -1.0, 1.0);
-            minimizer.DefineParameter(11,"A_SNx2",  1.0, 0.0, -1.0, 1.0);
-            minimizer.DefineParameter(14,"A_CNy1",  1.0, 0.01, -1.0, 1.0);
-            minimizer.DefineParameter(15,"A_SNy1",  1.0, 0.0, -1.0, 1.0);
-            minimizer.DefineParameter(18,"A_CNy2",  1.0, 0.01, -1.0, 1.0);
-            minimizer.DefineParameter(19,"A_SNy2",  1.0, 0.0, -1.0, 1.0);
-            minimizer.DefineParameter(24,"A_ct", 0.0, 0.0, -0.1, 0.5); // SET TO 0; SHOULD BE ABSORBED INTO ALPHA BETA
-        }
-
-        minimizer.DefineParameter(16,"Ky", ref_Kys[desiredCalo], 0.01, 0.9, 1.2);
 
         printf("FITTING PHASE: CBO ONLY\n");
         minimizer.Command("RES");
-        minimizer.DefineParameter(7, "A_CNx1",  1.0, 0.01, -2.0, 2.0); // SUB WITH TF1
-        minimizer.DefineParameter(8, "A_SNx1",  1.0, 0.0, -1.0, 1.0); // SUB WITH TF1
         minimizer.Command("FIX 1");
         minimizer.Command("FIX 2");
         minimizer.Command("FIX 3");
