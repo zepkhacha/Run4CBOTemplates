@@ -168,6 +168,8 @@ int main(int argc, char* argv[]){
     double alpha_vw, beta_vw, w_vw, A_vw, phi_vw;
     double alpha_vw_err, beta_vw_err, w_vw_err, A_vw_err, phi_vw_err;
 
+    double T_CBO, T_CBO_err;
+
     double alpha_A0, beta_A0;
     double alpha_A0_err, beta_A0_err;
 
@@ -183,6 +185,10 @@ int main(int argc, char* argv[]){
     double fullFit_A_ct;
     double fullFit_w_vw;
     double fullFit_w_y;
+    double fullFit_A_CAx1; // cos and sin coefficients for A0 modulation
+    double fullFit_A_SAx1;
+    double fullFit_A_Cp; // coefficients for phi_0 modulation
+    double fullFit_A_Sp;
 
     double fitStart = (fitrangelow-1)  * 0.1492;
     double fitStop  = fitrangehigh * 0.1492;
@@ -210,6 +216,11 @@ int main(int argc, char* argv[]){
     cboFullFitResults->SetBranchAddress("A_ct" , &fullFit_A_ct);
     cboFullFitResults->SetBranchAddress("w_y"  , &fullFit_w_y);
     cboFullFitResults->SetBranchAddress("w_vw" , &fullFit_w_vw);
+
+    cboFullFitResults->SetBranchAddress("A_CAx1" , &fullFit_CAx1);
+    cboFullFitResults->SetBranchAddress("A_SAx1" , &fullFit_SAx1);
+    cboFullFitResults->SetBranchAddress("A_Cp" , &fullFit_Cp);
+    cboFullFitResults->SetBranchAddress("A_Sp" , &fullFit_Sp);
 
     cboFullFitResults->GetEntry(0);
     cboFullFit->Close();
@@ -425,10 +436,10 @@ int main(int argc, char* argv[]){
 
     // adding in terms for phi_mod and A0_mod
     minimizer.DefineParameter(19, "T_CBO", 100.0, 1.0, 0.0, 1000.0);
-    minimizer.DefineParameter(20, "alpha_A0", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(21, "beta_A0" , 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(22, "alpha_phi", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(23, "beta_phi" , 0.0, 0.001, 0, 0);
+    minimizer.DefineParameter(20, "alpha_A0", fullFit_CAx1, 0.0001, -0.01, 0.01);
+    minimizer.DefineParameter(21, "beta_A0" , fullFit_SAx1, 0.0001, -0.01, 0.01);
+    minimizer.DefineParameter(22, "alpha_phi", fullFit_Cp, 0.0001, -0.01, 0.01);
+    minimizer.DefineParameter(23, "beta_phi" , fullFit_Sp, 0.0001, -0.01, 0.01);
 
     // now go through various stages of fitting 
     printf("MINUIT - FIT ONLY WIGGLE\n");
@@ -638,6 +649,21 @@ int main(int argc, char* argv[]){
     // zeta to allow y-freq to adjust
     zeta_y = par[17];
     zeta_vw= par[18];
+
+    // set A0 mod variables and their errors
+    T_CBO = par[19];
+    T_CBO_err = sqrt(-errorplus[19]*errorminus[19]);
+
+    alpha_A0 = par[20];
+    beta_A0 = par[21];
+    alpha_A0_err = sqrt(-errorplus[20]*errorminus[20]);
+    beta_A0_err = sqrt(-errorplus[21]*errorminus[21]);
+
+    // set phi mod variables and their errors
+    alpha_phi = par[22];
+    beta_phi = par[23];
+    alpha_phi_err = sqrt(-errorplus[22]*errorminus[22]);
+    beta_phi_err = sqrt(-errorplus[23]*errorminus[23]);
 
     fitresults->Fill();
 
