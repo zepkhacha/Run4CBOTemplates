@@ -379,7 +379,7 @@ int main(int argc, char* argv[]){
     fprintf(stderr, "Done Reading data\n");
 
     // Now do a chisq fit
-    int noParams = 19; 
+    int noParams = 24; 
     double par[noParams];
     double errorplus[noParams];
     double errorminus[noParams];
