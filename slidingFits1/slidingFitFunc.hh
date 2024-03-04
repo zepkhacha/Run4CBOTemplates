@@ -113,8 +113,8 @@ double calcnu(double par[], double i){
     double nu = 0.0;
     double w_CBO = par[6];
 
-    double phi_mod = exp(-1.*(time)/par[19])*(par[20]*cos(w_CBO*time) + par[21]*sin(w_CBO*time));
-    double A0_mod  = exp(-1.*(time)/par[19])*(par[22]*cos(w_CBO*time) + par[23]*sin(w_CBO*time));
+    double phi_mod = par[22]*cos(w_CBO*time) + par[23]*sin(w_CBO*time);
+    double A0_mod  = par[20]*cos(w_CBO*time) + par[21]*sin(w_CBO*time);
 
     // 5-param fit
     nu = par[0]*exp(-1.*time/par[1]) * (1 + par[2]*(1+A0_mod)*cos((blindr)*time - phi - phi_mod));

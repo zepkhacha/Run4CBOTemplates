@@ -217,10 +217,10 @@ int main(int argc, char* argv[]){
     cboFullFitResults->SetBranchAddress("w_y"  , &fullFit_w_y);
     cboFullFitResults->SetBranchAddress("w_vw" , &fullFit_w_vw);
 
-    cboFullFitResults->SetBranchAddress("A_CAx1" , &fullFit_CAx1);
-    cboFullFitResults->SetBranchAddress("A_SAx1" , &fullFit_SAx1);
-    cboFullFitResults->SetBranchAddress("A_Cp" , &fullFit_Cp);
-    cboFullFitResults->SetBranchAddress("A_Sp" , &fullFit_Sp);
+    cboFullFitResults->SetBranchAddress("A_CAx1" , &fullFit_A_CAx1);
+    cboFullFitResults->SetBranchAddress("A_SAx1" , &fullFit_A_SAx1);
+    cboFullFitResults->SetBranchAddress("A_Cp" , &fullFit_A_Cp);
+    cboFullFitResults->SetBranchAddress("A_Sp" , &fullFit_A_Sp);
 
     cboFullFitResults->GetEntry(0);
     cboFullFit->Close();
@@ -310,10 +310,14 @@ int main(int argc, char* argv[]){
     // A0 modulation
     fitresults->Branch("alpha_A0", &alpha_A0);
     fitresults->Branch("beta_A0", &beta_A0);
+    fitresults->Branch("alpha_A0_err", &alpha_A0_err);
+    fitresults->Branch("beta_A0_err", &beta_A0_err);
 
     // phi modulation
     fitresults->Branch("alpha_phi", &alpha_phi);
     fitresults->Branch("beta_phi", &beta_phi);
+    fitresults->Branch("alpha_phi_err", &alpha_phi_err);
+    fitresults->Branch("beta_phi_err", &beta_phi_err);
 
     // LM parameters
     fitresults->Branch("LM", &LM);
@@ -436,10 +440,10 @@ int main(int argc, char* argv[]){
 
     // adding in terms for phi_mod and A0_mod
     minimizer.DefineParameter(19, "T_CBO", 100.0, 1.0, 0.0, 1000.0);
-    minimizer.DefineParameter(20, "alpha_A0", fullFit_CAx1, 0.0001, -0.01, 0.01);
-    minimizer.DefineParameter(21, "beta_A0" , fullFit_SAx1, 0.0001, -0.01, 0.01);
-    minimizer.DefineParameter(22, "alpha_phi", fullFit_Cp, 0.0001, -0.01, 0.01);
-    minimizer.DefineParameter(23, "beta_phi" , fullFit_Sp, 0.0001, -0.01, 0.01);
+    minimizer.DefineParameter(20, "alpha_A0", fullFit_A_CAx1, 0.1, 0, 0);
+    minimizer.DefineParameter(21, "beta_A0" , fullFit_A_SAx1, 0.1, 0, 0);
+    minimizer.DefineParameter(22, "alpha_phi", fullFit_A_Cp,  0.1, 0, 0);
+    minimizer.DefineParameter(23, "beta_phi" , fullFit_A_Sp,  0.1, 0, 0);
 
     // now go through various stages of fitting 
     printf("MINUIT - FIT ONLY WIGGLE\n");
