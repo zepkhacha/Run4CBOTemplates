@@ -77,16 +77,17 @@ double cbo(double time, double amp){
     // For the endgame
     //return 1.0 + 2.927*exp(-time/79.05)/time + 2.239*exp(-time/6.94)/time;
     // For Run 2/3
-    return 1.0 + amp*exp(-time/24.4)/time;
+    //return 1.0 + amp*exp(-time/24.4)/time;
+    return 1.0;
 }
 
 double wy(double kappa, double wcbo, double time, double amp){
-    double x = (4*3.141592)/(0.1492*kappa*wcbo*cbo(time, amp)) - 1.0;
+    double x = ((4*M_PI)/(0.1492*kappa*wcbo*cbo(time, amp))) - 1.0;
     return kappa*wcbo*cbo(time, amp)*sqrt(x);
 }
 
 double wvw(double kappa, double wcbo, double time, double amp){
-    return (2*3.141592)/0.1492 - 2.*wy(kappa, wcbo, time, amp);
+    return ((2*M_PI)/0.1492) - 2.*wy(kappa, wcbo, time, amp);
 }
 
 double calcnu(double *dim, double *par){ // dim[0] = bin number
@@ -133,8 +134,8 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
             beta_y     += caloWeights[caloNum]*(beta_y_TF1    [caloNum]).Eval(time);
             alpha_vw   += caloWeights[caloNum]*(alpha_vw_TF1  [caloNum]).Eval(time);
             beta_vw    += caloWeights[caloNum]*(beta_vw_TF1   [caloNum]).Eval(time);
-            alpha_A0   += caloWeights[caloNum]*(alpha_phi_TF1 [caloNum]).Eval(time);
-            beta_A0    += caloWeights[caloNum]*(beta_phi_TF1  [caloNum]).Eval(time);
+            alpha_A0   += caloWeights[caloNum]*(alpha_A0_TF1  [caloNum]).Eval(time);
+            beta_A0    += caloWeights[caloNum]*(beta_A0_TF1   [caloNum]).Eval(time);
             alpha_phi  += caloWeights[caloNum]*(alpha_phi_TF1 [caloNum]).Eval(time);
             beta_phi   += caloWeights[caloNum]*(beta_phi_TF1  [caloNum]).Eval(time);
         } // end loop over caloNum
