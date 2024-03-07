@@ -1,3 +1,14 @@
+#include "gm2util/blinders/Blinders.hh"
+#include <TFile.h>
+#include <TCanvas.h>
+#include <TH1.h>
+#include <TTree.h>
+#include <TLatex.h>
+#include <TLine.h>
+#include <TStyle.h>
+
+static blinding::Blinders myblinders(blinding::Blinders::kOmega_a, "reunificationisblind");
+
 void plotFitFigures(std::string inputFile){
 
 // open specified file
@@ -16,20 +27,25 @@ TH1D  *r = (TH1D*)f->Get("residua");
 TTree *t = (TTree*)f->Get("fitresults");
 
 double w_CBO, Ky;
+double w_y, w_vw;
 double R;
 
 t->SetBranchAddress("w_CBO", &w_CBO);
+t->SetBranchAddress("w_y", &w_y);
+t->SetBranchAddress("w_vw", &w_vw);
 t->SetBranchAddress("Ky", &Ky);
 t->SetBranchAddress("R", &R);
 t->GetEntry(0);
 
-double wy = Ky * w_CBO * sqrt(( (4*M_PI) / (0.1492*Ky*w_CBO) ) - 1.0);
-double fy   = (wy/(2*M_PI)) * pow(10.,6.); 
+//double wy = Ky * w_CBO * sqrt(( (4*M_PI) / (0.1492*Ky*w_CBO) ) - 1.0);
+double fy   = (w_y/(2*M_PI)) * pow(10.,6.); 
 double fCBO = (w_CBO/(2*M_PI)) * pow(10.,6.);
 double fC   = 1.0 / (0.1492E-6); // cyclotron
 double fx   = (fx + fC);
 double fVO  = (fC - fy);
 double fVW  = (fC - 2*fy);
+//double fVW  = (w_vw/(2*M_PI)) * pow(10.,6.);
+double fa   = (myblinders.paramToFreq(R)/(2*M_PI)) * pow(10.,6.);
 
 printf("fy %f fVW %f\n", fy, fVW);
 
@@ -83,7 +99,7 @@ TLine *l_2fCBO = new TLine(2*fCBO,0.,2*fCBO,maxY);
 TLine *l_fC    = new TLine(fC  ,0.,fC  ,maxY);
 TLine *l_fx   = new TLine(fx  ,0.,fx  ,maxY);
 TLine *l_fy   = new TLine(fy  ,0.,fy  ,maxY); 
-//TLine *l_fa   = new TLine(fa  ,0.,fa  ,maxY); 
+TLine *l_fa   = new TLine(fa  ,0.,fa  ,maxY); 
 TLine *l_fVO  = new TLine(fVO ,0.,fVO ,maxY);    
 TLine *l_fVW  = new TLine(fVW ,0.,fVW ,maxY);    
 
@@ -91,7 +107,7 @@ l_fCBO->SetLineColor(kRed);
 l_2fCBO->SetLineColor(kRed);
 l_fx  ->SetLineColor(kRed);
 l_fy  ->SetLineColor(kRed);
-//l_fa  ->SetLineColor(kRed);
+l_fa  ->SetLineColor(kRed);
 l_fCBO->SetLineColor(kRed);
 l_fVO ->SetLineColor(kRed);
 l_fVW ->SetLineColor(kRed);
@@ -100,7 +116,7 @@ l_fCBO->SetLineStyle(2);
 l_2fCBO->SetLineStyle(2);
 l_fx  ->SetLineStyle(2);
 l_fy  ->SetLineStyle(2);
-//l_fa  ->SetLineStyle(2);
+l_fa  ->SetLineStyle(2);
 l_fCBO->SetLineStyle(2);
 l_fVO ->SetLineStyle(2);
 l_fVW ->SetLineStyle(2);
@@ -109,7 +125,7 @@ l_fCBO->Draw("SAME");
 l_2fCBO->Draw("SAME");
 l_fx  ->Draw("SAME");
 l_fy  ->Draw("SAME");
-//l_fa  ->Draw("SAME");
+l_fa  ->Draw("SAME");
 l_fVO ->Draw("SAME");
 l_fVW ->Draw("SAME");
 
@@ -125,7 +141,7 @@ latex.DrawLatex(+ 2*fCBO, maxVal,"2f_{CBO}");
 latex.DrawLatex(+ fC, maxVal,"f_{C}");
 latex.DrawLatex(+ fx, maxVal,"f_{x}");
 latex.DrawLatex(+ fy, maxVal,"f_{y}");
-//latex.DrawLatex(-50000+ fa, maxVal,"f_{a}");
+latex.DrawLatex(-50000+ fa, maxVal,"f_{a}");
 latex.DrawLatex(+ fCBO, maxVal,"f_{CBO}");
 latex.DrawLatex(+ fVO, maxVal,"f_{VO}");
 latex.DrawLatex(+ fVW, maxVal,"f_{VW}");
@@ -143,4 +159,8 @@ c->Print(Form("fitFigures_%s.pdf",outputFilename.c_str()));
 
 // close PDF
 c->Print(Form("fitFigures_%s.pdf]",outputFilename.c_str()));
+}
+
+int main(int argc, char *argv[]){
+    plotFitFigures(argv[1]);
 }

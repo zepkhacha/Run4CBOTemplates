@@ -49,6 +49,7 @@ void makeTemplate(
 
     // declare a ttree to hold weights per calo
     TTree *caloWeights = new TTree("caloWeights", "caloWeights");
+    std::vector<double> weightsVector(24, 0.0);
     int calo;
     double calo_N0, calo_N0_err, weight;
 
@@ -94,6 +95,7 @@ void makeTemplate(
         weight = calo_N0 / sumN0;
         sumWeight += weight;
         printf("i = %i calo = %i weight %f\n", i, calo, weight);
+        weightsVector[calo-1] = weight;
         caloWeights->Fill();
         calo_weightRefFilename->Close();
     }
@@ -165,6 +167,8 @@ void makeTemplate(
 
     lSlidingParam->SetTextSize(0.01);
 
+    std::vector<TF1> fitFunction_short;
+    std::vector<TF1> fitFunction_long;
     std::vector<TF1> fitFunction;
 
     for (unsigned int i=0; i<gSlidingParam.size(); i++){
@@ -172,7 +176,7 @@ void makeTemplate(
 
         TF1* expShort = new TF1(Form("calo%i_%s", i, paramName.c_str()),
                 "[0]*exp(-x/[1])+[2]",
-                20.0,50.0);
+                20.0,30.0);
         expShort->SetParameter(0,00.0);
         expShort->SetParameter(1,10.0);
         expShort->SetParameter(2,00.0);
@@ -180,7 +184,7 @@ void makeTemplate(
 
         TF1* expLong = new TF1(Form("calo%i_%s", i, paramName.c_str()),
                 "[0]*exp(-x/[1])+[2]",
-                50.0,300.0);
+                35.0,300.0);
         expLong->SetParameter(0,00.0);
         expLong->SetParameter(1,100.0);
         expLong->SetParameter(2,00.0);
@@ -199,7 +203,7 @@ void makeTemplate(
         expModel->SetParLimits(3,-1.0,1.0);
         expModel->SetParLimits(1,5.0,1000.0);
         expModel->SetParLimits(4,0.0,10.0);
-        gSlidingParam[i].Fit(expModel, "ME", "", 30.0, 400.0);
+        gSlidingParam[i].Fit(expModel, "MEN0", "", 30.0, 400.0);
         double chisq_expModel = expModel->GetChisquare();
         printf("reduced chisq exp %f\n", chisq_expModel/(gSlidingParam[i].GetN()-3));
 
@@ -218,12 +222,27 @@ void makeTemplate(
         //printf("chisq exp2 %f\n", chisq_exp2Model);
 
         fitFunction.push_back(*expModel);
+        fitFunction_short.push_back(*expShort);
+        fitFunction_long.push_back(*expLong);
         expModel->Write();
         // add to multigraph to view them overlaid
         mgSlidingParam.Add(&gSlidingParam[i]);
         lSlidingParam->AddEntry(&gSlidingParam[i], Form("calo%i", i+1));
 
     }
+
+    // now create a TF1 for the calo combination
+    //TString combinationFunction = Form("%f*(%s) ",weightsVector[0],fitFunction[0].GetExpFormula().Data());
+    std::string combinationFunction = Form("calo1_%s ", paramName.c_str());
+
+    for (int i=1; i<24; i++){
+        //combinationFunction += Form("+ %f*(%s) " ,weightsVector[i],fitFunction[i].GetExpFormula().Data());
+        //combinationFunction += Form("+ %f*(calo%i_%s) " ,weightsVector[i],i+1,paramName.c_str());
+        combinationFunction += Form("+ calo%i_%s " ,i+1,paramName.c_str());
+    }
+
+    TF1* caloCombo = new TF1(Form("caloCombo_%s", paramName.c_str()), combinationFunction.c_str());
+    caloCombo->Write();
 
     fOut->Close();
 
@@ -232,8 +251,13 @@ void makeTemplate(
     mgSlidingParam.SetTitle(Form("%s; time [#mus]; [arb]", paramName.c_str()));
     mgSlidingParam.SetMaximum(maxY);
     mgSlidingParam.SetMinimum(minY);
-    mgSlidingParam.Draw(drawOption.c_str());
+    mgSlidingParam.Draw("ALE PFC PLC");
     lSlidingParam->Draw();
+    for (unsigned int i=0; i<gSlidingParam.size(); i++){
+        fitFunction[i].SetLineColor(kBlack);
+        fitFunction[i].SetLineStyle(8);
+        fitFunction[i].Draw("SAME");
+    }
     c.Print(outputFilename.c_str());
 
     // add individual calos
@@ -245,7 +269,18 @@ void makeTemplate(
         gSlidingParam[i].SetMaximum(maxY);
         gSlidingParam[i].SetMinimum(minY);
         gSlidingParam[i].Draw(drawOption.c_str());
+
+        fitFunction[i].SetLineColor(kBlack);
+        fitFunction_short[i].SetLineColor(kGreen);
+        fitFunction_long[i].SetLineColor(kBlue);
+
+        fitFunction[i].SetLineStyle(8);
+        fitFunction_short[i].SetLineStyle(6);
+        fitFunction_long[i].SetLineStyle(7);
+
         fitFunction[i].Draw("SAME");
+        fitFunction_short[i].Draw("SAME");
+        fitFunction_long[i].Draw("SAME");
 
         TLatex latex;
         latex.SetTextSize(0.03);

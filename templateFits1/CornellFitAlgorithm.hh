@@ -122,7 +122,7 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
         double alpha_phi = 0.0;
         double beta_phi  = 0.0;
 
-        for (int caloNum=1; caloNum<24; caloNum++){
+        for (int caloNum=0; caloNum<24; caloNum++){
             if (desiredCalo!=0 and caloNum!=desiredCalo-1){
                 continue;
             }

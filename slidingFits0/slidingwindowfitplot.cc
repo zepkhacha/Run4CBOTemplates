@@ -168,17 +168,32 @@ int main(int argc, char* argv[]){
     double alpha_vw, beta_vw, w_vw, A_vw, phi_vw;
     double alpha_vw_err, beta_vw_err, w_vw_err, A_vw_err, phi_vw_err;
 
+    double T_CBO, T_CBO_err;
+
+    double alpha_A0, beta_A0;
+    double alpha_A0_err, beta_A0_err;
+
+    double alpha_phi, beta_phi;
+    double alpha_phi_err, beta_phi_err;
+
     double LM, LM_err;
 
     double zeta_y, zeta_vw;
     double zeta_y_err, zeta_vw_err;
 
+    double alpha_xy, beta_xy, w_xy;
+    double alpha_xy_err, beta_xy_err, w_xy_err;
+
     double fullFit_Ky;
     double fullFit_A_ct;
     double fullFit_w_vw;
     double fullFit_w_y;
+    double fullFit_A_CAx1; // cos and sin coefficients for A0 modulation
+    double fullFit_A_SAx1;
+    double fullFit_A_Cp; // coefficients for phi_0 modulation
+    double fullFit_A_Sp;
 
-    double fitStart = fitrangelow  * 0.1492;
+    double fitStart = (fitrangelow-1)  * 0.1492;
     double fitStop  = fitrangehigh * 0.1492;
 
 
@@ -204,6 +219,11 @@ int main(int argc, char* argv[]){
     cboFullFitResults->SetBranchAddress("A_ct" , &fullFit_A_ct);
     cboFullFitResults->SetBranchAddress("w_y"  , &fullFit_w_y);
     cboFullFitResults->SetBranchAddress("w_vw" , &fullFit_w_vw);
+
+    cboFullFitResults->SetBranchAddress("A_CAx1" , &fullFit_A_CAx1);
+    cboFullFitResults->SetBranchAddress("A_SAx1" , &fullFit_A_SAx1);
+    cboFullFitResults->SetBranchAddress("A_Cp" , &fullFit_A_Cp);
+    cboFullFitResults->SetBranchAddress("A_Sp" , &fullFit_A_Sp);
 
     cboFullFitResults->GetEntry(0);
     cboFullFit->Close();
@@ -290,6 +310,23 @@ int main(int argc, char* argv[]){
     fitresults->Branch("phi_vw_err", &phi_vw_err);
     fitresults->Branch("zeta_vw", &zeta_vw);
 
+    // X-Y cross terms
+    fitresults->Branch("alpha_xy", &alpha_xy);
+    fitresults->Branch("beta_xy" , &beta_xy);
+    fitresults->Branch("w_xy" , &w_xy);
+
+    // A0 modulation
+    fitresults->Branch("alpha_A0", &alpha_A0);
+    fitresults->Branch("beta_A0", &beta_A0);
+    fitresults->Branch("alpha_A0_err", &alpha_A0_err);
+    fitresults->Branch("beta_A0_err", &beta_A0_err);
+
+    // phi modulation
+    fitresults->Branch("alpha_phi", &alpha_phi);
+    fitresults->Branch("beta_phi", &beta_phi);
+    fitresults->Branch("alpha_phi_err", &alpha_phi_err);
+    fitresults->Branch("beta_phi_err", &beta_phi_err);
+
     // LM parameters
     fitresults->Branch("LM", &LM);
     fitresults->Branch("LM_err", &LM_err);
@@ -301,11 +338,11 @@ int main(int argc, char* argv[]){
     fitrangelow  = startBin + (windowNo);
     fitStart     = (fitrangelow-1)*0.1492;
 
-    if (fitrangelow < 271){
-        windowBins = 34;
-    }else{
+    //if (fitrangelow < 271){
+    //    windowBins = 34;
+    //}else{
         windowBins = 69;
-    }
+    //}
 
     fitrangehigh = fitrangelow+windowBins;
     fitStop      = fitrangehigh*0.1492;
@@ -365,7 +402,7 @@ int main(int argc, char* argv[]){
     fprintf(stderr, "Done Reading data\n");
 
     // Now do a chisq fit
-    int noParams = 19; 
+    int noParams = 27; 
     double par[noParams];
     double errorplus[noParams];
     double errorminus[noParams];
@@ -385,7 +422,7 @@ int main(int argc, char* argv[]){
 
     // 1-CBO terms
     minimizer.DefineParameter(5, "alpha_CBO", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(6, "w_CBO", fullFit_wx1, 0, 0, 0);
+    minimizer.DefineParameter(6, "w_CBO", 2.3264342, 0, 0, 0);
     minimizer.DefineParameter(7, "beta_CBO", 0.0, 0.001, 0, 0);
 
     // 2-CBO terms
@@ -394,12 +431,12 @@ int main(int argc, char* argv[]){
 
     // 1-Y terms
     minimizer.DefineParameter(10, "alpha_y", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(11, "w_y", fullFit_w_y, 0.0, 0, 0);
+    minimizer.DefineParameter(11, "w_y", 13.896504, 0.0, 0, 0);
     minimizer.DefineParameter(12, "beta_y", 0.0, 0.001, 0, 0);
 
     // 2-Y terms
     minimizer.DefineParameter(13, "alpha_vw", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(14, "w_vw", fullFit_w_vw, 0.0, 0, 0);
+    minimizer.DefineParameter(14, "w_vw", 14.319494, 0.0, 0, 0);
     minimizer.DefineParameter(15, "beta_vw", 0.0, 0.001, 0, 0);
 
     // LM term
@@ -408,6 +445,18 @@ int main(int argc, char* argv[]){
     // later adding in a linear-t term to allow vertical frequencies to change within first window
     minimizer.DefineParameter(17,  "zeta_y", 0.0, 0.0, 0, 0);
     minimizer.DefineParameter(18, "zeta_vw", 0.0, 0.0, 0, 0);
+
+    // adding in terms for phi_mod and A0_mod
+    minimizer.DefineParameter(19, "T_CBO", 100.0, 1.0, 0.0, 1000.0);
+    minimizer.DefineParameter(20, "alpha_A0" , 0.0,  0.001, 0, 0);
+    minimizer.DefineParameter(21, "beta_A0"  , 0.0,  0.001, 0, 0);
+    minimizer.DefineParameter(22, "alpha_phi", 0.0,  0.001, 0, 0);
+    minimizer.DefineParameter(23, "beta_phi" , 0.0,  0.001, 0, 0);
+
+    // now adding in x-y cross term
+    minimizer.DefineParameter(24, "alpha_xy", 0.0, 0.001, 0, 0);
+    minimizer.DefineParameter(25, "w_xy", 12.075412, 0.0, 0, 0);
+    minimizer.DefineParameter(26, "beta_xy", 0.0, 0.001, 0, 0);
 
     // now go through various stages of fitting 
     printf("MINUIT - FIT ONLY WIGGLE\n");
@@ -610,6 +659,15 @@ int main(int argc, char* argv[]){
     A_vw_err = 0.0;
     phi_vw_err = 0.0;
 
+    // set cross terms
+    alpha_xy = par[24];
+    w_xy     = par[25];
+    beta_xy  = par[26];
+
+    alpha_xy_err = sqrt(-errorplus[24]*errorminus[24]);
+    w_xy_err     = sqrt(-errorplus[25]*errorminus[25]);
+    beta_xy_err  = sqrt(-errorplus[26]*errorminus[26]);
+
     // set LM term
     LM = par[16];
     LM_err = sqrt(-errorplus[16]*errorminus[16]);
@@ -617,6 +675,21 @@ int main(int argc, char* argv[]){
     // zeta to allow y-freq to adjust
     zeta_y = par[17];
     zeta_vw= par[18];
+
+    // set A0 mod variables and their errors
+    T_CBO = par[19];
+    T_CBO_err = sqrt(-errorplus[19]*errorminus[19]);
+
+    alpha_A0 = par[20];
+    beta_A0 = par[21];
+    alpha_A0_err = sqrt(-errorplus[20]*errorminus[20]);
+    beta_A0_err = sqrt(-errorplus[21]*errorminus[21]);
+
+    // set phi mod variables and their errors
+    alpha_phi = par[22];
+    beta_phi = par[23];
+    alpha_phi_err = sqrt(-errorplus[22]*errorminus[22]);
+    beta_phi_err = sqrt(-errorplus[23]*errorminus[23]);
 
     fitresults->Fill();
 
@@ -627,7 +700,7 @@ int main(int argc, char* argv[]){
         sum += pucorr;
     }
 
-    fprintf(stderr, "Mean corr %f\n", sum/nBins);
+    fprintf(stderr, "Mean corr %f = sum/nBins; sum %f; nBins %i\n", sum/nBins, sum, nBins);
     //}; // end loop over seeds
 
     output->cd();
