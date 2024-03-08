@@ -20,9 +20,9 @@ void makeAll(){
     makeTemplate("slidingFits0/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "beta_A0", "dimensionless", -0.025, 0.025, "APE PFC PLC");
 
     makeTemplate("slidingFits0/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "alpha_phi", "dimensionless", -0.025, 0.025, "APE PFC PLC");
-    makeTemplate("slidingFits0/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "beta_phi", "dimensionless", -0.015, 0.015, "APE PFC PLC");
+    makeTemplate("slidingFits0/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "beta_phi", "dimensionless", -0.025, 0.025, "APE PFC PLC");
 
-    makeTemplate("slidingFits0/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "alpha_xy", "dimensionless", -0.025, 0.025, "APE PFC PLC");
-    makeTemplate("slidingFits0/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "beta_xy" , "dimensionless", -0.015, 0.015, "APE PFC PLC");
+    makeTemplate("slidingFits0/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "alpha_xy", "dimensionless", -0.002, 0.002, "APE PFC PLC");
+    makeTemplate("slidingFits0/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "beta_xy" , "dimensionless", -0.002, 0.002, "APE PFC PLC");
 
 }

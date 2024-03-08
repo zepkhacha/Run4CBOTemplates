@@ -16,8 +16,8 @@ formatC="/gm2data/zkhechad/run45/envelope/formats/formatC_mBin_constraintOff.txt
 formatD="/gm2data/zkhechad/run45/envelope/formats/formatD_mBin_constraintOn.txt"
 
 mainDirectory="/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/"
-mkdir -p ${mainDirectory}/slidingFits1/${run}
-outputDirectory="${mainDirectory}/slidingFits1/${run}/"
+mkdir -p ${mainDirectory}/slidingFits0/${run}
+outputDirectory="${mainDirectory}/slidingFits0/${run}/"
 
 echo "performing window 0"
 ./slidingwindowfitplot -a 1 -w 0 -n ${calo} -q ${mainDirectory}fullFits/${run}/sBin_constraintOn_cE0.0_seed0_${run}_calo${calo}.root -i /gm2data/cornell/histograms/aMethod/histogram_a_${run}.root -o ${outputDirectory}/${run}_calo${calo}_window0000.root -c 0 -s 0 -b ${frFile} -f ${formatB} 2>&1 > ${outputDirectory}/${run}_calo${calo}_window0000.log 

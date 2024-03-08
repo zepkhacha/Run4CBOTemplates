@@ -23,6 +23,9 @@ void plotAll(){
     plotParam("slidingFits0/noRF_windowFits.root", "A_vw", "dimensionless", 0.0, 0.002, "ALE PFC PLC");
     plotParam("slidingFits0/noRF_windowFits.root", "phi_vw", "[rad]", -3.2, 3.2, "ALE PFC PLC");
 
+    plotParam("slidingFits0/noRF_windowFits.root", "alpha_xy", "dimensionless", -0.002, 0.002, "ALE PFC PLC");
+    plotParam("slidingFits0/noRF_windowFits.root", "beta_xy", "dimensionless", -0.002, 0.002, "ALE PFC PLC");
+
     plotParam("slidingFits0/noRF_windowFits.root", "alpha_A0", "dimensionless", -0.02, 0.02, "ALE PFC PLC");
     plotParam("slidingFits0/noRF_windowFits.root", "beta_A0", "dimensionless", -0.02, 0.02, "ALE PFC PLC");
     plotParam("slidingFits0/noRF_windowFits.root", "A_A0", "dimensionless", 0.0, 0.02, "ALE PFC PLC");

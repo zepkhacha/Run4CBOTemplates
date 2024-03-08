@@ -314,6 +314,9 @@ int main(int argc, char* argv[]){
     fitresults->Branch("alpha_xy", &alpha_xy);
     fitresults->Branch("beta_xy" , &beta_xy);
     fitresults->Branch("w_xy" , &w_xy);
+    fitresults->Branch("alpha_xy_err", &alpha_xy_err);
+    fitresults->Branch("beta_xy_err" , &beta_xy_err);
+    fitresults->Branch("w_xy_err" , &w_xy_err);
 
     // A0 modulation
     fitresults->Branch("alpha_A0", &alpha_A0);

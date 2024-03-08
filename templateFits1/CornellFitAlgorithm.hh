@@ -40,6 +40,8 @@ std::vector<TF1> alpha_A0_TF1;
 std::vector<TF1> beta_A0_TF1;
 std::vector<TF1> alpha_phi_TF1;
 std::vector<TF1> beta_phi_TF1;
+std::vector<TF1> alpha_xy_TF1;
+std::vector<TF1> beta_xy_TF1;
 
 //bin-dependent variables
 std::pair <double, double> magicTauConstraints (0.0,0.0);
@@ -121,6 +123,8 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
         double beta_A0   = 0.0;
         double alpha_phi = 0.0;
         double beta_phi  = 0.0;
+        double alpha_xy  = 0.0;
+        double beta_xy   = 0.0;
 
         for (int caloNum=0; caloNum<24; caloNum++){
             if (desiredCalo!=0 and caloNum!=desiredCalo-1){
@@ -138,6 +142,8 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
             beta_A0    += caloWeights[caloNum]*(beta_A0_TF1   [caloNum]).Eval(time);
             alpha_phi  += caloWeights[caloNum]*(alpha_phi_TF1 [caloNum]).Eval(time);
             beta_phi   += caloWeights[caloNum]*(beta_phi_TF1  [caloNum]).Eval(time);
+            alpha_xy   += caloWeights[caloNum]*(alpha_xy_TF1  [caloNum]).Eval(time);
+            beta_xy    += caloWeights[caloNum]*(beta_xy_TF1   [caloNum]).Eval(time);
         } // end loop over caloNum
 
         double b_dp = dp_p0[b];
@@ -196,7 +202,7 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
 
 
         }                                            
-        double p = exp(-1.*time/par[25])*(par[22]*cos(time*par[26])+par[23]*sin(time*par[26]));
+        double p = par[22]*alpha_xy*cos(time*par[26])+par[23]*beta_xy*sin(time*par[26]);
         binNu *= x*y + p;
 
 
