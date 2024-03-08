@@ -27,7 +27,7 @@ bool constrainMop   = false; // mop constraint via chisq penalty
 //path to full CBO templates
 std::string templatePath;
 std::string refFile; // to fix w_CBO ? not implemented yet
-                     // to store alpha and beta TF1 templates
+// to store alpha and beta TF1 templates
 std::vector<TF1> alpha_CBO_TF1;
 std::vector<TF1> beta_CBO_TF1;
 std::vector<TF1> alpha_2CBO_TF1;
@@ -36,6 +36,12 @@ std::vector<TF1> alpha_y_TF1;
 std::vector<TF1> beta_y_TF1;
 std::vector<TF1> alpha_vw_TF1;
 std::vector<TF1> beta_vw_TF1;
+std::vector<TF1> alpha_A0_TF1;
+std::vector<TF1> beta_A0_TF1;
+std::vector<TF1> alpha_phi_TF1;
+std::vector<TF1> beta_phi_TF1;
+std::vector<TF1> alpha_xy_TF1;
+std::vector<TF1> beta_xy_TF1;
 
 //bin-dependent variables
 std::pair <double, double> magicTauConstraints (0.0,0.0);
@@ -73,16 +79,17 @@ double cbo(double time, double amp){
     // For the endgame
     //return 1.0 + 2.927*exp(-time/79.05)/time + 2.239*exp(-time/6.94)/time;
     // For Run 2/3
-    return 1.0 + amp*exp(-time/24.4)/time;
+    //return 1.0 + amp*exp(-time/24.4)/time;
+    return 1.0;
 }
 
 double wy(double kappa, double wcbo, double time, double amp){
-    double x = (4*3.141592)/(0.1492*kappa*wcbo*cbo(time, amp)) - 1.0;
+    double x = ((4*M_PI)/(0.1492*kappa*wcbo*cbo(time, amp))) - 1.0;
     return kappa*wcbo*cbo(time, amp)*sqrt(x);
 }
 
 double wvw(double kappa, double wcbo, double time, double amp){
-    return (2*3.141592)/0.1492 - 2.*wy(kappa, wcbo, time, amp);
+    return ((2*M_PI)/0.1492) - 2.*wy(kappa, wcbo, time, amp);
 }
 
 double calcnu(double *dim, double *par){ // dim[0] = bin number
@@ -103,26 +110,63 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
     // in kevin-style fits, b==magicBin has weight = 1.0, remainder have 0
     for (int b=calcnuRangeLower; b<=calcnuRangeUpper; b++){
 
+        // first let's calculate all of our weighted-avg alpha and beta values
+        double alpha_CBO = 0.0;
+        double beta_CBO  = 0.0;
+        double alpha_2CBO= 0.0;
+        double beta_2CBO = 0.0;
+        double alpha_y   = 0.0;
+        double beta_y    = 0.0;
+        double alpha_vw  = 0.0; 
+        double beta_vw   = 0.0; 
+        double alpha_A0  = 0.0;
+        double beta_A0   = 0.0;
+        double alpha_phi = 0.0;
+        double beta_phi  = 0.0;
+        double alpha_xy  = 0.0;
+        double beta_xy   = 0.0;
+
+        for (int caloNum=0; caloNum<24; caloNum++){
+            if (desiredCalo!=0 and caloNum!=desiredCalo-1){
+                continue;
+            }
+            alpha_CBO  += caloWeights[caloNum]*(alpha_CBO_TF1 [caloNum]).Eval(time);
+            beta_CBO   += caloWeights[caloNum]*(beta_CBO_TF1  [caloNum]).Eval(time);
+            alpha_2CBO += caloWeights[caloNum]*(alpha_2CBO_TF1[caloNum]).Eval(time);
+            beta_2CBO  += caloWeights[caloNum]*(beta_2CBO_TF1 [caloNum]).Eval(time);
+            alpha_y    += caloWeights[caloNum]*(alpha_y_TF1   [caloNum]).Eval(time);
+            beta_y     += caloWeights[caloNum]*(beta_y_TF1    [caloNum]).Eval(time);
+            alpha_vw   += caloWeights[caloNum]*(alpha_vw_TF1  [caloNum]).Eval(time);
+            beta_vw    += caloWeights[caloNum]*(beta_vw_TF1   [caloNum]).Eval(time);
+            alpha_A0   += caloWeights[caloNum]*(alpha_A0_TF1  [caloNum]).Eval(time);
+            beta_A0    += caloWeights[caloNum]*(beta_A0_TF1   [caloNum]).Eval(time);
+            alpha_phi  += caloWeights[caloNum]*(alpha_phi_TF1 [caloNum]).Eval(time);
+            beta_phi   += caloWeights[caloNum]*(beta_phi_TF1  [caloNum]).Eval(time);
+            alpha_xy   += caloWeights[caloNum]*(alpha_xy_TF1  [caloNum]).Eval(time);
+            beta_xy    += caloWeights[caloNum]*(beta_xy_TF1   [caloNum]).Eval(time);
+        } // end loop over caloNum
+
         double b_dp = dp_p0[b];
         double binNu = 0.0;
         double phi_mod, A0_mod;
 
         // modulations on phi and asymmetry
         if (pBinCBO){
-            phi_mod = exp(-1.*(time)/par[5])*(par[20]*cos(par[6]*(wcbo_i(b_dp)/wcbo_i(0.0))*cbo(time, par[24])*time) 
-                    + par[21]*sin(par[6]*(wcbo_i(b_dp)/wcbo_i(0.0))*cbo(time, par[24])*time));
-            A0_mod      = exp(-1.*(time)/par[5])*(par[12]*cos(par[6]*(wcbo_i(b_dp)/wcbo_i(0.0))*time) 
-                    + par[13]*sin(par[6]*(wcbo_i(b_dp)/wcbo_i(0.0))*time));
+            // THIS ISNT CONFIGURED CORRECTLY FOR TEMPLATE FITS!
+            //phi_mod = exp(-1.*(time)/par[5])*(par[20]*cos(par[6]*(wcbo_i(b_dp)/wcbo_i(0.0))*cbo(time, par[24])*time) 
+            //        + par[21]*sin(par[6]*(wcbo_i(b_dp)/wcbo_i(0.0))*cbo(time, par[24])*time));
+            //A0_mod      = exp(-1.*(time)/par[5])*(par[12]*cos(par[6]*(wcbo_i(b_dp)/wcbo_i(0.0))*time) 
+            //        + par[13]*sin(par[6]*(wcbo_i(b_dp)/wcbo_i(0.0))*time));
         }else{
-            phi_mod = exp(-1.*(time)/par[5])*(par[20]*cos(par[6]*cbo(time, par[24])*time) 
-                    + par[21]*sin(par[6]*cbo(time, par[24])*time));
-            A0_mod      = exp(-1.*(time)/par[5])*(par[12]*cos(par[6]*cbo(time, par[24])*time) 
-                    + par[13]*sin(par[6]*cbo(time, par[24])*time));
+            phi_mod = par[20]*alpha_phi*cos(par[6]*cbo(time, par[24])*time) 
+                + par[21]*beta_phi*sin(par[6]*cbo(time, par[24])*time);
+            A0_mod  = par[12]*alpha_A0*cos(par[6]*cbo(time, par[24])*time) 
+                + par[13]*beta_A0*sin(par[6]*cbo(time, par[24])*time);
         }   
 
         // 5-param term
-        binNu    += pBinPhi ?    par[2]*cos((blindr*(1-c_e[b]))*time - ((phi + dPhi[b]) *(1.0 + phi_mod)))
-            : par[2]*cos((blindr           )*time - ( phi            *(1.0 + phi_mod)));
+        binNu    += pBinPhi ?    par[2]*cos((blindr*(1-c_e[b]))*time - ((phi + dPhi[b]) + phi_mod ))
+            :                    par[2]*cos((blindr           )*time - ( phi            + phi_mod ));
         binNu    *= 1.0 + A0_mod;
         binNu    += 1.0;
         binNu    *= pBinTau ?    par[0]*exp(-1.*(time)/((gammas[b]/gammas[magicBin])*par[1]))
@@ -145,43 +189,22 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
 
         } else{
 
-            x = 1.0;
-            y = 1.0;
 
-            // for non-momentum-binned fits, sum over calos for X-only
+            x = 1 + (par[7] *alpha_CBO *cos(  par[6]*cbo(time, par[24])*time)
+                    +  par[8] * beta_CBO *sin(  par[6]*cbo(time, par[24])*time))
+                + (par[10]*alpha_2CBO*cos(2*par[6]*cbo(time, par[24])*time) 
+                        +  par[11]* beta_2CBO*sin(2*par[6]*cbo(time, par[24])*time));
 
-            for (int caloNum=0; caloNum<24; caloNum++){
-
-                if (desiredCalo!=0 and caloNum!=desiredCalo){
-                    continue;
-                }
-
-                double alpha_CBO = (alpha_CBO_TF1[caloNum]).Eval(time);
-                double beta_CBO  = (beta_CBO_TF1 [caloNum]).Eval(time);
-                double alpha_2CBO = (alpha_2CBO_TF1[caloNum]).Eval(time);
-                double beta_2CBO  = (beta_2CBO_TF1 [caloNum]).Eval(time);
-                double alpha_y = (alpha_y_TF1[caloNum]).Eval(time);
-                double beta_y  = (beta_y_TF1 [caloNum]).Eval(time);
-                double alpha_vw = (alpha_vw_TF1[caloNum]).Eval(time);
-                double beta_vw  = (beta_vw_TF1 [caloNum]).Eval(time);
-
-                x += par[7]*( (alpha_CBO*cos(  par[6]*cbo(time, par[24])*time) 
-                            + par[8]*beta_CBO*sin(  par[6]*cbo(time, par[24])*time))*caloWeights[caloNum]);
-
-                x += par[10]*( (alpha_2CBO)*cos(2*par[6]*cbo(time, par[24])*time) 
-                        + par[11]*beta_2CBO*sin(2*par[6]*cbo(time, par[24])*time))*caloWeights[caloNum];
-
-                y += par[14]*( (alpha_y)*cos(wy (par[16], par[6], time, par[24])*time) 
-                        + par[15]*beta_y*sin(wy (par[16], par[6], time, par[24])*time))*caloWeights[caloNum];
-                y += par[18]*( (alpha_vw)*cos(wvw(par[16], par[6], time, par[24])*time)
-                            + par[19]*beta_vw*sin(wvw(par[16], par[6], time, par[24])*time))*caloWeights[caloNum];
-            } // end loop over caloNum
+            y = 1 + (par[14]*alpha_y *cos(wy (par[16], par[6], time, par[24])*time) 
+                    +  par[15]*beta_y  *sin(wy (par[16], par[6], time, par[24])*time))
+                + (par[18]*alpha_vw*cos(wvw(par[16], par[6], time, par[24])*time)
+                        +  par[19]*beta_vw *sin(wvw(par[16], par[6], time, par[24])*time));
 
 
         }                                            
-        //double p = exp(-1.*time/par[25])*(par[22]*cos(time*par[26])+par[23]*sin(time*par[26]));
-        //binNu *= x*y + p;
-        binNu *= x*y;
+        double p = par[22]*alpha_xy*cos(time*par[26])+par[23]*beta_xy*sin(time*par[26]);
+        binNu *= x*y + p;
+
 
         binNu *= (1.0 - par[9]*lambda->GetBinContent(int(dim[0])));
         nu += binWeights[b] * binNu;

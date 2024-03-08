@@ -179,17 +179,21 @@ int main(int argc, char* argv[]){
     TFile *f_refFile = TFile::Open(refFile.c_str(), "READ");
     std::vector<double> ref_wCBOs(25, 0.0);
     std::vector<double> ref_Kys(25, 0.0);
+    std::vector<double> ref_wxys(25, 0.0);
     TTree *t_refFile = (TTree*)f_refFile->Get("fitresults");
     double ref_wCBO;
     double ref_Ky;
+    double ref_wxy;
     int ref_calo;
     t_refFile->SetBranchAddress("w_CBO", &ref_wCBO);
     t_refFile->SetBranchAddress("Ky", &ref_Ky);
+    t_refFile->SetBranchAddress("w_xy", &ref_wxy);
     t_refFile->SetBranchAddress("calo", &ref_calo);
     for (int refEntry=0; refEntry<t_refFile->GetEntries(); refEntry++){
         t_refFile->GetEntry(refEntry);
         ref_wCBOs[ref_calo] = ref_wCBO;
         ref_Kys[ref_calo] = ref_Ky;
+        ref_wxys[ref_calo] = ref_wxy;
     }
 
     //TO DO: stop making duplicates of caloWeights in each template file...or just make one file for both alpha/beta
@@ -203,6 +207,12 @@ int main(int argc, char* argv[]){
     TFile *f_beta_y  = TFile::Open(Form("%s/templates_beta_y.root" , templatePath.c_str()), "READ");
     TFile *f_alpha_vw = TFile::Open(Form("%s/templates_alpha_vw.root", templatePath.c_str()), "READ");
     TFile *f_beta_vw  = TFile::Open(Form("%s/templates_beta_vw.root" , templatePath.c_str()), "READ");
+    TFile *f_alpha_A0 = TFile::Open(Form("%s/templates_alpha_A0.root", templatePath.c_str()), "READ");
+    TFile *f_beta_A0  = TFile::Open(Form("%s/templates_beta_A0.root" , templatePath.c_str()), "READ");
+    TFile *f_alpha_phi = TFile::Open(Form("%s/templates_alpha_phi.root", templatePath.c_str()), "READ");
+    TFile *f_beta_phi  = TFile::Open(Form("%s/templates_beta_phi.root" , templatePath.c_str()), "READ");
+    TFile *f_alpha_xy = TFile::Open(Form("%s/templates_alpha_xy.root", templatePath.c_str()), "READ");
+    TFile *f_beta_xy  = TFile::Open(Form("%s/templates_beta_xy.root" , templatePath.c_str()), "READ");
 
     int caloNum;
     double caloWeight;
@@ -235,6 +245,12 @@ int main(int argc, char* argv[]){
         TF1* temp_beta_y  = (TF1*)f_beta_y ->Get(Form("calo%i_beta_y" , desiredCalo));
         TF1* temp_alpha_vw = (TF1*)f_alpha_vw->Get(Form("calo%i_alpha_vw", desiredCalo));
         TF1* temp_beta_vw  = (TF1*)f_beta_vw ->Get(Form("calo%i_beta_vw" , desiredCalo));
+        TF1* temp_alpha_A0 = (TF1*)f_alpha_A0->Get(Form("calo%i_alpha_A0", desiredCalo));
+        TF1* temp_beta_A0  = (TF1*)f_beta_A0 ->Get(Form("calo%i_beta_A0" , desiredCalo));
+        TF1* temp_alpha_phi = (TF1*)f_alpha_phi->Get(Form("calo%i_alpha_phi", desiredCalo));
+        TF1* temp_beta_phi  = (TF1*)f_beta_phi ->Get(Form("calo%i_beta_phi" , desiredCalo));
+        TF1* temp_alpha_xy = (TF1*)f_alpha_xy->Get(Form("calo%i_alpha_xy", desiredCalo));
+        TF1* temp_beta_xy  = (TF1*)f_beta_xy ->Get(Form("calo%i_beta_xy" , desiredCalo));
 
         alpha_CBO_TF1.push_back(*temp_alpha_CBO);
         beta_CBO_TF1 .push_back(*temp_beta_CBO); 
@@ -244,6 +260,12 @@ int main(int argc, char* argv[]){
         beta_y_TF1 .push_back(*temp_beta_y); 
         alpha_vw_TF1.push_back(*temp_alpha_vw);
         beta_vw_TF1 .push_back(*temp_beta_vw); 
+        alpha_A0_TF1.push_back(*temp_alpha_A0);
+        beta_A0_TF1 .push_back(*temp_beta_A0); 
+        alpha_phi_TF1.push_back(*temp_alpha_phi);
+        beta_phi_TF1 .push_back(*temp_beta_phi); 
+        alpha_xy_TF1.push_back(*temp_alpha_xy);
+        beta_xy_TF1 .push_back(*temp_beta_xy); 
     }
 
     f_alpha_CBO->Close();
@@ -254,6 +276,12 @@ int main(int argc, char* argv[]){
     f_beta_y->Close();   
     f_alpha_vw->Close();
     f_beta_vw->Close(); 
+    f_alpha_A0->Close();
+    f_beta_A0->Close();
+    f_alpha_phi->Close();
+    f_beta_phi->Close();
+    f_alpha_xy->Close();
+    f_beta_xy->Close();
 
     printf("Parameters after format file: pBinTau %d pBinPhi %d pBinCBO %d constraintau %d includeMopTerm %d constrainMop %d c_e_scale %f \n", pBinTau, pBinPhi, pBinCBO, constraintau, includeMopTerm, constrainMop, c_e_scale);
     printf("Opening file %s.\n", boostFilename);
@@ -579,30 +607,30 @@ int main(int argc, char* argv[]){
             minimizer.DefineParameter(19,"A_SNy2", -0.0, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(24,"A_ct", 0.0, 0.00, -0.1, 0.5);
         } else{
-            minimizer.DefineParameter(7, "A_CNx1",  1.0, 0.01, -2.0, 2.0); // USE TO SCALE ALPHA/BETA
+            minimizer.DefineParameter(7, "A_CNx1",  1.0, 0.0, -2.0, 2.0); // USE TO SCALE ALPHA/BETA
             minimizer.DefineParameter(8, "A_SNx1",  1.0, 0.0, -1.0, 1.0); // SUB WITH TF1
-            minimizer.DefineParameter(10,"A_CNx2",  1.0, 0.01, -1.0, 1.0);
+            minimizer.DefineParameter(10,"A_CNx2",  1.0, 0.0, -1.0, 1.0);
             minimizer.DefineParameter(11,"A_SNx2",  1.0, 0.0, -1.0, 1.0);
-            minimizer.DefineParameter(14,"A_CNy1",  1.0, 0.01, -1.0, 1.0);
+            minimizer.DefineParameter(14,"A_CNy1",  1.0, 0.0, -1.0, 1.0);
             minimizer.DefineParameter(15,"A_SNy1",  1.0, 0.0, -1.0, 1.0);
-            minimizer.DefineParameter(18,"A_CNy2",  1.0, 0.01, -1.0, 1.0);
+            minimizer.DefineParameter(18,"A_CNy2",  1.0, 0.0, -1.0, 1.0);
             minimizer.DefineParameter(19,"A_SNy2",  1.0, 0.0, -1.0, 1.0);
             minimizer.DefineParameter(24,"A_ct", 0.0, 0.0, -0.1, 0.5); // SET TO 0; SHOULD BE ABSORBED INTO ALPHA BETA
         }
 
         minimizer.DefineParameter(9, "LM", 0.001, 0.001, -0.1, 0.1);
-        minimizer.DefineParameter(12,"A_CAx1", -0.2, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(13,"A_SAx1", -0.3, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(12,"A_CAx1",  1.0, 0., -1.0, 1.0);
+        minimizer.DefineParameter(13,"A_SAx1",  1.0, 0., -1.0, 1.0);
         minimizer.DefineParameter(16,"Ky", ref_Kys[desiredCalo], 0.00, 0.0, 1.2);
         minimizer.DefineParameter(17,"Ty", 30, 10, 1.0, 10000.);
 
-        minimizer.DefineParameter(20,"A_Cp", -0.2, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(21,"A_Sp", -0.3, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(20,"A_Cp",  1.0, 0., -1.0, 1.0);
+        minimizer.DefineParameter(21,"A_Sp",  1.0, 0., -1.0, 1.0);
 
-        minimizer.DefineParameter(22,"A_CNxy", -0.2, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(23,"A_SNxy", -0.3, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(25,"T_xy", 60, 10, 1, 1000);
-        minimizer.DefineParameter(26,"w_xy", 11.9, 0.1, 11.5, 12.5);
+        minimizer.DefineParameter(22,"A_CNxy", 1.0, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(23,"A_SNxy", 1.0, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(25,"T_xy", 60, 0, 1, 1000);
+        minimizer.DefineParameter(26,"w_xy", ref_wxys[desiredCalo], 0.0, 11., 13.);
 
         if (includeMopTerm){
             if (constrainMop){
