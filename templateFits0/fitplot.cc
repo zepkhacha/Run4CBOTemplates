@@ -627,8 +627,8 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(20,"A_Cp",  1.0, 0., -1.0, 1.0);
         minimizer.DefineParameter(21,"A_Sp",  1.0, 0., -1.0, 1.0);
 
-        minimizer.DefineParameter(22,"A_CNxy", 1.0, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(23,"A_SNxy", 1.0, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(22,"A_CNxy", 1.0, 0.0, -1.0, 1.0);
+        minimizer.DefineParameter(23,"A_SNxy", 1.0, 0.0, -1.0, 1.0);
         minimizer.DefineParameter(25,"T_xy", 60, 0, 1, 1000);
         minimizer.DefineParameter(26,"w_xy", ref_wxys[desiredCalo], 0.0, 11., 13.);
 
