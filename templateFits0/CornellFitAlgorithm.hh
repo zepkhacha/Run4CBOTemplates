@@ -130,20 +130,20 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
             if (desiredCalo!=0 and caloNum!=desiredCalo-1){
                 continue;
             }
-            alpha_CBO  += caloWeights[caloNum]*(alpha_CBO_TF1 [caloNum]).Eval(time);
-            beta_CBO   += caloWeights[caloNum]*(beta_CBO_TF1  [caloNum]).Eval(time);
-            alpha_2CBO += caloWeights[caloNum]*(alpha_2CBO_TF1[caloNum]).Eval(time);
-            beta_2CBO  += caloWeights[caloNum]*(beta_2CBO_TF1 [caloNum]).Eval(time);
-            alpha_y    += caloWeights[caloNum]*(alpha_y_TF1   [caloNum]).Eval(time);
-            beta_y     += caloWeights[caloNum]*(beta_y_TF1    [caloNum]).Eval(time);
-            alpha_vw   += caloWeights[caloNum]*(alpha_vw_TF1  [caloNum]).Eval(time);
-            beta_vw    += caloWeights[caloNum]*(beta_vw_TF1   [caloNum]).Eval(time);
-            alpha_A0   += caloWeights[caloNum]*(alpha_A0_TF1  [caloNum]).Eval(time);
-            beta_A0    += caloWeights[caloNum]*(beta_A0_TF1   [caloNum]).Eval(time);
-            alpha_phi  += caloWeights[caloNum]*(alpha_phi_TF1 [caloNum]).Eval(time);
-            beta_phi   += caloWeights[caloNum]*(beta_phi_TF1  [caloNum]).Eval(time);
-            alpha_xy   += caloWeights[caloNum]*(alpha_xy_TF1  [caloNum]).Eval(time);
-            beta_xy    += caloWeights[caloNum]*(beta_xy_TF1   [caloNum]).Eval(time);
+            alpha_CBO  += caloWeights[caloNum]*(alpha_CBO_TF1 [desiredCalo]).Eval(time);
+            beta_CBO   += caloWeights[caloNum]*(beta_CBO_TF1  [desiredCalo]).Eval(time);
+            alpha_2CBO += caloWeights[caloNum]*(alpha_2CBO_TF1[desiredCalo]).Eval(time);
+            beta_2CBO  += caloWeights[caloNum]*(beta_2CBO_TF1 [desiredCalo]).Eval(time);
+            alpha_y    += caloWeights[caloNum]*(alpha_y_TF1   [desiredCalo]).Eval(time);
+            beta_y     += caloWeights[caloNum]*(beta_y_TF1    [desiredCalo]).Eval(time);
+            alpha_vw   += caloWeights[caloNum]*(alpha_vw_TF1  [desiredCalo]).Eval(time);
+            beta_vw    += caloWeights[caloNum]*(beta_vw_TF1   [desiredCalo]).Eval(time);
+            alpha_A0   += caloWeights[caloNum]*(alpha_A0_TF1  [desiredCalo]).Eval(time);
+            beta_A0    += caloWeights[caloNum]*(beta_A0_TF1   [desiredCalo]).Eval(time);
+            alpha_phi  += caloWeights[caloNum]*(alpha_phi_TF1 [desiredCalo]).Eval(time);
+            beta_phi   += caloWeights[caloNum]*(beta_phi_TF1  [desiredCalo]).Eval(time);
+            alpha_xy   += caloWeights[caloNum]*(alpha_xy_TF1  [desiredCalo]).Eval(time);
+            beta_xy    += caloWeights[caloNum]*(beta_xy_TF1   [desiredCalo]).Eval(time);
         } // end loop over caloNum
 
         double b_dp = dp_p0[b];
@@ -202,7 +202,7 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
 
 
         }                                            
-        double p = par[22]*alpha_xy*cos(time*par[26])+par[23]*beta_xy*sin(time*par[26]);
+        double p = (par[22]*alpha_xy*cos(time*par[26])+par[23]*beta_xy*sin(time*par[26]));
         binNu *= x*y + p;
 
 
