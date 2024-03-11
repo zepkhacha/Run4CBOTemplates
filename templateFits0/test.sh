@@ -2,11 +2,11 @@
 #transform='/gm2data/tbarrett/gm2fr/results/Run4/Nominal/transform.root'
 transform='/gm2data/tbarrett/gm2fr/studies/run23_bunch_corrections/CorrectedFourier_Run3b.root'
 # types of formats
-formatA='/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/templateFits0/formats/formatA_sBin_constraintOff.txt'
-formatB='/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/templateFits0/formats/formatB_sBin_constraintOn.txt'
-formatC='/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/templateFits0/formats/formatC_mBin_constraintOff.txt'
-formatD='/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/templateFits0/formats/formatD_mBin_constraintOn.txt'
-formatE='/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/templateFits0/formats/formatE_mBin_mop_constraintOn_wcboOn.txt'
+formatA='./formats/formatA_sBin_constraintOff.txt'
+formatB='./formats/formatB_sBin_constraintOn.txt'
+formatC='./formats/formatC_mBin_constraintOff.txt'
+formatD='./formats/formatD_mBin_constraintOn.txt'
+formatE='./formats/formatE_mBin_mop_constraintOn_wcboOn.txt'
 
 run4='/gm2data/cornell/histograms/aMethod/histogram_a_run4.root'
 run5='/gm2data/cornell/histograms/aMethod/histogram_a_run5.root'
@@ -16,7 +16,7 @@ for dat in noRF ;  do # dat = run number
     # full-fit on calo sum, kevin-style 
     cE=0.0;
     seedNo=0;
-    for caloNum in {21..21}; do
+    for caloNum in {0..24} ; do
       ./fitplot \
       -i /gm2data/cornell/histograms/aMethod/histogram_a_${dat}.root \
       -o sBin_constraintOn_cE${cE}_seed${seedNo}_${dat}_calo${caloNum}.root \
@@ -25,7 +25,7 @@ for dat in noRF ;  do # dat = run number
       -s ${seedNo} \
       -a 1 \
       -b $transform \
-      -f $formatB | tee sBin_constraintOn_cE${cE}_seed${seedNo}_${dat}_calo${caloNum}.log 
+      -f $formatB | tee sBin_constraintOn_cE${cE}_seed${seedNo}_${dat}_calo${caloNum}.log &
     done
     wait
 

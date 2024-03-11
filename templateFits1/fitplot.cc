@@ -594,7 +594,7 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(4, "R", 0, 10, -1000, 1000);
 
         minimizer.DefineParameter(5, "T_CBO", 100.0, 10.0, 1, 10000); 
-        minimizer.DefineParameter(6, "w_CBO", ref_wCBOs[desiredCalo], 0.0, 2.0, 3.0);
+        minimizer.DefineParameter(6, "w_CBO", 2.3264342, 0.0, 2.0, 3.0);
 
         if (pBinCBO){
             minimizer.DefineParameter(7, "A_CNx1", -0.0, 0.1, -1.0, 1.0);
@@ -621,16 +621,16 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(9, "LM", 0.001, 0.001, -0.1, 0.1);
         minimizer.DefineParameter(12,"A_CAx1",  1.0, 0., -1.0, 1.0);
         minimizer.DefineParameter(13,"A_SAx1",  1.0, 0., -1.0, 1.0);
-        minimizer.DefineParameter(16,"Ky", ref_Kys[desiredCalo], 0.00, 0.0, 1.2);
-        minimizer.DefineParameter(17,"Ty", 30, 10, 1.0, 10000.);
+        minimizer.DefineParameter(16,"Ky", 1.0139493, 0.00, 0.0, 1.2);
+        minimizer.DefineParameter(17,"Ty", 30, 0., 0.0, 10000.);
 
         minimizer.DefineParameter(20,"A_Cp",  1.0, 0., -1.0, 1.0);
         minimizer.DefineParameter(21,"A_Sp",  1.0, 0., -1.0, 1.0);
 
-        minimizer.DefineParameter(22,"A_CNxy", 1.0, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(23,"A_SNxy", 1.0, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(22,"A_CNxy", 1.0, 0.0, -1.0, 1.0);
+        minimizer.DefineParameter(23,"A_SNxy", 1.0, 0.0, -1.0, 1.0);
         minimizer.DefineParameter(25,"T_xy", 60, 0, 1, 1000);
-        minimizer.DefineParameter(26,"w_xy", ref_wxys[desiredCalo], 0.0, 11., 13.);
+        minimizer.DefineParameter(26,"w_xy", 12.075412, 0.0, 11., 13.);
 
         if (includeMopTerm){
             if (constrainMop){
@@ -738,7 +738,7 @@ int main(int argc, char* argv[]){
         //minimizer.Migrad();
 
         minimizer.Command("MIG 25000 0.01");
-        //minimizer.Command("MINO 25000");
+        minimizer.Command("MINO 25000");
 
         TString varname[29];
         TString chnam;

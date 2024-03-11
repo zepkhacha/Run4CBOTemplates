@@ -341,11 +341,11 @@ int main(int argc, char* argv[]){
     fitrangelow  = startBin + (windowNo);
     fitStart     = (fitrangelow-1)*0.1492;
 
-    if (fitrangelow < 271){
-        windowBins = 34;
-    }else{
+    //if (fitrangelow < 271){
+    //    windowBins = 34;
+    //}else{
         windowBins = 69;
-    }
+    //}
 
     fitrangehigh = fitrangelow+windowBins;
     fitStop      = fitrangehigh*0.1492;
