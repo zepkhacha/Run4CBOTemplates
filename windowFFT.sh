@@ -1,4 +1,5 @@
 fileList="
+noRF_calo0_windowFits.root
 noRF_calo1_windowFits.root
 noRF_calo2_windowFits.root
 noRF_calo3_windowFits.root
