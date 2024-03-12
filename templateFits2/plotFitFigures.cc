@@ -37,8 +37,8 @@ t->SetBranchAddress("Ky", &Ky);
 t->SetBranchAddress("R", &R);
 t->GetEntry(0);
 
-//double wy = Ky * w_CBO * sqrt(( (4*M_PI) / (0.1492*Ky*w_CBO) ) - 1.0);
-double fy   = (w_y/(2*M_PI)) * pow(10.,6.); 
+double wy = Ky * w_CBO * sqrt(( (4*M_PI) / (0.1492*Ky*w_CBO) ) - 1.0);
+double fy   = (wy/(2*M_PI)) * pow(10.,6.); 
 double fCBO = (w_CBO/(2*M_PI)) * pow(10.,6.);
 double fC   = 1.0 / (0.1492E-6); // cyclotron
 double fx   = (fx + fC);
@@ -148,17 +148,17 @@ latex.DrawLatex(+ fVW, maxVal,"f_{VW}");
 
 
 c->Print(Form("fft_%s.pdf",outputFilename.c_str()));
-c->Print(Form("fitFigures_%s.pdf",outputFilename.c_str()));
-
-// FIGURE 2: Residuals
-c->Clear();
-r->Draw();
-c->Print(Form("fitFigures_%s.pdf",outputFilename.c_str()));
-
-// FIGURE 3: Wiggle
-
-// close PDF
-c->Print(Form("fitFigures_%s.pdf]",outputFilename.c_str()));
+//c->Print(Form("fitFigures_%s.pdf",outputFilename.c_str()));
+//
+//// FIGURE 2: Residuals
+//c->Clear();
+//r->Draw();
+//c->Print(Form("fitFigures_%s.pdf",outputFilename.c_str()));
+//
+//// FIGURE 3: Wiggle
+//
+//// close PDF
+//c->Print(Form("fitFigures_%s.pdf]",outputFilename.c_str()));
 }
 
 int main(int argc, char *argv[]){
