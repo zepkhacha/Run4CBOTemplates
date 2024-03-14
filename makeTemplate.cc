@@ -214,12 +214,6 @@ void makeTemplate(
         mgSlidingParam.Add(&gSlidingParam[i]);
         lSlidingParam->AddEntry(&gSlidingParam[i], Form("calo%i", i+1));
 
-        // we'll try a TSpline version of the TGraph too
-        TSpline3 *spline3 = new TSpline3(Form("calo%i_%s_spline",i,paramName.c_str()),&gSlidingParam[i]);
-        spline3->SetName(Form("calo%i_%s_spline",i,paramName.c_str()));
-        spline3->SetTitle(Form("calo%i_%s_spline",i,paramName.c_str()));
-        spline3->Write();
-
     }
 
     // now create a TF1 for the calo combination
