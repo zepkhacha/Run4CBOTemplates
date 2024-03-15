@@ -608,29 +608,29 @@ int main(int argc, char* argv[]){
             minimizer.DefineParameter(24,"A_ct", 0.0, 0.00, -0.1, 0.5);
         } else{
             minimizer.DefineParameter(7, "A_CNx1",  1.0, 0.1, -2.0, 2.0); // USE TO SCALE ALPHA/BETA
-            minimizer.DefineParameter(8, "A_SNx1",  1.0, 0.1, -1.0, 1.0); // SUB WITH TF1
+            minimizer.DefineParameter(8, "A_SNx1",  1.0, 0.1, -2.0, 2.0); // SUB WITH TF1
             minimizer.DefineParameter(10,"A_CNx2",  1.0, 0.1, -2.0, 2.0);
-            minimizer.DefineParameter(11,"A_SNx2",  1.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(11,"A_SNx2",  1.0, 0.1, -2.0, 2.0);
             minimizer.DefineParameter(14,"A_CNy1",  1.0, 0.1, -2.0, 2.0);
-            minimizer.DefineParameter(15,"A_SNy1",  1.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(15,"A_SNy1",  1.0, 0.1, -2.0, 2.0);
             minimizer.DefineParameter(18,"A_CNy2",  1.0, 0.1, -2.0, 2.0);
-            minimizer.DefineParameter(19,"A_SNy2",  1.0, 0.1, -1.0, 1.0);
+            minimizer.DefineParameter(19,"A_SNy2",  1.0, 0.1, -2.0, 2.0);
             minimizer.DefineParameter(24,"A_ct", 0.0, 0.0, -0.1, 0.5); // SET TO 0; SHOULD BE ABSORBED INTO ALPHA BETA
         }
 
         minimizer.DefineParameter(9, "LM", 0.001, 0.001, -0.1, 0.1);
 
         minimizer.DefineParameter(12,"A_CAx1",  1.0, 0.1, -2.0, 2.0);
-        minimizer.DefineParameter(13,"A_SAx1",  1.0, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(13,"A_SAx1",  1.0, 0.1, -2.0, 2.0);
 
         minimizer.DefineParameter(16,"Ky", 1.0139493, 0.00, 0.0, 1.2);
         minimizer.DefineParameter(17,"Ty", 30, 0., 0.0, 10000.);
 
         minimizer.DefineParameter(20,"A_Cp",  1.0, 0.1, -2.0, 2.0);
-        minimizer.DefineParameter(21,"A_Sp",  1.0, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(21,"A_Sp",  1.0, 0.1, -2.0, 2.0);
 
         minimizer.DefineParameter(22,"A_CNxy", 1.0, 0.1, -2.0, 2.0);
-        minimizer.DefineParameter(23,"A_SNxy", 1.0, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(23,"A_SNxy", 1.0, 0.1, -2.0, 2.0);
         minimizer.DefineParameter(25,"T_xy", 60, 0, 1, 1000);
         minimizer.DefineParameter(26,"w_xy", 12.075412, 0.0, 11., 13.);
 
