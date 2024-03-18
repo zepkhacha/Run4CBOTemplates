@@ -281,7 +281,7 @@ int main(int argc, char* argv[]){
         printf("bin %i content %f momentum %f isPhysical? %d weight %f\n",i,transform_dp_p0->GetBinContent(i),dp_p0[i],isPhysical,binWeights.at(binWeights.size()-1));
     }
 
-    printf("size of dp_p0 %i size of binWeights %i\n", dp_p0.size(), binWeights.size());
+    printf("size of dp_p0 %lu size of binWeights %lu\n", dp_p0.size(), binWeights.size());
 
     boostdata->Close();
     //*************
@@ -299,23 +299,30 @@ int main(int argc, char* argv[]){
     double A_CAx1, A_SAx1, A_CNy1, A_SNy1;
     double Ky, Ty, A_CNy2, A_SNy2;
     double A_Cp, A_Sp;
-    double A_SNxy, A_CNxy;
-    double A_ct, T_xy, w_xy;
+    double A_ct;
+    double T_vw_m_cbo, w_vw_m_cbo;
+    double T_vw_p_cbo, w_vw_p_cbo;
+    double A_SNvw_m_cbo, A_CNvw_m_cbo;
+    double A_SNvw_p_cbo, A_CNvw_p_cbo;
     double N0err, tauerr, A0err, phierr, Rerr;
     double T_CBOerr, w_CBOerr, A_CNx1err, A_SNx1err, C_CBOerr;
     double LMerr, A_CNx2err, A_SNx2err;
     double A_CAx1err, A_SAx1err, A_CNy1err, A_SNy1err;
     double Kyerr, Tyerr, A_CNy2err, A_SNy2err;
     double A_Cperr, A_Sperr;
-    double A_SNxyerr, A_CNxyerr;
-    double A_cterr, T_xyerr, w_xyerr;
+    double A_SNvw_m_cboerr, A_CNvw_m_cboerr;
+    double A_SNvw_p_cboerr, A_CNvw_p_cboerr;
+    double A_cterr;
+    double T_vw_m_cboerr, w_vw_m_cboerr;
+    double T_vw_p_cboerr, w_vw_p_cboerr;
     double ANx1, ANx1err, pNx1, pNx1err;
     double ANx2, ANx2err, pNx2, pNx2err;
     double AAx1, AAx1err, pAx1, pAx1err;
     double ANy1, ANy1err, pNy1, pNy1err;
     double ANy2, ANy2err, pNy2, pNy2err;
     double Ap, Aperr, pp, pperr;
-    double ANxy, ANxyerr, pNxy, pNxyerr;
+    double ANvw_m_cbo, ANvw_m_cboerr, pNvw_m_cbo, pNvw_m_cboerr;
+    double ANvw_p_cbo, ANvw_p_cboerr, pNvw_p_cbo, pNvw_p_cboerr;
     double Gamma_mop, Gamma_moperr;
     double w_y, w_vw;
 
@@ -346,8 +353,10 @@ int main(int argc, char* argv[]){
     fitresults->Branch("A_SAx1", &A_SAx1);
     fitresults->Branch("A_CNy1", &A_CNy1);
     fitresults->Branch("A_SNy1", &A_SNy1);
-    fitresults->Branch("A_SNxy", &A_SNxy);
-    fitresults->Branch("A_CNxy", &A_CNxy);
+    fitresults->Branch("A_SNvw_m_cbo", &A_SNvw_m_cbo);
+    fitresults->Branch("A_CNvw_m_cbo", &A_CNvw_m_cbo);
+    fitresults->Branch("A_SNvw_p_cbo", &A_SNvw_p_cbo);
+    fitresults->Branch("A_CNvw_p_cbo", &A_CNvw_p_cbo);
     fitresults->Branch("Ky", &Ky);
     fitresults->Branch("Ty", &Ty);
     fitresults->Branch("w_y", &w_y);
@@ -357,8 +366,10 @@ int main(int argc, char* argv[]){
     fitresults->Branch("A_Cp", &A_Cp);
     fitresults->Branch("A_Sp", &A_Sp);
     fitresults->Branch("A_ct", &A_ct);
-    fitresults->Branch("T_xy", &T_xy);
-    fitresults->Branch("w_xy", &w_xy);
+    fitresults->Branch("T_vw_m_cbo", &T_vw_m_cbo);
+    fitresults->Branch("w_vw_m_cbo", &w_vw_m_cbo);
+    fitresults->Branch("T_vw_p_cbo", &T_vw_p_cbo);
+    fitresults->Branch("w_vw_p_cbo", &w_vw_p_cbo);
 
     fitresults->Branch("N0err", &N0err);
     fitresults->Branch("tauerr", &tauerr);
@@ -383,11 +394,15 @@ int main(int argc, char* argv[]){
     fitresults->Branch("A_SNy2err", &A_SNy2err);
     fitresults->Branch("A_Cperr", &A_Cperr);
     fitresults->Branch("A_Sperr", &A_Sperr);
-    fitresults->Branch("A_SNxyerr", &A_SNxyerr);
-    fitresults->Branch("A_CNxyerr", &A_CNxyerr);
+    fitresults->Branch("A_SNvw_m_cboerr", &A_SNvw_m_cboerr);
+    fitresults->Branch("A_CNvw_m_cboerr", &A_CNvw_m_cboerr);
+    fitresults->Branch("A_SNvw_p_cboerr", &A_SNvw_p_cboerr);
+    fitresults->Branch("A_CNvw_p_cboerr", &A_CNvw_p_cboerr);
     fitresults->Branch("A_cterr", &A_cterr);
-    fitresults->Branch("T_xyerr", &T_xyerr);
-    fitresults->Branch("w_xyerr", &w_xyerr);
+    fitresults->Branch("T_vw_m_cboerr", &T_vw_m_cboerr);
+    fitresults->Branch("w_vw_m_cboerr", &w_vw_m_cboerr);
+    fitresults->Branch("T_vw_p_cboerr", &T_vw_p_cboerr);
+    fitresults->Branch("w_vw_p_cboerr", &w_vw_p_cboerr);
     fitresults->Branch("ANx1", &ANx1);
     fitresults->Branch("Anx1err", &ANx1err);
     fitresults->Branch("pNx1", &pNx1);
@@ -412,10 +427,14 @@ int main(int argc, char* argv[]){
     fitresults->Branch("Aperr", &Aperr);
     fitresults->Branch("pp", &pp);
     fitresults->Branch("pperr", &pperr);
-    fitresults->Branch("ANxy", &ANxy);
-    fitresults->Branch("ANxyerr", &ANxyerr);
-    fitresults->Branch("pNxy", &pNxy);
-    fitresults->Branch("pNxyerr", &pNxyerr);
+    fitresults->Branch("ANvw_m_cbo", &ANvw_m_cbo);
+    fitresults->Branch("ANvw_m_cboerr", &ANvw_m_cboerr);
+    fitresults->Branch("pNvw_m_cbo", &pNvw_m_cbo);
+    fitresults->Branch("pNvw_m_cboerr", &pNvw_m_cboerr);
+    fitresults->Branch("ANvw_p_cbo", &ANvw_p_cbo);
+    fitresults->Branch("ANvw_p_cboerr", &ANvw_p_cboerr);
+    fitresults->Branch("pNvw_p_cbo", &pNvw_p_cbo);
+    fitresults->Branch("pNvw_p_cboerr", &pNvw_p_cboerr);
     fitresults->Branch("Gamma_mop", &Gamma_mop);
     fitresults->Branch("Gamma_moperr", &Gamma_moperr);
     fitresults->Branch("c_e_scale"  , &c_e_scale);
@@ -459,11 +478,12 @@ int main(int argc, char* argv[]){
         fprintf(stderr, "Done Reading data\n");
 
         // Now do a 28 parameter fit
-        double par[29];
-        double errorplus[29];
-        double errorminus[29];
+        int noParams = 33;
+        double par[noParams];
+        double errorplus[noParams];
+        double errorminus[noParams];
 
-        TMinuit minimizer(29);
+        TMinuit minimizer(noParams);
         minimizer.Command("SET PRINTOUT 3"); // change to level 1
         minimizer.Command("SET NOWARNINGS");
         minimizer.SetFCN(minuitFunction);
@@ -489,8 +509,10 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(17,"Ty", 30, 10, 1.0, 10000.);
         minimizer.DefineParameter(20,"A_Cp", -0.2, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(21,"A_Sp", -0.3, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(22,"A_CNxy", -0.2, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(23,"A_SNxy", -0.3, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(22,"A_CNvw_m_cbo", -0.2, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(23,"A_SNvw_m_cbo", -0.3, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(29,"A_CNvw_p_cbo", -0.2, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(30,"A_SNvw_p_cbo", -0.3, 0.1, -1.0, 1.0);
         if (pBinCBO){
             minimizer.DefineParameter(7, "A_CNx1", -0.0, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(8, "A_SNx1", -0.0, 0.1, -1.0, 1.0);
@@ -512,8 +534,10 @@ int main(int argc, char* argv[]){
             minimizer.DefineParameter(19,"A_SNy2", -0.3, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(24,"A_ct", 0.0, 0.00, -0.1, 0.5); // fix to remove w_CBO(t) dependence
         }
-        minimizer.DefineParameter(25,"T_xy", 60, 10, 1, 1000);
-        minimizer.DefineParameter(26,"w_xy", 11.9, 0.1, 11.5, 12.5);
+        minimizer.DefineParameter(25,"T_vw_m_cbo", 60, 10, 1, 1000);
+        minimizer.DefineParameter(26,"w_vw_m_cbo", 11.9, 0.1, 11.5, 12.5);
+        minimizer.DefineParameter(31,"T_vw_p_cbo", 60, 10, 1, 1000);
+        minimizer.DefineParameter(32,"w_vw_p_cbo", 16.6, 0.1, 14.5, 18.5);
         if (includeMopTerm){
             if (constrainMop){
                 minimizer.DefineParameter(27,"Gamma_mop", 0.00002, 0.0000001, -0.001, 0.001);
@@ -615,7 +639,7 @@ int main(int argc, char* argv[]){
         minimizer.Command("MIG 25000 0.01");
         minimizer.Command("MINO 25000");
 
-        TString varname[29];
+        TString varname[noParams];
         TString chnam;
         double val, err, xlolim, xuplim;
         int iuint;
@@ -623,7 +647,7 @@ int main(int argc, char* argv[]){
         int npari, nparx, istat;
         double eplus, eminus, eparab, globc;
 
-        for(int k=0; k<29; k++){
+        for(int k=0; k<noParams; k++){
             minimizer.mnpout(k, chnam, val, err, xlolim, xuplim, iuint);
             par[k] = val;
             varname[k] = chnam;
@@ -632,7 +656,7 @@ int main(int argc, char* argv[]){
             errorminus[k] = eminus;
         }
 
-        for(int k=0; k<29; k++){
+        for(int k=0; k<noParams; k++){
             fprintf(stderr, "%s \t %12.5e + %9.3e %9.3e\n",
                     varname[k].Data(), par[k], errorplus[k], errorminus[k]);
         }
@@ -669,11 +693,15 @@ int main(int argc, char* argv[]){
         A_SNy2 = par[19];
         A_Cp = par[20];
         A_Sp = par[21];
-        A_CNxy = par[22];
-        A_SNxy = par[23];
+        A_CNvw_m_cbo = par[22];
+        A_SNvw_m_cbo = par[23];
+        A_CNvw_p_cbo = par[29];
+        A_SNvw_p_cbo = par[30];
         A_ct = par[24];
-        T_xy = par[25];
-        w_xy = par[26];
+        T_vw_m_cbo = par[25];
+        w_vw_m_cbo = par[26];
+        T_vw_p_cbo = par[31];
+        w_vw_p_cbo = par[32];
         Gamma_mop = par[27];
 
         N0err = sqrt(-errorplus[0]*errorminus[0]);
@@ -688,8 +716,10 @@ int main(int argc, char* argv[]){
         Kyerr = sqrt(-errorplus[16]*errorminus[16]);
         Tyerr = sqrt(-errorplus[17]*errorminus[17]);
         A_cterr = (errorplus[24]-errorminus[24])/2.;
-        T_xyerr = (errorplus[25]-errorminus[25])/2.;
-        w_xyerr = (errorplus[26]-errorminus[26])/2.;
+        T_vw_m_cboerr = (errorplus[25]-errorminus[25])/2.;
+        w_vw_m_cboerr = (errorplus[26]-errorminus[26])/2.;
+        T_vw_p_cboerr = (errorplus[31]-errorminus[31])/2.;
+        w_vw_p_cboerr = (errorplus[32]-errorminus[32])/2.;
         Gamma_moperr = (errorplus[27]-errorminus[27])/2.;
 
         A_CNx1err = sqrt(-errorplus[7]*errorminus[7]);
@@ -760,16 +790,33 @@ int main(int argc, char* argv[]){
                 + 2*A_Cp*A_Sp*erracp*errasp*covariance[20][21])/
             (A_Cp*A_Cp + A_Sp*A_Sp);
 
-        ANxy = sqrt(A_CNxy*A_CNxy + A_SNxy*A_SNxy);
-        double erracxy = (errorplus[22] - errorminus[22])/2.;
-        double errasxy = (errorplus[23] - errorminus[23])/2.;
-        ANxyerr = sqrt(pow(erracxy*A_CNxy, 2.) + pow(errasxy*A_SNxy, 2.)
-                + 2*A_CNxy*A_SNxy*erracxy*errasxy*covariance[22][23])/
-            sqrt(A_CNxy*A_CNxy + A_SNxy*A_SNxy);
-        pNxy = invert(A_CNxy, A_SNxy);
-        pNxyerr = sqrt(pow(A_CNxy*errasxy, 2.) + pow(A_SNxy*erracxy, 2.)
-                + 2*A_CNxy*A_SNxy*erracxy*errasxy*covariance[22][23])/
-            (A_CNxy*A_CNxy + A_SNxy*A_SNxy);
+        ANvw_m_cbo = sqrt(A_CNvw_m_cbo*A_CNvw_m_cbo + A_SNvw_m_cbo*A_SNvw_m_cbo);
+        ANvw_p_cbo = sqrt(A_CNvw_p_cbo*A_CNvw_p_cbo + A_SNvw_p_cbo*A_SNvw_p_cbo);
+
+        double erracvw_m_cbo = (errorplus[22] - errorminus[22])/2.;
+        double errasvw_m_cbo = (errorplus[23] - errorminus[23])/2.;
+
+        double erracvw_p_cbo = (errorplus[29] - errorminus[29])/2.;
+        double errasvw_p_cbo = (errorplus[30] - errorminus[30])/2.;
+
+        ANvw_m_cboerr = sqrt(pow(erracvw_m_cbo*A_CNvw_m_cbo, 2.) + pow(errasvw_m_cbo*A_SNvw_m_cbo, 2.)
+                + 2*A_CNvw_m_cbo*A_SNvw_m_cbo*erracvw_m_cbo*errasvw_m_cbo*covariance[22][23])/
+            sqrt(A_CNvw_m_cbo*A_CNvw_m_cbo + A_SNvw_m_cbo*A_SNvw_m_cbo);
+
+        ANvw_p_cboerr = sqrt(pow(erracvw_p_cbo*A_CNvw_p_cbo, 2.) + pow(errasvw_p_cbo*A_SNvw_p_cbo, 2.)
+                + 2*A_CNvw_p_cbo*A_SNvw_p_cbo*erracvw_p_cbo*errasvw_p_cbo*covariance[29][30])/
+            sqrt(A_CNvw_p_cbo*A_CNvw_p_cbo + A_SNvw_p_cbo*A_SNvw_p_cbo);
+
+        pNvw_m_cbo = invert(A_CNvw_m_cbo, A_SNvw_m_cbo);
+        pNvw_p_cbo = invert(A_CNvw_p_cbo, A_SNvw_p_cbo);
+
+        pNvw_m_cboerr = sqrt(pow(A_CNvw_m_cbo*errasvw_m_cbo, 2.) + pow(A_SNvw_m_cbo*erracvw_m_cbo, 2.)
+                + 2*A_CNvw_m_cbo*A_SNvw_m_cbo*erracvw_m_cbo*errasvw_m_cbo*covariance[22][23])/
+            (A_CNvw_m_cbo*A_CNvw_m_cbo + A_SNvw_m_cbo*A_SNvw_m_cbo);
+
+        pNvw_p_cboerr = sqrt(pow(A_CNvw_p_cbo*errasvw_p_cbo, 2.) + pow(A_SNvw_p_cbo*erracvw_p_cbo, 2.)
+                + 2*A_CNvw_p_cbo*A_SNvw_p_cbo*erracvw_p_cbo*errasvw_p_cbo*covariance[29][30])/
+            (A_CNvw_p_cbo*A_CNvw_p_cbo + A_SNvw_p_cbo*A_SNvw_p_cbo);
 
         A_CNx2err = sqrt(-errorplus[10]*errorminus[10]);
         A_SNx2err = sqrt(-errorplus[11]*errorminus[11]);

@@ -136,8 +136,9 @@ double calcnu(double *dim, double *par){ // dim[0] = bin number
                         + par[19]*sin(wvw(par[16], par[6], time, par[24])*time));
                 
         }                                            
-        double p = exp(-1.*time/par[25])*(par[22]*cos(time*par[26])+par[23]*sin(time*par[26]));
-        binNu *= x*y + p;
+        double vw_m_CBO = exp(-1.*time/par[25])*(par[22]*cos(time*par[26])+par[23]*sin(time*par[26]));
+        double vw_p_CBO = exp(-1.*time/par[25])*(par[29]*cos(time*par[26])+par[30]*sin(time*par[26]));
+        binNu *= x*y + vw_m_CBO + vw_p_CBO;
 
         binNu *= (1.0 - par[9]*lambda->GetBinContent(int(dim[0])));
         nu += binWeights[b] * binNu;
