@@ -35,6 +35,10 @@ void compareIterations(){
         g_R.push_back(g_temp);
         g_chisq.push_back(g_temp);
         g_rchisq.push_back(g_temp);
+
+        g_R[j].SetLineWidth( j==0 ? 4 : 1);
+        g_chisq[j].SetLineWidth( j==0 ? 4 : 1);
+        g_rchisq[j].SetLineWidth( j==0 ? 4 : 1);
     }
 
     for (int i = 0; i < filenames.size(); i++){
@@ -94,6 +98,8 @@ void compareIterations(){
 
     TLegend *leg_R = new TLegend(0.7,0.6,0.9,0.9);
     leg_R->SetTextSize(0.01);
+
+    g_R[0].SetLineWidth(8);
 
     for (int i = 0; i < 25; i++){
 
