@@ -472,9 +472,9 @@ int main(int argc, char* argv[]){
     minimizer.DefineParameter(26, "beta_vw_m_cbo", 0.0, 0.001, 0, 0);
 
     // now adding in x-y cross term (VW + CBO)
-    minimizer.DefineParameter(27, "alpha_vw_p_cbo", 0.0, 0.001, 0, 0);
+    minimizer.DefineParameter(27, "alpha_vw_p_cbo", 0.0, 0.0001, 0, 0);
     minimizer.DefineParameter(28, "w_vw_p_cbo", 15.992337, 0.0, 0, 0);
-    minimizer.DefineParameter(29, "beta_vw_p_cbo", 0.0, 0.001, 0, 0);
+    minimizer.DefineParameter(29, "beta_vw_p_cbo", 0.0, 0.0001, 0, 0);
 
     // now go through various stages of fitting 
     printf("MINUIT - FIT ONLY WIGGLE\n");
