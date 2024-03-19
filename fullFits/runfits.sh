@@ -19,13 +19,13 @@ for dat in noRF ;  do # dat = run number
     for caloNum in {0..24} ; do
       ./fitplot \
       -i /gm2data/cornell/histograms/aMethod/histogram_a_${dat}.root \
-      -o test_sBin_constraintOn_cE${cE}_seed${seedNo}_${dat}_calo${caloNum}_vw_pm_cbo.root \
+      -o sBin_constraintOn_cE${cE}_seed${seedNo}_${dat}_calo${caloNum}.root \
       -n $caloNum \
       -c ${cE} \
       -s ${seedNo} \
       -a 1 \
       -b $transform \
-      -f $formatB | tee test_sBin_constraintOn_cE${cE}_seed${seedNo}_${dat}_calo${caloNum}_vw_pm_cbo.log  &
+      -f $formatB | tee sBin_constraintOn_cE${cE}_seed${seedNo}_${dat}_calo${caloNum}.log &
     done
     wait
 

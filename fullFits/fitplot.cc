@@ -536,8 +536,8 @@ int main(int argc, char* argv[]){
         }
         minimizer.DefineParameter(25,"T_vw_m_cbo", 60, 10, 1, 1000);
         minimizer.DefineParameter(26,"w_vw_m_cbo", 11.9, 0.1, 11.5, 12.5);
-        minimizer.DefineParameter(31,"T_vw_p_cbo", 60, 10, 1, 1000);
-        minimizer.DefineParameter(32,"w_vw_p_cbo", 16.6, 0.1, 14.5, 18.5);
+        minimizer.DefineParameter(31,"T_vw_p_cbo", 10, 10, 1, 5000);
+        minimizer.DefineParameter(32,"w_vw_p_cbo", 16.6, 0.1, 12.5, 19.5);
         if (includeMopTerm){
             if (constrainMop){
                 minimizer.DefineParameter(27,"Gamma_mop", 0.00002, 0.0000001, -0.001, 0.001);
@@ -588,6 +588,11 @@ int main(int argc, char* argv[]){
         minimizer.Command("FIX 26");
         minimizer.Command("FIX 27");
         minimizer.Command("FIX 28");
+        minimizer.Command("FIX 29");
+        minimizer.Command("FIX 30");
+        minimizer.Command("FIX 31");
+        minimizer.Command("FIX 32");
+        minimizer.Command("FIX 33");
         minimizer.Migrad();
 
         minimizer.Command("RES");
@@ -614,6 +619,12 @@ int main(int argc, char* argv[]){
         minimizer.Command("FIX 25");
         minimizer.Command("FIX 26");
         minimizer.Command("FIX 27");
+        minimizer.Command("FIX 28");
+        minimizer.Command("FIX 29");
+        minimizer.Command("FIX 30");
+        minimizer.Command("FIX 31");
+        minimizer.Command("FIX 32");
+        minimizer.Command("FIX 33");
         minimizer.Migrad();
         minimizer.Command("RES");
         minimizer.Command("FIX 11");
@@ -632,6 +643,11 @@ int main(int argc, char* argv[]){
         minimizer.Command("FIX 26");
         minimizer.Command("FIX 27");
         minimizer.Command("FIX 28");
+        minimizer.Command("FIX 29");
+        minimizer.Command("FIX 30");
+        minimizer.Command("FIX 31");
+        minimizer.Command("FIX 32");
+        minimizer.Command("FIX 33");
         minimizer.Migrad();
         minimizer.Command("RES");
         //minimizer.Migrad();
