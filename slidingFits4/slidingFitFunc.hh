@@ -134,7 +134,7 @@ double calcnu(double par[], double i){
     // now add LM 
     double term_LM = (1.0 - par[16]*lambda->GetBinContent(i));
 
-    return term_5param * term_LM * ( term_x * term_y + term_vw_m_CBO ); 
+    return term_5param * term_LM * ( term_x + term_y + term_vw_m_CBO ); 
 
 }
 
