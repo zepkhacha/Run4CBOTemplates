@@ -130,15 +130,15 @@ latex.DrawLatex(+ fVW, maxVal,"f_{VW}");
 
 
 c->Print(Form("fft_%s.pdf",outputFilename.c_str()));
-c->Print(Form("fitFigures_%s.pdf",outputFilename.c_str()));
+//c->Print(Form("fitFigures_%s.pdf",outputFilename.c_str()));
 
-// FIGURE 2: Residuals
-c->Clear();
-r->Draw();
-c->Print(Form("fitFigures_%s.pdf",outputFilename.c_str()));
+//// FIGURE 2: Residuals
+//c->Clear();
+//r->Draw();
+//c->Print(Form("fitFigures_%s.pdf",outputFilename.c_str()));
 
 // FIGURE 3: Wiggle
 
 // close PDF
-c->Print(Form("fitFigures_%s.pdf]",outputFilename.c_str()));
+//c->Print(Form("fitFigures_%s.pdf]",outputFilename.c_str()));
 }
