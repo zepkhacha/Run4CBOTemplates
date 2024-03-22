@@ -187,14 +187,14 @@ int main(int argc, char* argv[]){
     double alpha_vw_p_cbo, beta_vw_p_cbo, w_vw_p_cbo;
     double alpha_vw_p_cbo_err, beta_vw_p_cbo_err, w_vw_p_cbo_err;
 
-    double fullFit_Ky;
-    double fullFit_A_ct;
-    double fullFit_w_vw;
-    double fullFit_w_y;
-    double fullFit_A_CAx1; // cos and sin coefficients for A0 modulation
-    double fullFit_A_SAx1;
-    double fullFit_A_Cp; // coefficients for phi_0 modulation
-    double fullFit_A_Sp;
+    double refFitKy;
+    double refFitA_ct;
+    double refFitw_vw;
+    double refFitw_y;
+    double refFitA_CAx1; // cos and sin coefficients for A0 modulation
+    double refFitA_SAx1;
+    double refFitA_Cp; // coefficients for phi_0 modulation
+    double refFitA_Sp;
 
     double fitStart = (fitrangelow-1)  * 0.1492;
     double fitStop  = fitrangehigh * 0.1492;
@@ -204,7 +204,7 @@ int main(int argc, char* argv[]){
     printf("reading reference data from %s (fixing 5-param to these terms)\n", fullFitFilename);
     TFile* cboFullFit = new TFile(fullFitFilename, "READ");
 
-    double fullFit_Ax1, fullFit_wx1, fullFit_phix1;
+    double refFitAx1, refFitwx1, refFitphix1;
     TTree* cboFullFitResults = (TTree*) cboFullFit->Get("fitresults");
 
     cboFullFitResults->SetBranchAddress("N0"   , &N0     );
@@ -213,20 +213,20 @@ int main(int argc, char* argv[]){
     cboFullFitResults->SetBranchAddress("phi"  , &phi    );
     cboFullFitResults->SetBranchAddress("tau"  , &tau    );
 
-    cboFullFitResults->SetBranchAddress("w_CBO", &fullFit_wx1);
-    cboFullFitResults->SetBranchAddress("ANx1" , &fullFit_Ax1);
-    cboFullFitResults->SetBranchAddress("pNx1" , &fullFit_phix1);
+    cboFullFitResults->SetBranchAddress("w_CBO", &refFitwx1);
+    cboFullFitResults->SetBranchAddress("ANx1" , &refFitAx1);
+    cboFullFitResults->SetBranchAddress("pNx1" , &refFitphix1);
     cboFullFitResults->SetBranchAddress("LM"   , &LM     );
 
-    cboFullFitResults->SetBranchAddress("Ky"   , &fullFit_Ky);
-    cboFullFitResults->SetBranchAddress("A_ct" , &fullFit_A_ct);
-    cboFullFitResults->SetBranchAddress("w_y"  , &fullFit_w_y);
-    cboFullFitResults->SetBranchAddress("w_vw" , &fullFit_w_vw);
+    cboFullFitResults->SetBranchAddress("Ky"   , &refFitKy);
+    cboFullFitResults->SetBranchAddress("A_ct" , &refFitA_ct);
+    cboFullFitResults->SetBranchAddress("w_y"  , &refFitw_y);
+    cboFullFitResults->SetBranchAddress("w_vw" , &refFitw_vw);
 
-    cboFullFitResults->SetBranchAddress("A_CAx1" , &fullFit_A_CAx1);
-    cboFullFitResults->SetBranchAddress("A_SAx1" , &fullFit_A_SAx1);
-    cboFullFitResults->SetBranchAddress("A_Cp" , &fullFit_A_Cp);
-    cboFullFitResults->SetBranchAddress("A_Sp" , &fullFit_A_Sp);
+    cboFullFitResults->SetBranchAddress("A_CAx1" , &refFitA_CAx1);
+    cboFullFitResults->SetBranchAddress("A_SAx1" , &refFitA_SAx1);
+    cboFullFitResults->SetBranchAddress("A_Cp" , &refFitA_Cp);
+    cboFullFitResults->SetBranchAddress("A_Sp" , &refFitA_Sp);
 
     cboFullFitResults->GetEntry(0);
     cboFullFit->Close();
@@ -435,7 +435,7 @@ int main(int argc, char* argv[]){
 
     // 1-CBO terms
     minimizer.DefineParameter(5, "alpha_CBO", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(6, "w_CBO", 2.3264342, 0, 0, 0);
+    minimizer.DefineParameter(6, "w_CBO", 2.327345, 0, 0, 0);
     minimizer.DefineParameter(7, "beta_CBO", 0.0, 0.001, 0, 0);
 
     // 2-CBO terms
@@ -444,12 +444,12 @@ int main(int argc, char* argv[]){
 
     // 1-Y terms
     minimizer.DefineParameter(10, "alpha_y", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(11, "w_y", 13.896504, 0.0, 0, 0);
+    minimizer.DefineParameter(11, "w_y", 13.898432, 0.0, 0, 0);
     minimizer.DefineParameter(12, "beta_y", 0.0, 0.001, 0, 0);
 
     // 2-Y terms
     minimizer.DefineParameter(13, "alpha_vw", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(14, "w_vw", 14.319494, 0.0, 0, 0);
+    minimizer.DefineParameter(14, "w_vw", 14.315639, 0.0, 0, 0);
     minimizer.DefineParameter(15, "beta_vw", 0.0, 0.001, 0, 0);
 
     // LM term
@@ -468,12 +468,12 @@ int main(int argc, char* argv[]){
 
     // now adding in x-y cross term (VW - CBO)
     minimizer.DefineParameter(24, "alpha_vw_m_cbo", 0.0, 0.001, 0, 0);
-    minimizer.DefineParameter(25, "w_vw_m_cbo", 12.058423, 0.0, 0, 0); //12.075412 before including vw+cbo
+    minimizer.DefineParameter(25, "w_vw_m_cbo", 12.014202, 0.0, 0, 0); //12.075412 before including vw+cbo
     minimizer.DefineParameter(26, "beta_vw_m_cbo", 0.0, 0.001, 0, 0);
 
     // now adding in x-y cross term (VW + CBO)
     minimizer.DefineParameter(27, "alpha_vw_p_cbo", 0.0, 0.0001, 0, 0);
-    minimizer.DefineParameter(28, "w_vw_p_cbo", 15.992337, 0.0, 0, 0);
+    minimizer.DefineParameter(28, "w_vw_p_cbo", 16.713920, 0.0, 0, 0);
     minimizer.DefineParameter(29, "beta_vw_p_cbo", 0.0, 0.0001, 0, 0);
 
     // now go through various stages of fitting 

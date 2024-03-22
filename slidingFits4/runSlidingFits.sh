@@ -10,10 +10,10 @@ fi
 frFile='/gm2data/tbarrett/gm2fr/studies/run23_bunch_corrections/CorrectedFourier_Run3b.root'
 
 # types of formats
-formatA="/gm2data/zkhechad/run45/envelope/formats/formatA_sBin_constraintOff.txt"
-formatB="/gm2data/zkhechad/run45/envelope/formats/formatB_sBin_constraintOn.txt"
-formatC="/gm2data/zkhechad/run45/envelope/formats/formatC_mBin_constraintOff.txt"
-formatD="/gm2data/zkhechad/run45/envelope/formats/formatD_mBin_constraintOn.txt"
+formatA="./formats/formatA_sBin_constraintOff.txt"
+formatB="./formats/formatB_sBin_constraintOn.txt"
+formatC="./formats/formatC_mBin_constraintOff.txt"
+formatD="./formats/formatD_mBin_constraintOn.txt"
 
 mainDirectory="/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/"
 mkdir -p ${mainDirectory}/slidingFits4/${run}
