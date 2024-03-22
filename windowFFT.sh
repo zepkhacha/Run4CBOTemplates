@@ -32,6 +32,6 @@ for file in $fileList; do
   calo=${runcalo#run*_}
   fullfitfilename=sBin_constraintOn_cE0.0_seed0_${runcalo}.root
   #fullfitfilename=sBin_constraintOff_cE0.0_seed0_${run}_calo.root
-  ./windowFFT -i slidingFits3/${file} -o fft_${file%.root} -f fullFits/${run}/$fullfitfilename
+  ./windowFFT -i slidingFits4/${file} -o fft_${file%.root} -f fullFits/${run}/$fullfitfilename
 done
 
