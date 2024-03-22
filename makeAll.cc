@@ -22,9 +22,9 @@ void makeAll(){
     makeTemplate("slidingFits4/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "alpha_phi", "dimensionless", -0.01, 0.01, "APE PFC PLC");
     makeTemplate("slidingFits4/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "beta_phi", "dimensionless", -0.01, 0.01, "APE PFC PLC");
 
-    makeTemplate("slidingFits4/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "alpha_vw_m_cbo", "dimensionless", -0.002, 0.002, "APE PFC PLC");
-    makeTemplate("slidingFits4/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "beta_vw_m_cbo" , "dimensionless", -0.002, 0.002, "APE PFC PLC");
+    makeTemplate("slidingFits4/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "alpha_vw_m_cbo", "dimensionless", -0.004, 0.004, "APE PFC PLC");
+    makeTemplate("slidingFits4/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "beta_vw_m_cbo" , "dimensionless", -0.004, 0.004, "APE PFC PLC");
 
-    makeTemplate("slidingFits4/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "alpha_vw_p_cbo", "dimensionless", -0.002, 0.002, "APE PFC PLC");
-    makeTemplate("slidingFits4/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "beta_vw_p_cbo" , "dimensionless", -0.002, 0.002, "APE PFC PLC");
+    makeTemplate("slidingFits4/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "alpha_vw_p_cbo", "dimensionless", -0.004, 0.004, "APE PFC PLC");
+    makeTemplate("slidingFits4/noRF_windowFits.root", "/gm2data/zkhechad/cboTemplates/Run4CBOTemplates/fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF_calo", "beta_vw_p_cbo" , "dimensionless", -0.004, 0.004, "APE PFC PLC");
 }
