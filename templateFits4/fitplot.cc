@@ -2,6 +2,7 @@
 #include "TTree.h"
 #include "TFile.h"
 #include "TH1.h"
+#include "TF1.h"
 #include "TString.h"
 #include "TMinuit.h"
 #include "TCanvas.h"
@@ -14,12 +15,14 @@
 #include "CornellHistograms.hh"
 #include "CornellFitAlgorithm.hh"
 #include "tbb/parallel_for.h"
+#include "readMinuitCommands.hh"
 
 // cpp includes
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <limits>
 
 // fitting configuration
 static double expcorr[nBins];		// no longer used
@@ -30,10 +33,6 @@ bool   asymmetry    = true;		// must be true for a-method, false for t-method
 int    fitrangelow  = startBin; // TO DO: change back to startBin;
 int    fitrangehigh = nBins; // TO DO: change back to nBins // 1340 for 200us
 double frlifetime   = 0;
-
-int desiredSeed = 0; // set via command-line argument
-int desiredCalo = 0; // set via command-line argument
-
 
 void printhelp(){
     printf(
@@ -166,10 +165,109 @@ int main(int argc, char* argv[]){
                 includeMopTerm = bool(atoi(line.substr(datIndex,100).c_str()));
             }else if 	(line.find("constrainMop") != std::string::npos) {
                 constrainMop = bool(atoi(line.substr(datIndex,100).c_str()));
+            }else if    (line.find("templatePath") != std::string::npos) {
+                templatePath = line.substr(datIndex,100).c_str();
+            }else if    (line.find("refFile") != std::string::npos) {
+                refFile = line.substr(datIndex,100).c_str();
             }else{}
         }
     } 
     format.close();
+
+    //TO DO: stop making duplicates of caloWeights in each template file...or just make one file for both alpha/beta
+    printf("loading CBO templates from templatePath = %s\n", templatePath.c_str());
+
+    TFile *f_alpha_CBO = TFile::Open(Form("%s/templates_alpha_CBO.root", templatePath.c_str()), "READ");
+    TFile *f_beta_CBO  = TFile::Open(Form("%s/templates_beta_CBO.root" , templatePath.c_str()), "READ");
+    TFile *f_alpha_2CBO = TFile::Open(Form("%s/templates_alpha_2CBO.root", templatePath.c_str()), "READ");
+    TFile *f_beta_2CBO  = TFile::Open(Form("%s/templates_beta_2CBO.root" , templatePath.c_str()), "READ");
+    TFile *f_alpha_y = TFile::Open(Form("%s/templates_alpha_y.root", templatePath.c_str()), "READ");
+    TFile *f_beta_y  = TFile::Open(Form("%s/templates_beta_y.root" , templatePath.c_str()), "READ");
+    TFile *f_alpha_vw = TFile::Open(Form("%s/templates_alpha_vw.root", templatePath.c_str()), "READ");
+    TFile *f_beta_vw  = TFile::Open(Form("%s/templates_beta_vw.root" , templatePath.c_str()), "READ");
+    TFile *f_alpha_A0 = TFile::Open(Form("%s/templates_alpha_A0.root", templatePath.c_str()), "READ");
+    TFile *f_beta_A0  = TFile::Open(Form("%s/templates_beta_A0.root" , templatePath.c_str()), "READ");
+    TFile *f_alpha_phi = TFile::Open(Form("%s/templates_alpha_phi.root", templatePath.c_str()), "READ");
+    TFile *f_beta_phi  = TFile::Open(Form("%s/templates_beta_phi.root" , templatePath.c_str()), "READ");
+    TFile *f_alpha_vw_m_cbo = TFile::Open(Form("%s/templates_alpha_vw_m_cbo.root", templatePath.c_str()), "READ");
+    TFile *f_beta_vw_m_cbo  = TFile::Open(Form("%s/templates_beta_vw_m_cbo.root" , templatePath.c_str()), "READ");
+    TFile *f_alpha_vw_p_cbo = TFile::Open(Form("%s/templates_alpha_vw_p_cbo.root", templatePath.c_str()), "READ");
+    TFile *f_beta_vw_p_cbo  = TFile::Open(Form("%s/templates_beta_vw_p_cbo.root" , templatePath.c_str()), "READ");
+
+    int caloNum;
+    double caloWeight;
+
+    TTree* treeOfcaloWeights = (TTree*)f_alpha_CBO->Get("caloWeights");
+    treeOfcaloWeights->SetBranchAddress("calo", &caloNum);
+    treeOfcaloWeights->SetBranchAddress("weight", &caloWeight);
+
+    // if desiredCalo = 0 (i.e. calo sum) load weights as usual
+    // otherwise set weight of desiredCalo==1.0 and ignore the rest
+    if (desiredCalo==0){
+        for (int entry=0; entry<treeOfcaloWeights->GetEntries(); entry++){
+            treeOfcaloWeights->GetEntry(entry);
+            caloWeights[caloNum-1] = caloWeight;
+        }
+    }else{
+        caloWeights[desiredCalo-1] = 1.0;
+    }
+
+    for (unsigned int i=0; i<caloWeights.size(); i++){
+        printf("calo %i weight %f\n", i, caloWeights[i]);
+    }
+
+    for (int i=0; i<25; i++){
+        TF1* temp_alpha_CBO = (TF1*)f_alpha_CBO->Get(Form("calo%i_alpha_CBO", desiredCalo));
+        TF1* temp_beta_CBO  = (TF1*)f_beta_CBO ->Get(Form("calo%i_beta_CBO" , desiredCalo));
+        TF1* temp_alpha_2CBO = (TF1*)f_alpha_2CBO->Get(Form("calo%i_alpha_2CBO", desiredCalo));
+        TF1* temp_beta_2CBO  = (TF1*)f_beta_2CBO ->Get(Form("calo%i_beta_2CBO" , desiredCalo));
+        TF1* temp_alpha_y = (TF1*)f_alpha_y->Get(Form("calo%i_alpha_y", desiredCalo));
+        TF1* temp_beta_y  = (TF1*)f_beta_y ->Get(Form("calo%i_beta_y" , desiredCalo));
+        TF1* temp_alpha_vw = (TF1*)f_alpha_vw->Get(Form("calo%i_alpha_vw", desiredCalo));
+        TF1* temp_beta_vw  = (TF1*)f_beta_vw ->Get(Form("calo%i_beta_vw" , desiredCalo));
+        TF1* temp_alpha_A0 = (TF1*)f_alpha_A0->Get(Form("calo%i_alpha_A0", desiredCalo));
+        TF1* temp_beta_A0  = (TF1*)f_beta_A0 ->Get(Form("calo%i_beta_A0" , desiredCalo));
+        TF1* temp_alpha_phi = (TF1*)f_alpha_phi->Get(Form("calo%i_alpha_phi", desiredCalo));
+        TF1* temp_beta_phi  = (TF1*)f_beta_phi ->Get(Form("calo%i_beta_phi" , desiredCalo));
+        TF1* temp_alpha_vw_m_cbo = (TF1*)f_alpha_vw_m_cbo->Get(Form("calo%i_alpha_vw_m_cbo", desiredCalo));
+        TF1* temp_beta_vw_m_cbo  = (TF1*)f_beta_vw_m_cbo ->Get(Form("calo%i_beta_vw_m_cbo" , desiredCalo));
+        TF1* temp_alpha_vw_p_cbo = (TF1*)f_alpha_vw_p_cbo->Get(Form("calo%i_alpha_vw_p_cbo", desiredCalo));
+        TF1* temp_beta_vw_p_cbo  = (TF1*)f_beta_vw_p_cbo ->Get(Form("calo%i_beta_vw_p_cbo" , desiredCalo));
+
+        alpha_CBO_TF1.push_back(*temp_alpha_CBO);
+        beta_CBO_TF1 .push_back(*temp_beta_CBO); 
+        alpha_2CBO_TF1.push_back(*temp_alpha_2CBO);
+        beta_2CBO_TF1 .push_back(*temp_beta_2CBO); 
+        alpha_y_TF1.push_back(*temp_alpha_y);
+        beta_y_TF1 .push_back(*temp_beta_y); 
+        alpha_vw_TF1.push_back(*temp_alpha_vw);
+        beta_vw_TF1 .push_back(*temp_beta_vw); 
+        alpha_A0_TF1.push_back(*temp_alpha_A0);
+        beta_A0_TF1 .push_back(*temp_beta_A0); 
+        alpha_phi_TF1.push_back(*temp_alpha_phi);
+        beta_phi_TF1 .push_back(*temp_beta_phi); 
+        alpha_vw_m_cbo_TF1.push_back(*temp_alpha_vw_m_cbo);
+        beta_vw_m_cbo_TF1 .push_back(*temp_beta_vw_m_cbo); 
+        alpha_vw_p_cbo_TF1.push_back(*temp_alpha_vw_p_cbo);
+        beta_vw_p_cbo_TF1 .push_back(*temp_beta_vw_p_cbo); 
+    }
+
+    f_alpha_CBO->Close();
+    f_beta_CBO->Close();  
+    f_alpha_2CBO->Close();
+    f_beta_2CBO->Close(); 
+    f_alpha_y->Close();  
+    f_beta_y->Close();   
+    f_alpha_vw->Close();
+    f_beta_vw->Close(); 
+    f_alpha_A0->Close();
+    f_beta_A0->Close();
+    f_alpha_phi->Close();
+    f_beta_phi->Close();
+    f_alpha_vw_m_cbo->Close();
+    f_beta_vw_m_cbo->Close();
+    f_alpha_vw_p_cbo->Close();
+    f_beta_vw_p_cbo->Close();
 
     printf("Parameters after format file: pBinTau %d pBinPhi %d pBinCBO %d constraintau %d includeMopTerm %d constrainMop %d c_e_scale %f \n", pBinTau, pBinPhi, pBinCBO, constraintau, includeMopTerm, constrainMop, c_e_scale);
     printf("Opening file %s.\n", boostFilename);
@@ -355,6 +453,8 @@ int main(int argc, char* argv[]){
     fitresults->Branch("A_SNy1", &A_SNy1);
     fitresults->Branch("A_SNvw_m_cbo", &A_SNvw_m_cbo);
     fitresults->Branch("A_CNvw_m_cbo", &A_CNvw_m_cbo);
+    fitresults->Branch("A_SNvw_p_cbo", &A_SNvw_p_cbo);
+    fitresults->Branch("A_CNvw_p_cbo", &A_CNvw_p_cbo);
     fitresults->Branch("Ky", &Ky);
     fitresults->Branch("Ty", &Ty);
     fitresults->Branch("w_y", &w_y);
@@ -497,19 +597,25 @@ int main(int argc, char* argv[]){
         minimizer.DefineParameter(2, "A0", 0.37, 0.1, -1.0, 1.0);
         minimizer.DefineParameter(3, "phi", 4.208, 0.01, 2.0, 5.0);
         minimizer.DefineParameter(4, "R", 0, 10, -1000, 1000);
-        minimizer.DefineParameter(5, "T_CBO", 200, 10, 1, 10000);
-        minimizer.DefineParameter(6, "w_CBO", 2.325, 0.01, 2.0, 3.0);
+        minimizer.DefineParameter(5, "T_CBO", 100.0, 10.0, 1, 10000); 
+        minimizer.DefineParameter(6, "w_CBO", 2.327345, 0.0, 2.0, 3.0);
         minimizer.DefineParameter(9, "LM", 0.001, 0.001, -0.1, 0.1);
-        minimizer.DefineParameter(12,"A_CAx1", -0.2, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(13,"A_SAx1", -0.3, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(16,"Ky", 1.013, 0.01, 0.9, 2.9);
-        minimizer.DefineParameter(17,"Ty", 30, 10, 1.0, 10000.);
-        minimizer.DefineParameter(20,"A_Cp", -0.2, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(21,"A_Sp", -0.3, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(22,"A_CNvw_m_cbo", -0.2, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(23,"A_SNvw_m_cbo", -0.3, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(29,"A_CNvw_p_cbo", -0.2, 0.1, -1.0, 1.0);
-        minimizer.DefineParameter(30,"A_SNvw_p_cbo", -0.3, 0.1, -1.0, 1.0);
+        minimizer.DefineParameter(12,"A_CAx1",  1.0, 0.1, -2.0, 2.0);
+        minimizer.DefineParameter(13,"A_SAx1",  1.0, 0.1, -2.0, 2.0);
+        minimizer.DefineParameter(16,"Ky", 1.013842, 0.00, 0.0, 1.2);
+        minimizer.DefineParameter(17,"Ty", 30, 0., 0.0, 10000.);
+        minimizer.DefineParameter(20,"A_Cp",  1.0, 0.1, -2.0, 2.0);
+        minimizer.DefineParameter(21,"A_Sp",  1.0, 0.1, -2.0, 2.0);
+        minimizer.DefineParameter(22,"A_CNvw_m_cbo", 1.0, 0.1, -2.0, 2.0);
+        minimizer.DefineParameter(23,"A_SNvw_m_cbo", 1.0, 0.1, -2.0, 2.0);
+        minimizer.DefineParameter(25,"T_vw_m_cbo", 60, 0, 1, 1000);
+        minimizer.DefineParameter(26,"w_vw_m_cbo", 12.014202, 0.0, 11.5, 12.5);
+
+        minimizer.DefineParameter(29,"A_CNvw_p_cbo", 1.0, 0.1, -2.0, 2.0);
+        minimizer.DefineParameter(30,"A_SNvw_p_cbo", 1.0, 0.1, -2.0, 2.0);
+        minimizer.DefineParameter(31,"T_vw_p_cbo", 10, 0, 1, 5000);
+        minimizer.DefineParameter(32,"w_vw_p_cbo", 16.713920, 0.0, 16.3, 17.0);
+
         if (pBinCBO){
             minimizer.DefineParameter(7, "A_CNx1", -0.0, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(8, "A_SNx1", -0.0, 0.1, -1.0, 1.0);
@@ -521,20 +627,17 @@ int main(int argc, char* argv[]){
             minimizer.DefineParameter(19,"A_SNy2", -0.0, 0.1, -1.0, 1.0);
             minimizer.DefineParameter(24,"A_ct", 0.0, 0.00, -0.1, 0.5);
         } else{
-            minimizer.DefineParameter(7, "A_CNx1", -0.2, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(8, "A_SNx1", -0.3, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(10,"A_CNx2", -0.2, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(11,"A_SNx2", -0.3, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(14,"A_CNy1", -0.2, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(15,"A_SNy1", -0.3, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(18,"A_CNy2", -0.2, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(19,"A_SNy2", -0.3, 0.1, -1.0, 1.0);
-            minimizer.DefineParameter(24,"A_ct", 0.0, 0.00, -0.1, 0.5); // fix to remove w_CBO(t) dependence
+            minimizer.DefineParameter(7, "A_CNx1",  1.0, 0.1, -2.0, 2.0); // USE TO SCALE ALPHA/BETA
+            minimizer.DefineParameter(8, "A_SNx1",  1.0, 0.1, -2.0, 2.0); // SUB WITH TF1
+            minimizer.DefineParameter(10,"A_CNx2",  1.0, 0.1, -2.0, 2.0);
+            minimizer.DefineParameter(11,"A_SNx2",  1.0, 0.1, -2.0, 2.0);
+            minimizer.DefineParameter(14,"A_CNy1",  1.0, 0.1, -2.0, 2.0);
+            minimizer.DefineParameter(15,"A_SNy1",  1.0, 0.1, -2.0, 2.0);
+            minimizer.DefineParameter(18,"A_CNy2",  1.0, 0.1, -2.0, 2.0);
+            minimizer.DefineParameter(19,"A_SNy2",  1.0, 0.1, -2.0, 2.0);
+            minimizer.DefineParameter(24,"A_ct", 0.0, 0.0, -0.1, 0.5); // SET TO 0; SHOULD BE ABSORBED INTO ALPHA BETA
         }
-        minimizer.DefineParameter(25,"T_vw_m_cbo", 60, 10, 1, 1000);
-        minimizer.DefineParameter(26,"w_vw_m_cbo", 11.9, 0.1, 11.5, 12.5);
-        minimizer.DefineParameter(31,"T_vw_p_cbo", 10, 10, 1, 5000);
-        minimizer.DefineParameter(32,"w_vw_p_cbo", 16.6, 0.1, 16.3, 17.0);
+
         if (includeMopTerm){
             if (constrainMop){
                 minimizer.DefineParameter(27,"Gamma_mop", 0.00002, 0.0000001, -0.001, 0.001);
@@ -544,24 +647,29 @@ int main(int argc, char* argv[]){
         }else{
             minimizer.DefineParameter(27,"Gamma_mop"    , 0., 0., -   1.0,    1.0);
         }
-        minimizer.DefineParameter(28, "C_CBO", 0.0, 0.01, 0, 0);
+        minimizer.DefineParameter(28, "C_CBO", 0.0, 0.0, 0, 0); // SET TO 0 TO REMOVE ENVELOPE
 
-        minimizer.Command("SET PAR 8 0");
-        minimizer.Command("SET PAR 9 0");
-        minimizer.Command("SET PAR 10 0");
-        minimizer.Command("SET PAR 11 0");
-        minimizer.Command("SET PAR 12 0");
-        minimizer.Command("SET PAR 13 0");
-        minimizer.Command("SET PAR 14 0");
-        minimizer.Command("SET PAR 15 0");
-        minimizer.Command("SET PAR 16 0");
-        minimizer.Command("SET PAR 19 0");
-        minimizer.Command("SET PAR 20 0");
-        minimizer.Command("SET PAR 21 0");
-        minimizer.Command("SET PAR 22 0");
-        minimizer.Command("SET PAR 23 0");
-        minimizer.Command("SET PAR 24 0");
-        minimizer.Command("SET PAR 25 0");
+        //minimizer.Command("SET PAR 8 0");
+        //minimizer.Command("SET PAR 9 0");
+        //minimizer.Command("SET PAR 11 0");
+        //minimizer.Command("SET PAR 12 0");
+        //minimizer.Command("SET PAR 13 0");
+        //minimizer.Command("SET PAR 14 0");
+        //minimizer.Command("SET PAR 15 0");
+        //minimizer.Command("SET PAR 16 0");
+        //minimizer.Command("SET PAR 17 0");
+        //minimizer.Command("SET PAR 18 0");
+        //minimizer.Command("SET PAR 19 0");
+        //minimizer.Command("SET PAR 20 0");
+        //minimizer.Command("SET PAR 21 0");
+        //minimizer.Command("SET PAR 22 0");
+        //minimizer.Command("SET PAR 23 0");
+        //minimizer.Command("SET PAR 24 0");
+        //minimizer.Command("SET PAR 25 0");
+        //minimizer.Command("SET PAR 26 0");
+        //minimizer.Command("SET PAR 27 0");
+        //minimizer.Command("SET PAR 28 0");
+        //minimizer.Command("SET PAR 29 0");
         minimizer.Command("FIX 6");
         minimizer.Command("FIX 7");
         minimizer.Command("FIX 8");
@@ -599,8 +707,6 @@ int main(int argc, char* argv[]){
         minimizer.Command("FIX 4");
         minimizer.Command("FIX 5");
         minimizer.Command("FIX 10");
-        minimizer.Command("FIX 11");
-        minimizer.Command("FIX 12");
         minimizer.Command("FIX 13");
         minimizer.Command("FIX 14");
         minimizer.Command("FIX 15");
@@ -869,6 +975,7 @@ int main(int argc, char* argv[]){
     TTree* pulls = new TTree("pulls", "pulls");
     double pull;
     pulls->Branch("pull", &pull);
+    fprintf(stderr, "Creating pulls tree..\n");
     for(int i=fitrangelow; i<=fitrangehigh; i++){
         double residual = wiggle->GetBinContent(i) - bestfit->GetBinContent(i);
         residua->SetBinContent(i, residual);
@@ -876,11 +983,13 @@ int main(int argc, char* argv[]){
         pulls->Fill();
     }
 
+    fprintf(stderr, "Writing data to file..\n");
     residua->Write();
     pulls->Write();
     fitresults->Write();  
     lambda->Write();
     bestfit->Write();
     wiggle->Write();
+    fprintf(stderr, "Closing file..\n");
     output->Close();
 }

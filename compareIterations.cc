@@ -4,13 +4,14 @@ void compareIterations(){
     gStyle->SetPalette(kDarkRainBow, 0, 0.5);
 
     std::vector<std::string> filenames = {
-        "fullFits/sBin_constraintOn_cE0.0_seed0_noRF.root",
+        "fullFits/noRF_vw_pm_cbo/sBin_constraintOn_cE0.0_seed0_noRF.root",
         "templateFits0/sBin_constraintOn_cE0.0_seed0_noRF.root",
         "templateFits1/sBin_constraintOn_cE0.0_seed0_noRF.root",
         "templateFits2/sBin_constraintOn_cE0.0_seed0_noRF.root",
         "templateFits2_floatScale/sBin_constraintOn_cE0.0_seed0_noRF.root",
         "templateFits3/sBin_constraintOn_cE0.0_seed0_noRF.root",
-        "templateFits3_floatBoth/sBin_constraintOn_cE0.0_seed0_noRF.root"
+        "templateFits3_floatBoth/sBin_constraintOn_cE0.0_seed0_noRF.root",
+        "templateFits4/sBin_constraintOn_cE0.0_seed0_noRF.root"
     };
 
     std::vector<std::vector<double>> vals_chisq ;
