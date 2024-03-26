@@ -129,6 +129,7 @@ void makeTemplate(
     // get sliding window results
     int graphEntry = 0;
     for (int entry=0; entry<slidingResults->GetEntries(); entry++){
+
         slidingResults->GetEntry(entry);
 
         //printf("calo %i entry %i param %f err %f\n", caloNum-1, entry ,param,err);
@@ -173,42 +174,57 @@ void makeTemplate(
 
     for (unsigned int i=0; i<gSlidingParam.size(); i++){
         int color = gSlidingParam[i].GetLineColor();
+        printf("fitting %s for calo: %i\n\n", paramName.c_str(), i);
 
         TF1* expShort = new TF1(Form("calo%i_%s_expShort", i, paramName.c_str()),
                 "[0]*exp(-x/[1])+[2]",
-                20.0,30.0);
+                20.0,45.0);
         expShort->SetParameter(0,00.0);
         expShort->SetParameter(1,10.0);
         expShort->SetParameter(2,00.0);
-        gSlidingParam[i].Fit(expShort, "MEN0", "", 20.0, 40.0);
+        expShort->SetParLimits(1, 0,100);
+        // get sign of exp from first two points
+        if (gSlidingParam[i].GetPointY(1)-gSlidingParam[i].GetPointY(0) > 0){
+        expShort->SetParLimits(0, -100,0);
+        }else{
+        expShort->SetParLimits(0, 0, 100);
+        }
+
+        gSlidingParam[i].Fit(expShort, "MEN0", "", 20.0, 45.0);
 
         TF1* expLong = new TF1(Form("calo%i_%s_expLong", i, paramName.c_str()),
                 "[0]*exp(-x/[1])+[2]",
-                35.0,300.0);
+                45.0,300.0);
         expLong->SetParameter(0,00.0);
         expLong->SetParameter(1,100.0);
         expLong->SetParameter(2,00.0);
         gSlidingParam[i].Fit(expLong, "MEN0", "", 30.0, 300.0);
 
         TF1* expModel = new TF1(Form("calo%i_%s", i, paramName.c_str()),
-                "[0]*exp(-x/[1])+[2]+[3]*exp(-x/[4])",
+                "(x< 40.0)*([3]*exp(-x/[4]) + [5]) + (x>40.0)*([0]*exp(-x/[1]) + [2])",
                 20.0,400.0);
         expModel->SetLineColor(kBlack);
-        expModel->FixParameter(0, expLong ->GetParameter(0));
-        expModel->FixParameter(1, expLong ->GetParameter(1));
-        expModel->FixParameter(3, expShort->GetParameter(0));
-        expModel->FixParameter(4, expShort->GetParameter(1));
-        expModel->SetParLimits(0,-1.0,1.0);
-        expModel->SetParLimits(3,-1.0,1.0);
-        expModel->SetParLimits(1,5.0,1000.0);
-        expModel->SetParLimits(4,0.0,10.0);
-        gSlidingParam[i].Fit(expModel, "MEN0", "", 30.0, 400.0);
+        expModel->SetParameter(0, expLong ->GetParameter(0));
+        expModel->SetParameter(1, expLong ->GetParameter(1));
+        expModel->SetParameter(3, expShort->GetParameter(0));
+        expModel->SetParameter(4, expShort->GetParameter(1));
+
+        expModel->SetParLimits(1, 0.0, 1000.0);
+        // get sign of exp from first two points
+        if (gSlidingParam[i].GetPointY(1)-gSlidingParam[i].GetPointY(0) > 0){
+        expModel->SetParLimits(3, -100,0);
+        }else{
+        expModel->SetParLimits(3, 0, 100);
+        }
+        gSlidingParam[i].Fit(expModel, "MEN0", "", 20.0, 300.0);
         double chisq_expModel = expModel->GetChisquare();
         printf("reduced chisq exp %f\n", chisq_expModel/(gSlidingParam[i].GetN()-3));
 
         fitFunction.push_back(*expModel);
         fitFunction_short.push_back(*expShort);
         fitFunction_long.push_back(*expLong);
+        expShort->Write();
+        expLong ->Write();
         expModel->Write();
         // add to multigraph to view them overlaid
         mgSlidingParam.Add(&gSlidingParam[i]);

@@ -11,7 +11,8 @@ void compareIterations(){
         "templateFits2_floatScale/sBin_constraintOn_cE0.0_seed0_noRF.root",
         "templateFits3/sBin_constraintOn_cE0.0_seed0_noRF.root",
         "templateFits3_floatBoth/sBin_constraintOn_cE0.0_seed0_noRF.root",
-        "templateFits4/sBin_constraintOn_cE0.0_seed0_noRF.root"
+        "templateFits4/sBin_constraintOn_cE0.0_seed0_noRF.root",
+        "templateFits5/sBin_constraintOn_cE0.0_seed0_noRF.root"
     };
 
     std::vector<std::vector<double>> vals_chisq ;
