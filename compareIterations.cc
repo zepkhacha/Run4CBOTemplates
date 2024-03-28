@@ -4,7 +4,7 @@ void compareIterations(){
     gStyle->SetPalette(kDarkRainBow, 0, 0.5);
 
     std::vector<std::string> filenames = {
-        "fullFits/noRF_vw_pm_cbo/sBin_constraintOn_cE0.0_seed0_noRF.root",
+        "fullFits/noRF/sBin_constraintOn_cE0.0_seed0_noRF.root",
         "templateFits0/sBin_constraintOn_cE0.0_seed0_noRF.root",
         "templateFits1/sBin_constraintOn_cE0.0_seed0_noRF.root",
         "templateFits2/sBin_constraintOn_cE0.0_seed0_noRF.root",
@@ -106,7 +106,7 @@ void compareIterations(){
     for (int i = 0; i < 25; i++){
 
         mg_R->Add(&g_R[i]);
-        leg_R->AddEntry(Form("calo %i",i));
+        leg_R->AddEntry(&g_R[i],Form("calo %i",i));
 
         mg_chisq->Add(&g_chisq[i]);
         mg_rchisq->Add(&g_rchisq[i]);
@@ -117,17 +117,17 @@ void compareIterations(){
     //mg_R->SetMaximum(-62.0);
     mg_R->SetTitle("R vs Iteration; Iteration; R[ppm]");
     mg_R->Draw("ALE PFC PLC");
-    //leg_R->Draw();
+    leg_R->Draw();
     c->Print("compareIterations_R.pdf");
 
     mg_chisq->SetTitle("chisq vs Iteration; Iteration; chisq");
     mg_chisq->Draw("ALE PFC PLC");
-    //leg_R->Draw();
+    leg_R->Draw();
     c->Print("compareIterations_chisq.pdf");
 
     mg_rchisq->SetTitle("Reduced chisq vs Iteration; Iteration; Reduced chisq");
     mg_rchisq->Draw("ALE PFC PLC");
-    //leg_R->Draw();
+    leg_R->Draw();
     c->Print("compareIterations_rchisq.pdf");
 
 }
